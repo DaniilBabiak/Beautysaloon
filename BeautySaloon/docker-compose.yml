@@ -1,0 +1,37 @@
+version: '1.0'
+
+volumes:
+    beautysaloonsqldata:
+
+networks:
+    beautysaloon-network:
+        external: true
+
+services:
+    beautysaloondata:
+        container_name: BeautysaloonSQLServer
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+            - "1433:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=BeautysaloonSQLServer123
+        volumes:
+            - beautysaloonsqldata:/var/opt/mssql
+        networks:
+            - beautysaloon-network
+
+    beautysaloon:
+        container_name: beautysaloon
+        image: beautysaloon-service:1.2
+        build:
+            dockerfile: ./BeautySaloon.API/Dockerfile
+        ports:
+            - "5001:80"
+        environment:
+            - ConnectionStrings__BeautysaloonDbConnection=Server=BeautysaloonSQLServer;Initial Catalog=BeautySaloonDb; MultipleActiveResultSets=True; TrustServerCertificate=true; User Id = sa; Password = BeautysaloonSQLServer123;
+        restart: on-failure
+        networks:
+            - beautysaloon-network
+        depends_on:
+            - beautysaloondata
