@@ -1,5 +1,10 @@
 
-.myfontsize{
-  color: var(--primary-color);
-  font-size: calc(var(--index) * 10);
+.nav-header{
+  background: rgb(36, 33, 33);
+}
+.active{
+  background: rgb(107, 107, 252);
+}
+.container-fluid{
+  padding: 0;
 }
