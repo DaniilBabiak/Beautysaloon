@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
 :root{
   --primary-color: #007bff;
   --index: calc(1vw + 1vh);
+}
+@font-face {
+  font-family: Oswal-regular;
+  src: url(./fonts/Oswald-Regular.ttf);
 }
