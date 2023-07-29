@@ -7,6 +7,7 @@ public static class Config
         new IdentityResource[]
         {
             new IdentityResources.OpenId(),
+            new IdentityResources.Email(),
             new IdentityResources.Profile(),
         };
 
@@ -16,6 +17,14 @@ public static class Config
             new ApiScope("scope1"),
             new ApiScope("scope2"),
         };
+    public static IEnumerable<ApiResource> ApiResources =>
+        new List<ApiResource>
+            {
+                new ApiResource("resourceapi", "Resource API")
+                {
+                    Scopes = {"api.read"}
+                }
+            };
 
     public static IEnumerable<Client> Clients =>
         new Client[]
@@ -47,5 +56,18 @@ public static class Config
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "scope2" }
             },
+
+            new Client {
+                    RequireConsent = false,
+                    ClientId = "angular_spa",
+                    ClientName = "Angular SPA",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedScopes = { "openid", "profile", "email", "api.read" },
+                    RedirectUris = {"http://localhost:4200/auth-callback"},
+                    PostLogoutRedirectUris = {"http://localhost:4200/"},
+                    AllowedCorsOrigins = {"http://localhost:4200"},
+                    AllowAccessTokensViaBrowser = true,
+                    AccessTokenLifetime = 3600
+                }
         };
 }
