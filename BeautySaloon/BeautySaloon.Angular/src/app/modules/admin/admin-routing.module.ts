@@ -7,6 +7,7 @@ import { ContactsComponent } from './components/contacts/contacts.component';
 import { ReviewsComponent } from './components/reviews/reviews.component';
 import { AppointmentsComponent } from './components/appointments/appointments.component';
 import { WorksComponent } from './components/works/works.component';
+import { ServicesComponent } from './components/services/services.component';
 
 const routes: Routes = [
   {path:'', component:AdminDashboardComponent, children:[
@@ -16,6 +17,7 @@ const routes: Routes = [
     {path:'reviews', component:ReviewsComponent},
     {path:'appointments', component:AppointmentsComponent},
     {path:'works', component:WorksComponent},
+    {path:'services', component:ServicesComponent},
     {path:'**', redirectTo:'/admin/main', pathMatch:'full'},
     {path:'', redirectTo: '/admin/main', pathMatch:'full'},
   ]},

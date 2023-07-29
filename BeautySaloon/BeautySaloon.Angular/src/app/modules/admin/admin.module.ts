@@ -12,7 +12,7 @@ import { ContactsComponent } from './components/contacts/contacts.component';
 import { WorksComponent } from './components/works/works.component';
 import { ReviewsComponent } from './components/reviews/reviews.component';
 import { AppointmentsComponent } from './components/appointments/appointments.component';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -25,11 +25,15 @@ import { AppointmentsComponent } from './components/appointments/appointments.co
     ContactsComponent,
     WorksComponent,
     ReviewsComponent,
-    AppointmentsComponent
+    AppointmentsComponent,
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    FontAwesomeModule,
+    
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+ 
+ }
