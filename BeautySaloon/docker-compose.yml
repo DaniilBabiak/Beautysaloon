@@ -2,6 +2,7 @@ version: '1.0'
 
 volumes:
     beautysaloonsqldata:
+    identitysqldata:
 
 networks:
     beautysaloon-network:
@@ -21,13 +22,41 @@ services:
         networks:
             - beautysaloon-network
 
+    identitydata:
+        container_name: BeautysaloonIdentitySQLServer
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+            - "1433:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=BeautysaloonIdentitySQLServer123
+        volumes:
+            - identitysqldata:/var/opt/mssql
+        networks:
+            - beautysaloon-network
+
+    identity:
+        container_name: beautysaloon-identity
+        image: beautysaloon-identity-service:1.0
+        build:
+            dockerfile: ./BeautySaloon.Identity/Dockerfile
+        ports:
+            - "5001:80"
+        environment:
+            - ConnectionStrings__BeautysaloonIdentityDbConnection=Server=BeautysaloonIdentitySQLServer;Initial Catalog=BeautySaloonDb; MultipleActiveResultSets=True; TrustServerCertificate=true; User Id = sa; Password = BeautysaloonIdentitySQLServer123;
+        restart: on-failure
+        networks:
+            - beautysaloon-network
+        depends_on:
+            - identitydata
+
     beautysaloon:
         container_name: beautysaloon
         image: beautysaloon-service:1.2
         build:
             dockerfile: ./BeautySaloon.API/Dockerfile
         ports:
-            - "5001:80"
+            - "5002:80"
         environment:
             - ConnectionStrings__BeautysaloonDbConnection=Server=BeautysaloonSQLServer;Initial Catalog=BeautySaloonDb; MultipleActiveResultSets=True; TrustServerCertificate=true; User Id = sa; Password = BeautysaloonSQLServer123;
         restart: on-failure
