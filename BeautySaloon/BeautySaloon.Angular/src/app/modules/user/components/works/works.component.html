@@ -1,1 +1,17 @@
-<p>works works!</p>
+<div class="work-wrapper">
+<div class="slider">
+  <span style="--i:1;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image1" ></span>
+  <span style="--i:2;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image2" ></span>
+  <span style="--i:3;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image3" ></span>
+  <span style="--i:4;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image4" ></span>
+  <span style="--i:5;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image5" ></span>
+  <span style="--i:6;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image6" ></span>
+  <span style="--i:7;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image7" ></span>
+  <span style="--i:8;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image8" ></span>
+</div>
+</div>
+
+<div class="modal" *ngIf="showModal">
+  <span class="modal-close" (click)="closeModal()">&times;</span>
+  <img [src]="modalImage" [alt]="modalAlt">
+</div>
