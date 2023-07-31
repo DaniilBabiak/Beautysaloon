@@ -8,10 +8,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class WorksComponent {
   imageUrl: SafeResourceUrl;
+ 
   showModal: boolean = false;
   modalImage: SafeResourceUrl = ''; 
   modalAlt: string = ''; 
-
+  
   constructor(private sanitizer: DomSanitizer) {
    
     const imagePath = 'assets/images/front-woman.avif';
