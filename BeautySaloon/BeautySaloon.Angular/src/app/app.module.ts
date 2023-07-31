@@ -5,16 +5,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { LoginComponent } from './login/login.component';
 import { FrontPageComponent } from './front-page/front-page.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ConfigService } from './configs/config.service';
+import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './auth/login/login.component';
+import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     FrontPageComponent,
+    LoginComponent,
+    AuthCallbackComponent,
 
   
 
@@ -23,9 +28,11 @@ import { FrontPageComponent } from './front-page/front-page.component';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [ConfigService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
