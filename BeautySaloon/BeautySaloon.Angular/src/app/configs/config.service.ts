@@ -16,7 +16,7 @@ export class ConfigService {
 
     getClientSettings(): UserManagerSettings {
         return {
-            authority: 'http://localhost:5001',
+            authority: 'https://localhost:5001',
             client_id: 'angular_spa',
             redirect_uri: 'http://localhost:4200/auth-callback',
             post_logout_redirect_uri: 'http://localhost:4200/user/main',
