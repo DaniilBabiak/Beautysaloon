@@ -124,6 +124,14 @@ public class Callback : PageModel
             user.Email = email;
         }
 
+        var fullName = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name)?.Value ??
+                    claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+
+        if (!string.IsNullOrEmpty(fullName))
+        {
+            user.FullName = fullName;
+        }
+
         // create a list of claims that we want to transfer into our store
         var filtered = new List<Claim>();
 

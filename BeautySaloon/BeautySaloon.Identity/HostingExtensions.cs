@@ -1,6 +1,8 @@
 using BeautySaloon.Identity.Data;
 using BeautySaloon.Identity.Models;
 using Duende.IdentityServer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -26,7 +28,7 @@ internal static class HostingExtensions
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
-
+                
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
@@ -36,11 +38,14 @@ internal static class HostingExtensions
             .AddInMemoryApiResources(Config.ApiResources)
             .AddAspNetIdentity<ApplicationUser>();
 
-        builder.Services.AddAuthentication()
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie(options =>
+                        {
+                            options.Cookie.HttpOnly = true;
+                        })
                         .AddGoogle(options =>
                         {
                             options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
                             // register your IdentityServer with Google at https://console.developers.google.com
                             // enable the Google+ API
                             // set the redirect URI to https://localhost:5001/signin-google

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -13,5 +14,24 @@ export class HeaderComponent {
 
 
 
+export class HeaderComponent implements OnInit {
+  isAuthenticated: boolean = false;
+  userName: string | undefined;
+  constructor(private authService: AuthService) { }
 
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()){
+      this.isAuthenticated = true;
+      this.userName = this.authService.name
+    }
+  }
+
+  login() {
+    this.authService.login();
+    this.userName = this.authService.name;
+  }
+
+  async signout(){
+    await this.authService.signout();
+  }
 }
