@@ -4,6 +4,7 @@ volumes:
     beautysaloonsqldata:
     identitysqldata:
 
+
 networks:
     beautysaloon-network:
         external: true
@@ -26,7 +27,7 @@ services:
         container_name: BeautysaloonIdentitySQLServer
         image: mcr.microsoft.com/mssql/server:2019-latest
         ports:
-            - "1433:1433"
+            - "1133:1433"
         environment:
             - ACCEPT_EULA=Y
             - SA_PASSWORD=BeautysaloonIdentitySQLServer123
@@ -37,18 +38,24 @@ services:
 
     identity:
         container_name: beautysaloon-identity
-        image: beautysaloon-identity-service:1.0
+        image: beautysaloon-identity-service:1.121
         build:
             dockerfile: ./BeautySaloon.Identity/Dockerfile
         ports:
-            - "5001:80"
+            - "5010:80"
+            - "5001:443"
         environment:
+            - ASPNETCORE_URLS=https://+:443;http://+:80
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=DoctorHouse2001
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/aspnetapp.pfx
             - ConnectionStrings__BeautysaloonIdentityDbConnection=Server=BeautysaloonIdentitySQLServer;Initial Catalog=BeautySaloonDb; MultipleActiveResultSets=True; TrustServerCertificate=true; User Id = sa; Password = BeautysaloonIdentitySQLServer123;
         restart: on-failure
         networks:
             - beautysaloon-network
         depends_on:
             - identitydata
+        volumes:
+            - ./certs:/app/certs:ro
 
     beautysaloon:
         container_name: beautysaloon
