@@ -26,7 +26,7 @@ services:
         container_name: BeautysaloonIdentitySQLServer
         image: mcr.microsoft.com/mssql/server:2019-latest
         ports:
-            - "1433:1433"
+            - "1133:1433"
         environment:
             - ACCEPT_EULA=Y
             - SA_PASSWORD=BeautysaloonIdentitySQLServer123
@@ -37,7 +37,7 @@ services:
 
     identity:
         container_name: beautysaloon-identity
-        image: beautysaloon-identity-service:1.0
+        image: beautysaloon-identity-service:1.11
         build:
             dockerfile: ./BeautySaloon.Identity/Dockerfile
         ports:
