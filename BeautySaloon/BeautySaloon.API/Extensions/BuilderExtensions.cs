@@ -22,7 +22,56 @@ public static class BuilderExtensions
 
         builder.ConfigureSqlContexts();
 
+        builder.ConfigureAuthentication();
+        builder.ConfigureAuthorization();
+        
+        builder.ConfigureCors();
+
         return builder;
+    }
+
+    private static void ConfigureAuthentication(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthentication("Bearer")
+                                .AddJwtBearer(options =>
+                                {
+                                    options.Authority = "https://localhost:5001";
+                                    options.TokenValidationParameters.ValidateAudience = false;
+                                    options.RequireHttpsMetadata = false;
+                                });
+    }
+
+    private static void ConfigureAuthorization(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("HealthPolicy", policy =>
+            {
+                policy.RequireClaim("scope", "health");
+            });
+            options.AddPolicy("api.read", policy =>
+            {
+                policy.RequireClaim("scope", "api.read");
+            });
+            options.AddPolicy("api.edit", policy =>
+            {
+                policy.RequireClaim("scope", "api.edit");
+                policy.RequireRole("admin");
+            });
+        });
+    }
+
+    private static void ConfigureCors(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(setup =>
+        {
+            setup.AddPolicy("AllowAllPolicy", options =>
+            {
+                options.AllowAnyHeader();
+                options.AllowAnyMethod();
+                options.AllowAnyOrigin();
+            });
+        });
     }
 
     private static void ConfigureSqlContexts(this WebApplicationBuilder builder)
