@@ -10,7 +10,7 @@ import { FrontPageComponent } from './front-page/front-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfigService } from './configs/config.service';
 import { FormsModule } from '@angular/forms';
-import { LoginComponent } from './auth/login/login.component';
+
 import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
 
 
@@ -20,7 +20,7 @@ import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.compon
     AppComponent,
    
     FrontPageComponent,
-    LoginComponent,
+   
     AuthCallbackComponent,
 
   
