@@ -45,6 +45,11 @@
             <a class="nav-link" routerLink="/profile">{{userName}}</a>
           </li>
         </div>
+        <div *ngIf="isAdmin">
+          <li class="nav-item " routerLinkActive="active">
+            <a class="nav-link">You are admin</a>
+          </li>
+        </div>
       </div>
     </nav>
   </div>

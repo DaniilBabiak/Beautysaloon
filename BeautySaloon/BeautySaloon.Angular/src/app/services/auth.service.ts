@@ -44,12 +44,15 @@ export class AuthService {
     return this.user != null && !this.user.expired;
   }
 
+  isAdmin(): boolean{
+    var role = this.user?.profile["role"];
+    return this.user?.profile["role"] == 'admin';
+  }
+
   get authorizationHeaderValue(): string {
     if (this.user) {
       return `${this.user.token_type} ${this.user.access_token}`;
-
     }
-
     return '';
   }
 
