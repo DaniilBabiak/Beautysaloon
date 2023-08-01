@@ -30,7 +30,7 @@
           </li>
           <div *ngIf="!isAuthenticated">
             <li class="nav-item " routerLinkActive="active">
-              <a class="nav-link" routerLink="../login">Login</a>
+              <button class="btn btn-lg btn-primary" (click)="login()">Login with IdentityServer</button>
             </li>
           </div>
           <div *ngIf="isAuthenticated">
