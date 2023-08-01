@@ -1,4 +1,6 @@
 ﻿using BeautySaloon.API.Entities.Contexts;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -20,7 +22,10 @@ public static class ApplicationExtensions
         app.UseStaticFiles();
 
         app.MapControllers().RequireAuthorization("api.read");
-
+        app.MapHealthChecks("/api/health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        }).RequireAuthorization("HealthPolicy");
         await app.MigrateDatabase();
 
         return app;
