@@ -1,7 +1,3 @@
 <p>Hello {{userName}}!</p>
 <p>Your phone number: {{phoneNumber ? phoneNumber : 'N/A'}}</p>
 <p>Would you like to change your phone number?</p>
-<button (click)="changePhoneNumber()">Change number</button>
-
-<!-- Условное отображение формы изменения номера телефона -->
-<app-change-phone-number-form *ngIf="showChangePhoneNumberForm"></app-change-phone-number-form>

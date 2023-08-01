@@ -1,1 +1,5 @@
-<p>test-rest works!</p>
+<ng-container *ngIf="values">
+    <div *ngFor="let value of values">
+        {{ value }}
+    </div>
+</ng-container>

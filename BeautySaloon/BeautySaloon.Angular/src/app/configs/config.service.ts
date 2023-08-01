@@ -6,12 +6,8 @@ export class ConfigService {
 
     constructor() { }
 
-    get authApiURI() {
-        return 'https://localhost:5000/api';
-    }
-
     get resourceApiURI() {
-        return 'http://localhost:5050/api';
+        return 'http://localhost:5002';
     }
 
     getClientSettings(): UserManagerSettings {

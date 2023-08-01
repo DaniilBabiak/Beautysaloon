@@ -4,6 +4,7 @@ import { FrontPageComponent } from './front-page/front-page.component';
 
 import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
 import { ProfileComponent } from './profileComponents/profile/profile.component';
+import { TestRestComponent } from './test-rest/test-rest.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule) },
   { path: 'user', loadChildren: () => import('./modules/user/user.module').then((m) => m.UserModule) },
   { path: 'profile', component: ProfileComponent },
-  { path: 'auth-callback', component: AuthCallbackComponent }
+  { path: 'auth-callback', component: AuthCallbackComponent },
+  { path: 'test', component: TestRestComponent }
 ];
 
 @NgModule({

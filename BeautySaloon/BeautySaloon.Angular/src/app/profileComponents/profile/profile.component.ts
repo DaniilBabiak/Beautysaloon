@@ -20,11 +20,4 @@ export class ProfileComponent implements OnInit {
     this.userName = this.authService.name;
     this.phoneNumber = this.authService.phoneNumber;
   }
-  changePhoneNumber() {
-    // Возможно, здесь вы захотите показать модальное окно или перенаправить пользователя на отдельную страницу для изменения номера телефона.
-    // В этом случае, вы можете использовать Angular Router или модальные окна библиотеки (например, Angular Material Dialog).
-
-    // Но, если вы хотите показать форму на этой же странице, вы можете добавить флаг, который покажет форму в шаблоне:
-    this.showChangePhoneNumberForm = !this.showChangePhoneNumberForm;
-  }
 }

@@ -40,10 +40,6 @@ export class AuthService {
     }
   }
 
-  register(userRegistration: any) {
-    return this.http.post(this.configService.authApiURI + '/account', userRegistration).pipe(catchError(this.handleError));
-  }
-
   isAuthenticated(): boolean {
     return this.user != null && !this.user.expired;
   }
