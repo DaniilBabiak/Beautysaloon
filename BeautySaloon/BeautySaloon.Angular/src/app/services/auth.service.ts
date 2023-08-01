@@ -40,10 +40,6 @@ export class AuthService {
     }
   }
 
-  register(userRegistration: any) {
-    return this.http.post(this.configService.authApiURI + '/account', userRegistration).pipe(catchError(this.handleError));
-  }
-
   isAuthenticated(): boolean {
     return this.user != null && !this.user.expired;
   }
@@ -57,12 +53,12 @@ export class AuthService {
     return '';
   }
 
-  get name(): string | undefined {
-    if (this.user){
-      return this.user != null ? this.user.profile.name : '';
-    }
+  get name(): string {
+    return this.user?.profile?.name ?? '';
+  }
 
-    return '';
+  get phoneNumber(): string {
+    return this.user?.profile?.phone_number ?? '';
   }
 
   async signout() {

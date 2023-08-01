@@ -9,20 +9,17 @@ public static class ApplicationExtensions
     public static async Task<WebApplication> ConfigureApplication(this WebApplication app)
     {
         app.UseSerilogRequestLogging();
-
+        app.UseCors("AllowAllPolicy");
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
         app.UseStaticFiles();
 
-        app.MapControllers();
+        app.MapControllers().RequireAuthorization("api.read");
 
         await app.MigrateDatabase();
 

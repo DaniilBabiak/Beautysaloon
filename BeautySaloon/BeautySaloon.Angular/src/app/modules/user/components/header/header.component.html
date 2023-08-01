@@ -38,10 +38,12 @@
               <button class="nav-link" (click)="signout()">Sign out</button>
             </li>
           </div>
-        
+
         </ul>
-        <div>
-            <label>{{userName}}</label>
+        <div *ngIf="isAuthenticated">
+          <li class="nav-item " routerLinkActive="active">
+            <a class="nav-link" routerLink="/profile">{{userName}}</a>
+          </li>
         </div>
       </div>
     </nav>

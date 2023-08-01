@@ -1,4 +1,3 @@
-
 using BeautySaloon.API.Extensions;
 using Serilog;
 
