@@ -44,6 +44,6 @@ public static class ApplicationExtensions
                 }
             }
         }
-        
+
     }
 }

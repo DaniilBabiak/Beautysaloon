@@ -29,8 +29,8 @@ public static class Config
         };
     public static IEnumerable<ApiResource> ApiResources =>
         new List<ApiResource>
-            {
-            };
+        {
+        };
 
     public static IEnumerable<Client> Clients =>
         new Client[]

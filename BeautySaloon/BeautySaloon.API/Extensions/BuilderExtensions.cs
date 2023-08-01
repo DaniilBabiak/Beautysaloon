@@ -24,7 +24,7 @@ public static class BuilderExtensions
 
         builder.ConfigureAuthentication();
         builder.ConfigureAuthorization();
-        
+
         builder.ConfigureCors();
 
         builder.ConfigureHealthChecks();

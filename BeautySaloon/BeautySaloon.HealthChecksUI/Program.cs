@@ -1,6 +1,4 @@
 using BeautySaloon.HealthChecksUI.Extensions;
-using BeautySaloon.HealthChecksUI.Helpers;
-using Serilog;
 
 namespace BeautySaloon.HealthChecksUI;
 
