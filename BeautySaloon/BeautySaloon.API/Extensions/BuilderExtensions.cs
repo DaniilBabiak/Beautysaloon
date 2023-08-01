@@ -27,6 +27,8 @@ public static class BuilderExtensions
         
         builder.ConfigureCors();
 
+        builder.ConfigureHealthChecks();
+
         return builder;
     }
 
@@ -60,7 +62,16 @@ public static class BuilderExtensions
             });
         });
     }
+    private static void ConfigureHealthChecks(this WebApplicationBuilder builder)
+    {
+        string connectionString = builder.Configuration.GetConnectionString("BeautysaloonDbConnection");
 
+        builder.Services.AddHealthChecks()
+                        .AddSqlServer(
+                            connectionString: connectionString,
+                            name: "API SQL Server",
+                            tags: new[] { "Database" });
+    }
     private static void ConfigureCors(this WebApplicationBuilder builder)
     {
         builder.Services.AddCors(setup =>
