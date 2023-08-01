@@ -57,12 +57,12 @@ export class AuthService {
     return '';
   }
 
-  get name(): string | undefined {
-    if (this.user){
-      return this.user != null ? this.user.profile.name : '';
-    }
+  get name(): string {
+    return this.user?.profile?.name ?? '';
+  }
 
-    return '';
+  get phoneNumber(): string {
+    return this.user?.profile?.phone_number ?? '';
   }
 
   async signout() {

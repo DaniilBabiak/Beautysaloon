@@ -12,6 +12,9 @@ import { ConfigService } from './configs/config.service';
 import { FormsModule } from '@angular/forms';
 
 import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
+import { ProfileComponent } from './profileComponents/profile/profile.component';
+import { ChangePhoneNumberFormComponent } from './profileComponents/change-phone-number-form/change-phone-number-form.component';
+import { TestRestComponent } from './test-rest/test-rest.component';
 
 
 
@@ -22,6 +25,9 @@ import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.compon
     FrontPageComponent,
    
     AuthCallbackComponent,
+         ProfileComponent,
+         ChangePhoneNumberFormComponent,
+         TestRestComponent,
 
   
 
