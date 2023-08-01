@@ -10,6 +10,7 @@ internal class HealthChecksHttpClientHandler : DelegatingHandler
 {
     private readonly HealthChecksAuthSettings _options;
     private readonly IMemoryCache _memoryCache;
+    private readonly HttpClientHandler _httpClientHandler;
 
     private DiscoveryDocumentResponse _discoveryResponse;
 
@@ -18,14 +19,18 @@ internal class HealthChecksHttpClientHandler : DelegatingHandler
     {
         _options = options.Value;
         _memoryCache = memoryCache;
+        _httpClientHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, certificate, chain, sslPolicyErrors) => true
+        };
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         Log.Information(_options.Authority);
         if (_discoveryResponse == null)
-        {
-            _discoveryResponse = await new HttpClient().GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+        {            
+            _discoveryResponse = await new HttpClient(_httpClientHandler).GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
                 Address = _options.Authority,
                 Policy = new DiscoveryPolicy
@@ -42,7 +47,7 @@ internal class HealthChecksHttpClientHandler : DelegatingHandler
 
         if (!_memoryCache.TryGetValue(nameof(HealthChecksHttpClientHandler), out TokenResponse tokenResponse))
         {
-            var response = await new HttpClient()
+            var response = await new HttpClient(_httpClientHandler)
                                          .RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
                                          {
                                              Address = _discoveryResponse.TokenEndpoint,

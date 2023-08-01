@@ -3,7 +3,7 @@ version: '1.0'
 volumes:
     beautysaloonsqldata:
     identitysqldata:
-
+    healthcheckssqldata:
 
 networks:
     beautysaloon-network:
@@ -36,9 +36,22 @@ services:
         networks:
             - beautysaloon-network
 
+    healthchecksdata:
+        container_name: BeautysaloonHealthChecksSQLServer
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+            - "1533:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=BeautysaloonHealthChecksSQLServer123
+        volumes:
+            - healthcheckssqldata:/var/opt/mssql
+        networks:
+            - beautysaloon-network
+
     identity:
         container_name: beautysaloon-identity
-        image: beautysaloon-identity-service:1.121
+        image: beautysaloon-identity-service:1.24
         build:
             dockerfile: ./BeautySaloon.Identity/Dockerfile
         ports:
@@ -59,7 +72,7 @@ services:
 
     beautysaloon:
         container_name: beautysaloon
-        image: beautysaloon-service:1.2
+        image: beautysaloon-service:1.34
         build:
             dockerfile: ./BeautySaloon.API/Dockerfile
         ports:
@@ -71,3 +84,19 @@ services:
             - beautysaloon-network
         depends_on:
             - beautysaloondata
+
+    healthchecks:
+        container_name: healthchecks
+        image: beautysaloon-service:1.64
+        build:
+            dockerfile: ./BeautySaloon.HealthChecksUI/Dockerfile
+        ports:
+            - "5003:80"
+        environment:
+            - ConnectionStrings__HealthChecksDb=Server=BeautysaloonHealthChecksSQLServer;Initial Catalog=BeautySaloonDb; MultipleActiveResultSets=True; TrustServerCertificate=true; User Id = sa; Password = BeautysaloonHealthChecksSQLServer123;
+        restart: on-failure
+        networks:
+            - beautysaloon-network
+        depends_on:
+            - healthchecksdata
+            - identity

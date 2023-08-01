@@ -37,7 +37,14 @@ public static class BuilderExtensions
         builder.Services.AddAuthentication("Bearer")
                                 .AddJwtBearer(options =>
                                 {
-                                    options.Authority = "https://localhost:5001";
+                                    if (builder.Environment.IsDevelopment())
+                                    {
+                                        options.Authority = "https://localhost:5201";
+                                    }
+                                    else
+                                    {
+                                        options.Authority = "http://identity";
+                                    }
                                     options.TokenValidationParameters.ValidateAudience = false;
                                     options.RequireHttpsMetadata = false;
                                 });

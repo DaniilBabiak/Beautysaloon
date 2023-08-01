@@ -46,6 +46,10 @@ internal static class HostingExtensions
                             {
                                 options.Authority = "https://localhost:5001";
                             }
+                            else
+                            {
+                                options.Authority = "http://identity";
+                            }
                             options.TokenValidationParameters.ValidateAudience = false;
                             options.RequireHttpsMetadata = false;
                         })

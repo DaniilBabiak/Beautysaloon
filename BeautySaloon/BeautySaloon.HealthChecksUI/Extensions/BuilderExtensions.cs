@@ -18,8 +18,8 @@ public static class BuilderExtensions
         builder.Services.AddHealthChecks();
         builder.Services.AddHealthChecksUI(options =>
         {
-            options.SetEvaluationTimeInSeconds(60);
-            options.SetMinimumSecondsBetweenFailureNotifications(60);
+            options.SetEvaluationTimeInSeconds(5);
+            options.SetMinimumSecondsBetweenFailureNotifications(5);
             options.UseApiEndpointHttpMessageHandler(sp =>
             {
                 return new HttpClientHandler
