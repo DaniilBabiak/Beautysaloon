@@ -25,6 +25,7 @@ public static class Config
         {
             new ApiScope("api.read"),
             new ApiScope("api.edit"),
+            new ApiScope("health")
         };
     public static IEnumerable<ApiResource> ApiResources =>
         new List<ApiResource>
@@ -45,6 +46,16 @@ public static class Config
                     AllowedCorsOrigins = {"http://localhost:4200"},
                     AllowAccessTokensViaBrowser = true,
                     AccessTokenLifetime = 3600,
+                },
+            new Client
+            {
+                ClientId = "HealthCheckUI",
+                ClientSecrets = { new Secret("secret".Sha256()) },
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                AllowedScopes = new List<string>
+                {
+                    "health"
                 }
+            }
         };
 }
