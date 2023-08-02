@@ -1,8 +1,9 @@
 using BeautySaloon.Identity.Data;
 using BeautySaloon.Identity.Models;
 using Duende.IdentityServer;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -28,7 +29,7 @@ internal static class HostingExtensions
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
-                
+
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
@@ -39,6 +40,19 @@ internal static class HostingExtensions
             .AddAspNetIdentity<ApplicationUser>();
 
         builder.Services.AddAuthentication()
+                        .AddJwtBearer(options =>
+                        {
+                            if (builder.Environment.IsDevelopment())
+                            {
+                                options.Authority = "https://localhost:5001";
+                            }
+                            else
+                            {
+                                options.Authority = "http://identity";
+                            }
+                            options.TokenValidationParameters.ValidateAudience = false;
+                            options.RequireHttpsMetadata = false;
+                        })
                         .AddGoogle(options =>
                         {
                             options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -53,6 +67,18 @@ internal static class HostingExtensions
                             options.CorrelationCookie.SameSite = SameSiteMode.None;
                             options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
                         });
+
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("HealthPolicy", policy =>
+            {
+                policy.AuthenticationSchemes = new[] { JwtBearerDefaults.AuthenticationScheme };
+                policy.RequireClaim("scope", "health");
+            });
+        });
+
+        builder.ConfigureHealthChecks();
+
 
         return builder;
     }
@@ -75,7 +101,21 @@ internal static class HostingExtensions
 
         app.MapRazorPages()
             .RequireAuthorization();
-
+        app.MapHealthChecks("/api/health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        }).RequireAuthorization("HealthPolicy");
         return app;
+    }
+
+    private static void ConfigureHealthChecks(this WebApplicationBuilder builder)
+    {
+        string connectionString = builder.Configuration.GetConnectionString("BeautysaloonIdentityDbConnection");
+
+        builder.Services.AddHealthChecks()
+                        .AddSqlServer(
+                            connectionString: connectionString,
+                            name: "Identity SQL Server",
+                            tags: new[] { "Database" });
     }
 }

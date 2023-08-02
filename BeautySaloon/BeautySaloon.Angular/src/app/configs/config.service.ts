@@ -6,12 +6,8 @@ export class ConfigService {
 
     constructor() { }
 
-    get authApiURI() {
-        return 'https://localhost:5000/api';
-    }
-
     get resourceApiURI() {
-        return 'http://localhost:5050/api';
+        return 'http://localhost:5002';
     }
 
     getClientSettings(): UserManagerSettings {
@@ -21,7 +17,7 @@ export class ConfigService {
             redirect_uri: 'http://localhost:4200/auth-callback',
             post_logout_redirect_uri: 'http://localhost:4200/user/main',
             response_type: "id_token token",
-            scope: "openid profile email api.read",
+            scope: "openid profile email api.read api.edit role",
             filterProtocolClaims: true,
             loadUserInfo: true,
             automaticSilentRenew: true,

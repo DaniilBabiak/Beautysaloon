@@ -1,6 +1,7 @@
 ﻿using BeautySaloon.Identity;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
-
+IdentityModelEventSource.ShowPII = true;
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
