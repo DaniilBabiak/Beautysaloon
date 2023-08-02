@@ -1,6 +1,12 @@
 <div class="work-wrapper">
-<div class="slider">
-  <span style="--i:1;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image1" ></span>
+
+
+<div class="sign-wrap-2 work-header" style="padding: 0;">
+  <span class="sign_word">Our Best Works</span>
+</div>
+
+<!-- <div class="slider">
+  <span style="--i:1;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image1"></span>
   <span style="--i:2;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image2" ></span>
   <span style="--i:3;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image3" ></span>
   <span style="--i:4;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image4" ></span>
@@ -8,7 +14,29 @@
   <span style="--i:6;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image6" ></span>
   <span style="--i:7;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image7" ></span>
   <span style="--i:8;" (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="My Image8" ></span>
+</div> -->
+
+
+<div class="rhomb">
+ 
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
+  <a  (click)="openModal('My Image1', imageUrl)"><img [src]="imageUrl" alt="" /></a>
 </div>
+
+
+
+<div class="work-btn">
+  <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
+</div>
+
 </div>
 
 <div class="modal" *ngIf="showModal">

@@ -3,8 +3,13 @@
 :root{
   --primary-color: #007bff;
   --index: calc(1vw + 1vh);
+ 
 }
 @font-face {
   font-family: Oswal-regular;
   src: url(./fonts/Oswald-Regular.ttf);
+}
+@font-face{
+  font-family: PlayFair;
+  src: url(./fonts/Playfair.ttf);
 }
