@@ -11,12 +11,14 @@ import { AuthService } from 'src/app/services/auth.service';
 export class HeaderComponent implements OnInit {
   isAuthenticated: boolean = false;
   userName: string | undefined;
+  isAdmin: boolean = false;
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()){
       this.isAuthenticated = true;
       this.userName = this.authService.name
+      this.isAdmin = this.authService.isAdmin();
     }
   }
 

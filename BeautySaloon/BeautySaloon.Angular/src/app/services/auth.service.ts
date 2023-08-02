@@ -40,29 +40,28 @@ export class AuthService {
     }
   }
 
-  register(userRegistration: any) {
-    return this.http.post(this.configService.authApiURI + '/account', userRegistration).pipe(catchError(this.handleError));
-  }
-
   isAuthenticated(): boolean {
     return this.user != null && !this.user.expired;
+  }
+
+  isAdmin(): boolean{
+    var role = this.user?.profile["role"];
+    return this.user?.profile["role"] == 'admin';
   }
 
   get authorizationHeaderValue(): string {
     if (this.user) {
       return `${this.user.token_type} ${this.user.access_token}`;
-
     }
-
     return '';
   }
 
-  get name(): string | undefined {
-    if (this.user){
-      return this.user != null ? this.user.profile.name : '';
-    }
+  get name(): string {
+    return this.user?.profile?.name ?? '';
+  }
 
-    return '';
+  get phoneNumber(): string {
+    return this.user?.profile?.phone_number ?? '';
   }
 
   async signout() {

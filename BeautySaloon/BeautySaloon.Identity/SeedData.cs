@@ -37,6 +37,7 @@ public static class SeedData
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
+                            new Claim(JwtClaimTypes.Role, "admin")
                         }).Result;
                 if (!result.Succeeded)
                 {
