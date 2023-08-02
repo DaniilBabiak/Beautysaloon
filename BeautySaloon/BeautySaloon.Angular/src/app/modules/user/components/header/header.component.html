@@ -2,13 +2,13 @@
   <div class="container-fluid">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" routerLink="/welcome">Navbar</a>
+      <a class="navbar-brand" routerLink="/welcome" style="padding-left: 1%;">NAVBAR</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" style="justify-content: end; padding-right: 1%;">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" routerLink="./about">About</a>
@@ -30,19 +30,17 @@
           </li>
           <div *ngIf="!isAuthenticated">
             <li class="nav-item " routerLinkActive="active">
-              <button class="btn btn-lg btn-primary" (click)="login()">Login with IdentityServer</button>
+              <button class="btn btn-primary" (click)="login()">Login</button>
             </li>
           </div>
           <div *ngIf="isAuthenticated">
-            <li class="nav-item " routerLinkActive="active">
-              <button class="nav-link" (click)="signout()">Sign out</button>
+            <li class="nav-item" routerLinkActive="active">
+              <button class="btn btn-primary" (click)="signout()">Sign out</button>
             </li>
           </div>
         
         </ul>
-        <div>
-            <label>{{userName}}</label>
-        </div>
+       
       </div>
     </nav>
   </div>

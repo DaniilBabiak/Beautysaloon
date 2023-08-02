@@ -3,8 +3,18 @@
   background: rgb(36, 33, 33);
 }
 .active{
-  background: rgb(107, 107, 252);
+  position: relative;
 }
+.active::after{
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: rgb(0, 151, 197);
+  
+}
+
+
 .container-fluid{
   padding: 0;
 }

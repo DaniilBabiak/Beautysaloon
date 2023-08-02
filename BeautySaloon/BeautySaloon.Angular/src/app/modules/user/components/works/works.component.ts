@@ -6,7 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './works.component.html',
   styleUrls: ['./works.component.css']
 })
-export class WorksComponent {
+export class WorksComponent  {
   imageUrl: SafeResourceUrl;
  
   showModal: boolean = false;
