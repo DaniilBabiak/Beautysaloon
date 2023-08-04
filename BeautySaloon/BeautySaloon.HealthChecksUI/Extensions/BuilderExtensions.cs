@@ -1,4 +1,5 @@
-﻿using BeautySaloon.HealthChecksUI.Helpers;
+﻿using BeautySaloon.HealthChecksUI.RabbitMQ;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
@@ -8,18 +9,23 @@ public static class BuilderExtensions
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         var configuration = builder.Configuration;
+        builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
         builder.Services.Configure<HealthChecksAuthSettings>(builder.Configuration.GetSection("HealthChecksAuthSettings"));
-
+        builder.Services.AddMemoryCache();
         // Add services to the container.
         builder.ConfigureSerilog();
 
         builder.Services.AddRazorPages();
 
-        builder.Services.AddHealthChecks();
+        builder.Services.AddHealthChecks()
+                        .AddRabbitMQ(configuration.GetSection("RabbitMQSettings")["Uri"],
+                                     name: "RabbitMQ",
+                                     tags: new[] { "Queue services" });
         builder.Services.AddHealthChecksUI(options =>
         {
-            options.SetEvaluationTimeInSeconds(5);
-            options.SetMinimumSecondsBetweenFailureNotifications(5);
+            options.SetEvaluationTimeInSeconds(30);
+            options.SetMinimumSecondsBetweenFailureNotifications(30);
+            
             options.UseApiEndpointHttpMessageHandler(sp =>
             {
                 return new HttpClientHandler
@@ -28,18 +34,16 @@ public static class BuilderExtensions
                     ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; }
                 };
             });
-
-            options.AddHealthCheckEndpoint("Identity", configuration["HealthCheckUris:Identity"]);
-            options.AddHealthCheckEndpoint("Api", configuration["HealthCheckUris:API"]);
+            options.AddHealthCheckEndpoint("Health checker", "http://localhost:80/health");
+            options.AddHealthCheckEndpoint("Identity", "http://localhost:80/api/Health/Identity");
+            options.AddHealthCheckEndpoint("Api", "http://localhost:80/api/Health/API");
         }).AddSqlServerStorage(configuration.GetConnectionString("HealthChecksDb"), options =>
         {
             options.EnableDetailedErrors();
             options.EnableSensitiveDataLogging();
         });
 
-        builder.Services.AddTransient<HealthChecksHttpClientHandler>()
-                        .AddHttpClient("health-checks") // HealthChecks.UI.Keys.HEALTH_CHECK_HTTP_CLIENT_NAME
-                        .AddHttpMessageHandler<HealthChecksHttpClientHandler>();
+        builder.Services.AddHostedService<HealthCheckMessageListener>();
 
         return builder;
     }

@@ -1,11 +1,16 @@
 using BeautySaloon.Identity.Data;
 using BeautySaloon.Identity.Models;
+using BeautySaloon.Identity.RabbitMQ;
+using BeautySaloon.Shared;
 using Duende.IdentityServer;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 namespace BeautySaloon.Identity;
@@ -13,6 +18,9 @@ internal static class HostingExtensions
 {
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
+        var configuration = builder.Configuration;
+        builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
+
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -50,6 +58,8 @@ internal static class HostingExtensions
                             {
                                 options.Authority = "http://identity";
                             }
+
+                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001" };
                             options.TokenValidationParameters.ValidateAudience = false;
                             options.RequireHttpsMetadata = false;
                         })
@@ -61,21 +71,14 @@ internal static class HostingExtensions
                             // register your IdentityServer with Google at https://console.developers.google.com
                             // enable the Google+ API
                             // set the redirect URI to https://localhost:5001/signin-google
-                            options.ClientId = "758550067740-2dud263od3thtahp6iv3usl88e9lfi80.apps.googleusercontent.com";
-                            options.ClientSecret = "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";
+                            options.ClientId = GoogleConfig.ClientId;
+                            options.ClientSecret = GoogleConfig.ClientSecret;
                             options.CorrelationCookie.HttpOnly = true;
                             options.CorrelationCookie.SameSite = SameSiteMode.None;
                             options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
                         });
 
-        builder.Services.AddAuthorization(options =>
-        {
-            options.AddPolicy("HealthPolicy", policy =>
-            {
-                policy.AuthenticationSchemes = new[] { JwtBearerDefaults.AuthenticationScheme };
-                policy.RequireClaim("scope", "health");
-            });
-        });
+        builder.Services.AddAuthorization();
 
         builder.ConfigureHealthChecks();
 
@@ -101,21 +104,26 @@ internal static class HostingExtensions
 
         app.MapRazorPages()
             .RequireAuthorization();
-        app.MapHealthChecks("/api/health", new HealthCheckOptions
-        {
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        }).RequireAuthorization("HealthPolicy");
+        //app.MapHealthChecks("/api/health", new HealthCheckOptions
+        //{
+        //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        //}).RequireAuthorization("HealthPolicy");
         return app;
     }
 
     private static void ConfigureHealthChecks(this WebApplicationBuilder builder)
     {
-        string connectionString = builder.Configuration.GetConnectionString("BeautysaloonIdentityDbConnection");
+        var configuration = builder.Configuration;
+        string connectionString = configuration.GetConnectionString("BeautysaloonIdentityDbConnection");
 
         builder.Services.AddHealthChecks()
                         .AddSqlServer(
                             connectionString: connectionString,
                             name: "Identity SQL Server",
-                            tags: new[] { "Database" });
+                            tags: new[] { "Database" })
+                        .AddRabbitMQ(configuration.GetSection("RabbitMQSettings")["Uri"],
+                                     name: "RabbitMQ",
+                                     tags: new[] { "Queue services" });
+        builder.Services.AddSingleton<IHealthCheckPublisher, RabbitMQHealthCheckPublisher>();
     }
 }
