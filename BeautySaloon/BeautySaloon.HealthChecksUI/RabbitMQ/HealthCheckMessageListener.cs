@@ -1,11 +1,14 @@
-﻿using BeautySaloon.Shared;
+﻿using RabbitMQ.Client.Events;
+using RabbitMQ.Client;
+using StackExchange.Redis;
+using Microsoft.Extensions.Options;
+using System.Text;
+using BeautySaloon.Shared;
+using Serilog;
+using System.Threading.Channels;
+using Newtonsoft.Json;
 using HealthChecks.UI.Core;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
 
 namespace BeautySaloon.HealthChecksUI.RabbitMQ;
 

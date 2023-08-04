@@ -1,4 +1,5 @@
 ﻿using BeautySaloon.HealthChecksUI.RabbitMQ;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
@@ -24,7 +25,7 @@ public static class BuilderExtensions
         {
             options.SetEvaluationTimeInSeconds(30);
             options.SetMinimumSecondsBetweenFailureNotifications(30);
-
+            
             options.UseApiEndpointHttpMessageHandler(sp =>
             {
                 return new HttpClientHandler

@@ -3,8 +3,13 @@ using BeautySaloon.Identity.Models;
 using BeautySaloon.Identity.RabbitMQ;
 using BeautySaloon.Shared;
 using Duende.IdentityServer;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 

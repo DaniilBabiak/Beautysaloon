@@ -20,7 +20,7 @@ public static class ApplicationExtensions
         app.UseRouting();
 
         app.UseAuthorization();
-
+        
         app.MapHealthChecks("/health", new HealthCheckOptions
         {
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
