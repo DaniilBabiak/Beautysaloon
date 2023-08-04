@@ -7,7 +7,7 @@ export class ConfigService {
     constructor() { }
 
     get resourceApiURI() {
-        return 'http://localhost:5002';
+        return 'http://localhost:5020';
     }
 
     getClientSettings(): UserManagerSettings {

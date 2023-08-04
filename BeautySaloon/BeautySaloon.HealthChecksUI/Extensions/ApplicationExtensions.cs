@@ -1,4 +1,6 @@
-﻿using HealthChecks.UI.Data;
+﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
@@ -18,11 +20,17 @@ public static class ApplicationExtensions
         app.UseRouting();
 
         app.UseAuthorization();
+        
+        app.MapHealthChecks("/health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+
         app.MapHealthChecksUI(options =>
         {
             options.UIPath = "/healthchecks-ui";
         });
-
+        app.MapControllers();
         app.MapRazorPages();
 
         return app;
