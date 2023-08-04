@@ -19,13 +19,14 @@ public static class ApplicationExtensions
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        app.UseAuthorization();
         app.UseStaticFiles();
 
         app.MapControllers().RequireAuthorization("api.read");
-        app.MapHealthChecks("/api/health", new HealthCheckOptions
-        {
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        }).RequireAuthorization("HealthPolicy");
+        //app.MapHealthChecks("/api/health", new HealthCheckOptions
+        //{
+        //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        //});
         await app.MigrateDatabase();
 
         return app;

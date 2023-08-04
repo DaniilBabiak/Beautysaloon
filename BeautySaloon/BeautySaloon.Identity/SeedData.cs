@@ -1,5 +1,6 @@
 ﻿using BeautySaloon.Identity.Data;
 using BeautySaloon.Identity.Models;
+using BeautySaloon.Shared;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ public static class SeedData
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim(JwtClaimTypes.Role, "admin")
+                            new Claim(JwtClaimTypes.Role, RolesConfig.Admin)
                         }).Result;
                 if (!result.Succeeded)
                 {
