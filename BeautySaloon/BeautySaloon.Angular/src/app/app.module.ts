@@ -38,7 +38,8 @@ import { TestRestComponent } from './test-rest/test-rest.component';
     NgbModule,
     FontAwesomeModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+  
   ],
   providers: [ConfigService],
   bootstrap: [AppComponent]

@@ -8,15 +8,18 @@
   font-family: Oswald-Regular;
   color: white;
   font-weight: 900;
+  display: flex;
+  flex-basis: 10%;
 }
 .work-wrapper{
-  background: linear-gradient(to right, #596367, #0f2027);
+  background: linear-gradient(to right, rgb(237 159 237), rgb(176 203 213));
   height: 84.4vh;
   display: flex;
   align-items: center;
   overflow: hidden;
   flex-direction: column;
   justify-content: space-around;
+  min-width: 300px;
 }
 
 .slider{
@@ -112,7 +115,7 @@
     padding: 60px 20px;
 }
 .sign-wrap-2 .sign_word {
-    font-size: 40px;
+    font-size: calc(var(--index) *1.5);
     font-weight: bold;
     line-height: 50px;
     color: #FFF;
@@ -141,7 +144,7 @@
 
 
 .rhomb {
-  margin-top: 2%;
+  min-width: 230px;
   max-width: 1200px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -150,7 +153,7 @@
   width: 43%;
   position: relative;
 }
-.rhomb::before{
+/* .rhomb::before{
   content: '';
   position: absolute;
   width: 20vw;
@@ -173,7 +176,7 @@
   rotate: 45deg;
   top: 14%;
   right: -13%;
-}
+} */
 
 .rhomb a {
   grid-column: span 2;
@@ -195,5 +198,76 @@
   max-width: 100%;
 }
 
+.current-page{
+  color: rgb(219, 179, 0);
+}
 
+.arrow-left-5,
+.arrow-right-5,
+.arrow-top-5,
+.arrow-bottom-5 {
+  
+    cursor: pointer;
+    fill: #dda900; 
+    transition: fill 0.5s ease-out, transform 0.3s ease-in;    
+}
+.arrow-left-5 {
+    transform: rotate(90deg);
+}
+.arrow-right-5 {
+    transform: rotate(270deg);
+}
+.arrow-top-5 {
+    transform: rotate(180deg);
+}
+.arrow-left-5:hover,
+.arrow-right-5:hover,
+.arrow-top-5:hover,
+.arrow-bottom-5:hover {
+    fill: #f6f87a;
+    transform: scale(1.2);
+}
+.arrow-left-5:hover {
+  transform: translate(50%, 0%);
+}
+.arrow-right-5:hover {
+    transform: rotate(270deg) scale(1.2);
+}
+.arrow-top-5:hover {
+    transform: rotate(180deg) scale(1.2);
+}
 
+.pag-nav-left{
+  position: absolute;
+  top: 33.5%;
+  width: calc(var(--index)*10);
+  left: 7%;
+
+}
+.pag-nav-right{
+  position: absolute;
+  top: 33.5%;
+  width: calc(var(--index)*10);
+  right: 7%;
+}
+@media screen and (max-width: 576px) {
+  .pag-nav-left{
+    rotate: 180deg;
+    top: 19%;
+    left: 34%;
+    left: 50%;
+    transform: translate(50%, 0%);
+  }
+  .pag-nav-right{
+    rotate: 0deg;
+    left: 34%;
+    top: 60%;
+    left: 50%;
+  
+    transform: translate(-50%, 0%);
+  }
+  .rhomb{
+    margin-top: 10%;
+    min-width: 300px;
+  }
+}

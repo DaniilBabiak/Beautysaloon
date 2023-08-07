@@ -1,9 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-
+*{
+  scroll-behavior: auto;
+}
 :root{
   --primary-color: #007bff;
   --index: calc(1vw + 1vh);
- 
+  --color-header: #f4efec;
+  --color-text: #cdc6c3;
+  --gallery-gap: calc(var(--index) * 10)
 }
 @font-face {
   font-family: Oswal-regular;
@@ -12,4 +16,30 @@
 @font-face{
   font-family: PlayFair;
   src: url(./fonts/Playfair.ttf);
+}
+@font-face {
+  font-family: raleway-c;
+  src: url(./fonts/ofont.ru_Raleway.ttf);
+}
+@font-face {
+  font-family: outfit-c;
+  src: url(./fonts/OutfitRegular.ttf);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #08080c;
+  -webkit-box-shadow: inset 0 0 6px #000000;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 6px #1cffe3;
+  opacity: 0.33;
 }

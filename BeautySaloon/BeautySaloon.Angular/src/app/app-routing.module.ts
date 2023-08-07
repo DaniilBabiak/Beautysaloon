@@ -8,17 +8,20 @@ import { TestRestComponent } from './test-rest/test-rest.component';
 
 
 const routes: Routes = [
+
+ 
   { path: '', redirectTo: 'user', pathMatch: 'full' },
   { path: 'welcome', component: FrontPageComponent },
 
   { path: '', redirectTo: 'user', pathMatch: 'full' },
   { path: 'welcome', component: FrontPageComponent },
-  //{path:'**', redirectTo:'admin', pathMatch:'full'},
+
   { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule) },
   { path: 'user', loadChildren: () => import('./modules/user/user.module').then((m) => m.UserModule) },
   { path: 'profile', component: ProfileComponent },
   { path: 'auth-callback', component: AuthCallbackComponent },
   { path: 'test', component: TestRestComponent }
+   
 ];
 
 @NgModule({

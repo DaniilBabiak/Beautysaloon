@@ -1,4 +1,118 @@
-p{
+*{
   margin: 0;
-  height: 78.6vh;
+  padding: 0;
+  box-sizing: border-box;
+  
 }
+
+.container-fluid{
+  overflow: hidden;
+}
+.img-width{
+  width: 50%;
+}
+h1, h2, h3, h4, h5, h6{
+  font-family: outfit-c;
+}
+
+.content, .hero, .main-header .gallery-left, .gallery-right {
+  will-change: transform;
+} 
+
+body{
+ 
+  background-size: 50px;
+
+  font-family: raleway-c;
+  overflow-x: hidden;
+}
+.hero{
+  width: calc(var(--index) * 26);
+  position: absolute;
+  left: 46vw;
+  z-index: -1;
+}
+.main-header{
+  height: 94.2vh;
+}
+.container{
+  padding: 0 7vw;
+
+}
+.main-title{
+  font-size: calc(var(--index) * 8);
+  position: absolute;
+  width: min-content;
+  line-height: .9;
+  top: 15vh;
+  left: 10%;
+}
+
+.gallery{
+  display: flex;
+  padding: calc(var(--index) * 4) 0;
+}
+.gallery > * {
+flex:1;
+display: flex;
+align-items: center;
+flex-direction: column;
+}
+.gallery__item{
+  max-width: calc(var(--index) * 21);
+  margin-bottom: var(--gallery-gap);
+  max-height: 180vh;
+  border-radius: 8px;
+}
+.gallery-left{
+margin-top: calc(var(--gallery-gap) * 1.8);
+}
+.gallery-right .gallery__item{
+  margin-top: var(--gallery-gap);
+  margin-bottom: 0;
+}
+.text-block{
+  color: var(--color-text);
+  position: relative;
+}
+.text-block__h{
+  font-size: 2.5rem;
+  line-height: 3.3rem;
+  color: var(--color-header);
+  margin-bottom: 1.5rem;
+}
+.text-block__p{
+  line-height: 1.75rem;
+  font-size: 1.25rem;
+}
+
+.about-btn-makeappoitment{
+  display: flex;
+  justify-content: center;
+}
+.appoinmentsBtn {
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+  padding: 20px 30px;
+  margin: 10px 20px;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-image: linear-gradient(to right, #e63600 0%, #fae904 51%, #eec302 100%);
+  background-size: 200% auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+  transition: .5s;
+  position: absolute;
+    top: 85vh;
+    left: 9%;
+}
+
+.appoinmentsBtn:hover {
+  background-position: right center;
+  transform: scale(1.1);
+}
+
+
+

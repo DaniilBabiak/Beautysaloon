@@ -63,7 +63,7 @@
     constructor(private sanitizer: DomSanitizer) {
     
       const imagePath = 'assets/images/services-image1.jpg';
-      const imagePath2 = 'assets/images/services-image2.avif';
+      const imagePath2 = 'assets/images/services-image2.jpg';
       const imagePath3 = 'assets/images/services-image3.jpg';
       const imagePath4 = 'assets/images/services-image4.jpg';
       this.servicesPhoto1 = this.sanitizer.bypassSecurityTrustResourceUrl(imagePath);

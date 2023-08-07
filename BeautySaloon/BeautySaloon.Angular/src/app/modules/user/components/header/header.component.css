@@ -1,6 +1,7 @@
 
 .nav-header{
   background: rgb(36, 33, 33);
+  min-width: 300px;
 }
 .active{
   position: relative;

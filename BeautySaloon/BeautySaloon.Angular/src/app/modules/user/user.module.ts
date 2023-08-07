@@ -12,6 +12,8 @@ import { WorksComponent } from './components/works/works.component';
 import { ReviewsComponent } from './components/reviews/reviews.component';
 import { AppointmentsComponent } from './components/appointments/appointments.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,9 +30,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   imports: [
     CommonModule,
     UserRoutingModule,
-   
-    
+    SharedModule,
+    NgxPaginationModule,
     FontAwesomeModule,
+    
+    
   ]
 })
 export class UserModule { }
