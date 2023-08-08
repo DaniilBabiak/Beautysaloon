@@ -1,4 +1,8 @@
 ﻿using BeautySaloon.HealthChecksUI.HealthChecks;
+using BeautySaloon.Shared;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Serilog;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
@@ -19,6 +23,75 @@ public static class BuilderExtensions
 
         builder.ConfigureHealthChecksUI();
 
+        builder.Services.AddAuthentication(options =>
+                        {
+                            options.DefaultScheme = "Cookies";
+                            options.DefaultChallengeScheme = "oidc";
+                        })
+                        .AddCookie("Cookies", options =>
+                        {
+                            //options.CookieManager = new ChunkingCookieManager();
+
+                            ////options.Cookie.HttpOnly = true;
+                            //options.Cookie.SameSite = SameSiteMode.None;
+                            //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                        })
+                        .AddOpenIdConnect("oidc", options =>
+                        {
+                            if (builder.Environment.IsDevelopment())
+                            {
+                                options.Authority = "https://localhost:5001";
+                            }
+                            else
+                            {
+                                options.Authority = "http://identity";
+                                options.Events.OnRedirectToIdentityProvider = context =>
+                                {
+                                    // Intercept the redirection so the browser navigates to the right URL in your host
+                                    context.ProtocolMessage.IssuerAddress = "https://localhost:5001/connect/authorize";
+                                    context.ProtocolMessage.RedirectUri = "http://localhost:5030/signin-oidc";
+                                    return Task.CompletedTask;
+                                };
+                            }
+
+                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001" };
+                            options.RequireHttpsMetadata = false;
+                            options.ClientId = ClientsConfig.HealthCheckUI.ClientId;
+                            options.ClientSecret = "secret";
+                            options.ResponseType = "code";
+
+                            options.SaveTokens = true;
+
+                            options.Scope.Clear();
+                            options.Scope.Add("openid");
+                            options.Scope.Add("roles");
+                            options.ClaimActions.MapJsonKey("role", "role", "role");
+                            options.TokenValidationParameters.RoleClaimType = "role";
+
+                            options.Events.OnTokenResponseReceived = context =>
+                            {
+                                // Логирование токена
+                                var accessToken = context.TokenEndpointResponse.AccessToken;
+                                Log.Information(accessToken);
+
+                                return Task.CompletedTask;
+                            };
+
+                            options.Events.OnUserInformationReceived = context =>
+                            {
+
+                                return Task.CompletedTask;
+                            };
+
+                            options.GetClaimsFromUserInfoEndpoint = true;
+                        });
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminPolicy", policy =>
+            {
+                policy.RequireRole(RolesConfig.Admin);
+            });
+        });
         return builder;
     }
 

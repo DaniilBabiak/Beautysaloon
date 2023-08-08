@@ -4,6 +4,8 @@ using BeautySaloon.Identity.Models;
 using BeautySaloon.Identity.RabbitMQ;
 using BeautySaloon.Shared;
 using Duende.IdentityServer;
+using Duende.IdentityServer.AspNetIdentity;
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -16,7 +18,7 @@ internal static class HostingExtensions
         var configuration = builder.Configuration;
         builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
         builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
-
+        //builder.Services.AddTransient<IProfileService, ProfileService>();
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>

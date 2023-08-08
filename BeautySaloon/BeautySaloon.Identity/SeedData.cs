@@ -18,6 +18,18 @@ public static class SeedData
             context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+            var adminRole = roleMgr.FindByNameAsync(RolesConfig.Admin).Result;
+            if (adminRole == null)
+            {
+                adminRole = new ApplicationRole()
+                {
+                    Name = RolesConfig.Admin
+                };
+                var result = roleMgr.CreateAsync(adminRole).Result;
+            }
+
             var alice = userMgr.FindByNameAsync("alice").Result;
             if (alice == null)
             {
@@ -32,13 +44,12 @@ public static class SeedData
                 {
                     throw new Exception(result.Errors.First().Description);
                 }
-
+                
                 result = userMgr.AddClaimsAsync(alice, new Claim[]{
                             new Claim(JwtClaimTypes.Name, "Alice Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim(JwtClaimTypes.Role, RolesConfig.Admin)
+                            new Claim(JwtClaimTypes.WebSite, "http://alice.com")
                         }).Result;
                 if (!result.Succeeded)
                 {
@@ -83,6 +94,8 @@ public static class SeedData
             {
                 Log.Debug("bob already exists");
             }
+
+            var addRoleResult = userMgr.AddToRoleAsync(alice, RolesConfig.Admin).Result;
         }
     }
 }
