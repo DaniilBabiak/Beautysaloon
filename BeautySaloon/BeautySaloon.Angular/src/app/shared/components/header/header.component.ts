@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import{AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -12,8 +12,22 @@ export class HeaderComponent implements OnInit {
   isAuthenticated: boolean = false;
   userName: string | undefined;
   isAdmin: boolean = false;
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    if (this.authService.isAuthenticated()){
+      this.isAuthenticated = true;
+      this.userName = this.authService.name
+      this.isAdmin = this.authService.isAdmin();
+    }
+  }
+
+  login() {
+    this.authService.login();
+    this.userName = this.authService.name;
+  }
+
+  async signout(){
+    await this.authService.signout();
   }
 }

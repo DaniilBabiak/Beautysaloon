@@ -6,6 +6,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
+import {AuthService} from "./services/auth.service";
 @NgModule({
   declarations: [
     ScrollAnimatorDirective,
