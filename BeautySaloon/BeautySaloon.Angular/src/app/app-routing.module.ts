@@ -1,27 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FrontPageComponent } from './front-page/front-page.component';
 
-import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
-import { ProfileComponent } from './profileComponents/profile/profile.component';
-import { TestRestComponent } from './test-rest/test-rest.component';
 
 
 const routes: Routes = [
 
- 
-  { path: '', redirectTo: 'user', pathMatch: 'full' },
-  { path: 'welcome', component: FrontPageComponent },
+  {path: 'user', loadChildren: () => import('./views/user/user.module').then(m => m.UserModule)},
+  { path: 'welcome', loadChildren: () => import('./views/welcome/welcome.module').then(m => m.WelcomeModule) },
+  {path: "**", redirectTo: 'welcome'},
 
-  { path: '', redirectTo: 'user', pathMatch: 'full' },
-  { path: 'welcome', component: FrontPageComponent },
+  // { path: '', redirectTo: 'user', pathMatch: 'full' },
+  // { path: 'welcome', component: FrontPageComponent },
+  //
+  //
+  //
+  // { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule) },
+  // { path: 'user', loadChildren: () => import('./modules/user/user.module').then((m) => m.UserModule) },
+  // { path: 'profile', component: ProfileComponent },
+  // { path: 'auth-callback', component: AuthCallbackComponent },
+  // { path: 'test', component: TestRestComponent }
 
-  { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule) },
-  { path: 'user', loadChildren: () => import('./modules/user/user.module').then((m) => m.UserModule) },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'auth-callback', component: AuthCallbackComponent },
-  { path: 'test', component: TestRestComponent }
-   
 ];
 
 @NgModule({
