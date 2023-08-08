@@ -8,19 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="7.0.0" />
-	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.0.0" />
 	  <PackageReference Include="AspNetCore.HealthChecks.UI.SqlServer.Storage" Version="7.0.0" />
 	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
 	  <PackageReference Include="AspNetCore.HealthChecks.UI" Version="7.0.1" />
-	  <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
-	  <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BeautySaloon.Shared\BeautySaloon.Shared.csproj" />
   </ItemGroup>
 
 </Project>

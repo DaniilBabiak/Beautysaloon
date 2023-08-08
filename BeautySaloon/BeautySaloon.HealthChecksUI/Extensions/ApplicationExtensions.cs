@@ -2,6 +2,7 @@
 using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
 
@@ -23,12 +24,20 @@ public static class ApplicationExtensions
         
         app.MapHealthChecks("/health", new HealthCheckOptions
         {
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            ResultStatusCodes = new Dictionary<HealthStatus, int>
+                                {
+                                    {HealthStatus.Healthy, StatusCodes.Status200OK},
+                                    {HealthStatus.Degraded, StatusCodes.Status200OK},
+                                    {HealthStatus.Unhealthy, StatusCodes.Status200OK},
+                                },
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+            Predicate = _ => true
         });
 
         app.MapHealthChecksUI(options =>
         {
             options.UIPath = "/healthchecks-ui";
+            options.ApiPath = "/healthchecks-api";
         });
         app.MapControllers();
         app.MapRazorPages();
