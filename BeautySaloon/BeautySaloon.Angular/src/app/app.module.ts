@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import {HttpClientModule} from "@angular/common/http";
+import {ConfigService} from "./shared/services/config.service";
 
 
 
@@ -21,8 +23,9 @@ import { FormsModule } from '@angular/forms';
     NgbModule,
     FontAwesomeModule,
     FormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [ConfigService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
