@@ -23,4 +23,8 @@
     <ProjectReference Include="..\BeautySaloon.Shared\BeautySaloon.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RabbitMQ\" />
+  </ItemGroup>
+
 </Project>

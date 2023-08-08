@@ -104,7 +104,7 @@ services:
 
     healthchecks:
         container_name: healthchecks
-        image: beautysaloon-healthcheck-service:4.4
+        image: beautysaloon-healthcheck-service:4.5
         build:
             dockerfile: ./BeautySaloon.HealthChecksUI/Dockerfile
         ports:

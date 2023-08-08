@@ -1,8 +1,5 @@
-﻿using BeautySaloon.HealthChecksUI.RabbitMQ;
-using BeautySaloon.Shared;
-using Microsoft.AspNetCore.Connections;
+﻿using BeautySaloon.Shared;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,50 +7,47 @@ using System.Text;
 
 namespace BeautySaloon.HealthChecksUI.HealthChecks;
 
-public class APIHealthCheck : IHealthCheck, IDisposable
+public class RabbitMQHealthCheck : IHealthCheck, IDisposable
 {
-    private readonly RabbitMQSettings _rabbitmqSettings;
-    private readonly HealthChecksSettings _healthChecksSettings;
+    private readonly HealthChecksSettings _settings = new HealthChecksSettings();
     private readonly ConnectionFactory _connectionFactory;
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly EventingBasicConsumer _consumer;
 
-    public APIHealthCheck(IOptions<RabbitMQSettings> rabbitmqSettings, IOptions<HealthChecksSettings> healthChecksSettings)
+    public RabbitMQHealthCheck(Action<HealthChecksSettings> configureOptions = null)
     {
-        _rabbitmqSettings = rabbitmqSettings.Value;
-        _healthChecksSettings = healthChecksSettings.Value;
+        configureOptions?.Invoke(_settings);
 
         _connectionFactory = new ConnectionFactory()
         {
-            HostName = _rabbitmqSettings.HostName,
-            UserName = _rabbitmqSettings.UserName,
-            Password = _rabbitmqSettings.Password,
-            Uri = new Uri(_rabbitmqSettings.Uri)
+            HostName = _settings.HostName,
+            UserName = _settings.UserName,
+            Password = _settings.Password,
+            Uri = new Uri(_settings.Uri)
         };
 
         _connection = _connectionFactory.CreateConnection();
         _channel = _connection.CreateModel();
         _consumer = new EventingBasicConsumer(_channel);
     }
-
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        var result = new HealthCheckResult(HealthStatus.Unhealthy, "No respond from API");
-        _channel.QueueDeclare(queue: _healthChecksSettings.ApiRequestQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-        _channel.QueueDeclare(queue: _healthChecksSettings.ApiReplyQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+        var result = new HealthCheckResult(HealthStatus.Unhealthy, $"No respond from {context.Registration.Name}");
+        _channel.QueueDeclare(queue: _settings.RequestQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+        _channel.QueueDeclare(queue: _settings.ReplyQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
         var correlationId = Guid.NewGuid().ToString();
 
         var properties = _channel.CreateBasicProperties();
-            properties.ReplyTo = _healthChecksSettings.ApiReplyQueueName;
-            properties.CorrelationId = correlationId;
+        properties.ReplyTo = _settings.ReplyQueueName;
+        properties.CorrelationId = correlationId;
 
         var body = Encoding.UTF8.GetBytes("");
 
-        _channel.BasicPublish(exchange: "", routingKey: _healthChecksSettings.ApiRequestQueueName, basicProperties: properties, body: body);
+        _channel.BasicPublish(exchange: "", routingKey: _settings.RequestQueueName, basicProperties: properties, body: body);
 
-        _channel.BasicConsume(queue: _healthChecksSettings.ApiReplyQueueName, autoAck: true, consumer: _consumer);
+        _channel.BasicConsume(queue: _settings.ReplyQueueName, autoAck: true, consumer: _consumer);
 
         _consumer.Received += (model, ea) =>
         {

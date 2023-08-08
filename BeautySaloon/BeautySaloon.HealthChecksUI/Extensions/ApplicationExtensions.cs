@@ -21,7 +21,7 @@ public static class ApplicationExtensions
         app.UseRouting();
 
         app.UseAuthorization();
-        
+
         app.MapHealthChecks("/health", new HealthCheckOptions
         {
             ResultStatusCodes = new Dictionary<HealthStatus, int>

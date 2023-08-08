@@ -1,17 +1,12 @@
-﻿using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
-using BeautySaloon.Identity.RabbitMQ;
-using Microsoft.Extensions.Options;
-using System.Text;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Connections;
-using static IdentityModel.ClaimComparer;
-using Serilog;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using System.Threading.Channels;
-using System;
+﻿using BeautySaloon.Identity.RabbitMQ;
 using BeautySaloon.Shared;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using Serilog;
+using System.Text;
 
 namespace BeautySaloon.Identity.HealthChecks;
 
@@ -61,7 +56,7 @@ public class RabbitMQHealthCheckListener : BackgroundService
                     Duration = checkHealthResult.TotalDuration
                 };
 
-                foreach(var entry in checkHealthResult.Entries)
+                foreach (var entry in checkHealthResult.Entries)
                 {
                     var entryMessage = new StringBuilder();
                     entryMessage.Append(entry.Value.Status.ToString());

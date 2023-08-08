@@ -2,8 +2,10 @@
 
 public class HealthChecksSettings
 {
-    public string ApiRequestQueueName { get; set; }
-    public string ApiReplyQueueName { get; set; }
-    public string IdentityRequestQueueName { get; set; }
-    public string IdentityReplyQueueName { get; set; }
+    public string RequestQueueName { get; set; }
+    public string ReplyQueueName { get; set; }
+    public string HostName { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string Uri { get; set; }
 }

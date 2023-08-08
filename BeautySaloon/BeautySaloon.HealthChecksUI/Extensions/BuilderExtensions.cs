@@ -1,7 +1,4 @@
 ﻿using BeautySaloon.HealthChecksUI.HealthChecks;
-using BeautySaloon.HealthChecksUI.RabbitMQ;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
@@ -11,7 +8,6 @@ public static class BuilderExtensions
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         var configuration = builder.Configuration;
-        builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
         builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
         builder.Services.AddMemoryCache();
         // Add services to the container.
@@ -31,14 +27,41 @@ public static class BuilderExtensions
         var configuration = builder.Configuration;
 
         builder.Services.AddHealthChecks()
-                        .AddCheck<APIHealthCheck>("API")
-                        .AddCheck<IdentityHealthCheck>("Identity")
+                        .AddRabbitMQHealthCheck("API", options =>
+                        {
+                            options.RequestQueueName = "request-health-api";
+                            options.ReplyQueueName = "reply-health-api";
+                            options.HostName = "beautysaloon-rabbit";
+                            options.UserName = "guest";
+                            options.Password = "guest";
+                            if (builder.Environment.IsDevelopment())
+                            {
+                                options.Uri = "amqp://guest:guest@localhost:5672";
+                            }
+                            else
+                            {
+                                options.Uri = "amqp://guest:guest@RabbitMQ";
+                            }
+                        })
+                        .AddRabbitMQHealthCheck("Identity", options =>
+                        {
+                            options.RequestQueueName = "request-health-identity";
+                            options.ReplyQueueName = "reply-health-identity";
+                            options.HostName = "beautysaloon-rabbit";
+                            options.UserName = "guest";
+                            options.Password = "guest";
+                            if (builder.Environment.IsDevelopment())
+                            {
+                                options.Uri = "amqp://guest:guest@localhost:5672";
+                            }
+                            else
+                            {
+                                options.Uri = "amqp://guest:guest@RabbitMQ";
+                            }
+                        })
                         .AddSqlServer(configuration.GetConnectionString("HealthChecksDb"),
                                       name: "Health Checks SQL Server",
-                                      tags: new[] { "database" })
-                        .AddRabbitMQ(configuration.GetSection("RabbitMQSettings")["Uri"],
-                                     name: "RabbitMQ",
-                                     tags: new[] { "Queue services" });
+                                      tags: new[] { "database" });
     }
 
     private static void ConfigureHealthChecksUI(this WebApplicationBuilder builder)

@@ -2,14 +2,7 @@
 using BeautySaloon.API.HealthChecks;
 using BeautySaloon.API.RabbitMQ;
 using BeautySaloon.Shared;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.Net.Http.Headers;
 using Serilog;
 
 namespace BeautySaloon.API.Extensions;
