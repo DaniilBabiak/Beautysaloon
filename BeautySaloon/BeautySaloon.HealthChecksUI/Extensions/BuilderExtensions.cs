@@ -26,38 +26,34 @@ public static class BuilderExtensions
     {
         var configuration = builder.Configuration;
 
+        var rabbitUri = string.Empty;
+
+        if (builder.Environment.IsDevelopment())
+        {
+            rabbitUri = "amqp://guest:guest@localhost:5672";
+        }
+        else
+        {
+            rabbitUri = "amqp://guest:guest@RabbitMQ";
+        }
         builder.Services.AddHealthChecks()
-                        .AddRabbitMQHealthCheck("API", options =>
+                        .AddRabbitMQHealthCheck("API", new HealthChecksSettings
                         {
-                            options.RequestQueueName = "request-health-api";
-                            options.ReplyQueueName = "reply-health-api";
-                            options.HostName = "beautysaloon-rabbit";
-                            options.UserName = "guest";
-                            options.Password = "guest";
-                            if (builder.Environment.IsDevelopment())
-                            {
-                                options.Uri = "amqp://guest:guest@localhost:5672";
-                            }
-                            else
-                            {
-                                options.Uri = "amqp://guest:guest@RabbitMQ";
-                            }
+                            RequestQueueName = "request-health-api",
+                            ReplyQueueName = "reply-health-api",
+                            HostName = "beautysaloon-rabbit",
+                            UserName = "guest",
+                            Password = "guest",
+                            Uri = rabbitUri
                         })
-                        .AddRabbitMQHealthCheck("Identity", options =>
+                        .AddRabbitMQHealthCheck("Identity", new HealthChecksSettings
                         {
-                            options.RequestQueueName = "request-health-identity";
-                            options.ReplyQueueName = "reply-health-identity";
-                            options.HostName = "beautysaloon-rabbit";
-                            options.UserName = "guest";
-                            options.Password = "guest";
-                            if (builder.Environment.IsDevelopment())
-                            {
-                                options.Uri = "amqp://guest:guest@localhost:5672";
-                            }
-                            else
-                            {
-                                options.Uri = "amqp://guest:guest@RabbitMQ";
-                            }
+                            RequestQueueName = "request-health-identity",
+                            ReplyQueueName = "reply-health-identity",
+                            HostName = "beautysaloon-rabbit",
+                            UserName = "guest",
+                            Password = "guest",
+                            Uri = rabbitUri
                         })
                         .AddSqlServer(configuration.GetConnectionString("HealthChecksDb"),
                                       name: "Health Checks SQL Server",

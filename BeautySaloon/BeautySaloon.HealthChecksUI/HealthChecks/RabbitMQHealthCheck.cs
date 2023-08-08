@@ -15,9 +15,9 @@ public class RabbitMQHealthCheck : IHealthCheck, IDisposable
     private readonly IModel _channel;
     private readonly EventingBasicConsumer _consumer;
 
-    public RabbitMQHealthCheck(Action<HealthChecksSettings> configureOptions = null)
+    public RabbitMQHealthCheck(HealthChecksSettings settings = null)
     {
-        configureOptions?.Invoke(_settings);
+        _settings = settings ?? new HealthChecksSettings();
 
         _connectionFactory = new ConnectionFactory()
         {

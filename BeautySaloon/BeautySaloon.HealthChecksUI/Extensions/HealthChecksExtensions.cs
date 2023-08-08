@@ -1,4 +1,6 @@
 ﻿using BeautySaloon.HealthChecksUI.HealthChecks;
+using HealthChecks.SqlServer;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
@@ -8,14 +10,18 @@ public static class HealthChecksExtensions
     public static IHealthChecksBuilder AddRabbitMQHealthCheck(
         this IHealthChecksBuilder builder,
         string name,
-        Action<HealthChecksSettings> configureOptions = null)
+        HealthChecksSettings settings = null,
+        HealthStatus? failureStatus = null,
+        IEnumerable<string>? tags = null,
+        TimeSpan? timeout = null)
     {
-        builder.Services.AddTransient(provider =>
-        {
-            var settingsOptions = provider.GetRequiredService<IOptions<HealthChecksSettings>>();
-            return ActivatorUtilities.CreateInstance<RabbitMQHealthCheck>(provider, configureOptions);
-        });
-
-        return builder.AddCheck<RabbitMQHealthCheck>(name);
+        return builder.Add(new HealthCheckRegistration(name,
+            sp =>
+            {
+                return new RabbitMQHealthCheck(settings);
+            },
+            failureStatus,
+            tags,
+            timeout));
     }
 }
