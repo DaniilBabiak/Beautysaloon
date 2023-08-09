@@ -1,0 +1,21 @@
+
+.nav-header{
+  background: rgb(36, 33, 33);
+  min-width: 300px;
+}
+.active{
+  position: relative;
+}
+.active::after{
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: rgb(0, 151, 197);
+
+}
+
+
+.container-fluid{
+  padding: 0;
+}
