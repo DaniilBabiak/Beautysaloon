@@ -14,7 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautySaloon.Identity", "Be
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautySaloon.HealthChecksUI", "BeautySaloon.HealthChecksUI\BeautySaloon.HealthChecksUI.csproj", "{9CAAA3FA-4F7A-424C-9959-ABB59C5CB4E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySaloon.Shared", "BeautySaloon.Shared\BeautySaloon.Shared.csproj", "{DE89EF43-DAA3-4683-84D7-1CFDBBD56D63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautySaloon.Shared", "BeautySaloon.Shared\BeautySaloon.Shared.csproj", "{DE89EF43-DAA3-4683-84D7-1CFDBBD56D63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySaloon.ImagesAPI", "BeautySaloon.ImagesAPI\BeautySaloon.ImagesAPI.csproj", "{A5FB36E5-FCF5-441F-AB3A-52603C023172}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{DE89EF43-DAA3-4683-84D7-1CFDBBD56D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE89EF43-DAA3-4683-84D7-1CFDBBD56D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE89EF43-DAA3-4683-84D7-1CFDBBD56D63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FB36E5-FCF5-441F-AB3A-52603C023172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FB36E5-FCF5-441F-AB3A-52603C023172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FB36E5-FCF5-441F-AB3A-52603C023172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FB36E5-FCF5-441F-AB3A-52603C023172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
