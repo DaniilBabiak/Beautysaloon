@@ -15,14 +15,18 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()){
-      this.isAuthenticated = true;
-      this.userName = this.authService.name
-      this.authService.isAdmin().then(isAdmin =>{
-        this.isAdmin = isAdmin;
-      })
+     this.authService.isAuthenticated().then(authResult=> {
+       if (authResult){
+         this.isAuthenticated = true;
+         this.userName = this.authService.name
+         this.authService.isAdmin().then(isAdmin =>{
+           this.isAdmin = isAdmin;
+         })
+       }
+     })
+
     }
-  }
+
 
   login() {
     this.authService.login();

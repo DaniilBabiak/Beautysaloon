@@ -4,10 +4,13 @@ import { UserManager, User } from 'oidc-client';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { ConfigService } from "./config.service";
 
+const REDIRECT_URL_KEY = 'redirectUrl';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
   // Observable navItem source
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
   // Observable navItem stream
@@ -25,7 +28,7 @@ export class AuthService {
     this.manager = new UserManager(userManageConfig);
     this.manager.getUser().then(user => {
       this.user = user;
-      this._authNavStatusSource.next(this.isAuthenticated());
+      //this._authNavStatusSource.next(this.isAuthenticated());
     });
   }
 
@@ -40,12 +43,18 @@ export class AuthService {
   async completeAuthentication() {
     if (this.manager) {
       this.user = await this.manager.signinRedirectCallback();
-      this._authNavStatusSource.next(this.isAuthenticated());
+      //this._authNavStatusSource.next(this.isAuthenticated());
     }
   }
 
-  isAuthenticated(): boolean {
-    return this.user != null && !this.user.expired;
+  isAuthenticated(): Promise<boolean> {
+
+    if (!this.manager) {
+      return Promise.resolve(false);
+    }
+    return this.manager.getUser().then(user => {
+      return user != null && !user.expired;
+    });
   }
 
   isAdmin(): Promise<boolean> {
@@ -72,6 +81,17 @@ export class AuthService {
     return this.user?.profile?.name ?? '';
   }
 
+  get redirectUrl(): string | null {
+    return sessionStorage.getItem(REDIRECT_URL_KEY);
+  }
+
+  set redirectUrl(url: string | null) {
+    if (url) {
+      sessionStorage.setItem(REDIRECT_URL_KEY, url);
+    } else {
+      sessionStorage.removeItem(REDIRECT_URL_KEY);
+    }
+  }
   get phoneNumber(): string {
     return this.user?.profile?.phone_number ?? '';
   }

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import{AuthService} from "../../shared/services/auth.service";
+import { AuthService } from "../../shared/services/auth.service";
 
 @Component({
   selector: 'app-auth-callback',
   templateUrl: './auth-callback.component.html',
   styleUrls: ['./auth-callback.component.css']
 })
-export class AuthCallbackComponent implements OnInit{
+export class AuthCallbackComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
   error: boolean = false;
   async ngOnInit() {
@@ -21,6 +21,14 @@ export class AuthCallbackComponent implements OnInit{
     }
 
     await this.authService.completeAuthentication();
-    this.router.navigate(['/user']);
+
+    if (this.authService.redirectUrl) {
+      var url = this.authService.redirectUrl;
+      this.authService.redirectUrl = null;
+      this.router.navigate([url]);
+    }
+    else {
+      this.router.navigate(['/user']);
+    }
   }
 }
