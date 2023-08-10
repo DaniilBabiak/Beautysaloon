@@ -38,7 +38,14 @@ public static class BuilderExtensions
 
         builder.Services.AddMinio(options =>
         {
-            options.Endpoint = "localhost:9000";
+            if (builder.Environment.IsDevelopment())
+            {
+                options.Endpoint = "localhost:9000";
+            }
+            else
+            {
+                options.Endpoint = "minio:9000";
+            }
             options.AccessKey = "0TQQsAlu2FmZoGR2Gdd6";
             options.SecretKey = "oXA1pc73RQFxwyICpxCyTTLxBz0n8OKml0FiAORP";
             options.ConfigureClient(client =>
