@@ -2,6 +2,7 @@
 using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
 
@@ -14,22 +15,36 @@ public static class ApplicationExtensions
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
+            app.UseHsts();
         }
         app.UseStaticFiles();
 
-        app.UseRouting();
+        app.UseCookiePolicy(new CookiePolicyOptions
+        {
+            Secure = CookieSecurePolicy.Always
+        });
 
+        app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
-        
+
         app.MapHealthChecks("/health", new HealthCheckOptions
         {
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            ResultStatusCodes = new Dictionary<HealthStatus, int>
+                                {
+                                    {HealthStatus.Healthy, StatusCodes.Status200OK},
+                                    {HealthStatus.Degraded, StatusCodes.Status200OK},
+                                    {HealthStatus.Unhealthy, StatusCodes.Status200OK},
+                                },
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+            Predicate = _ => true
         });
 
         app.MapHealthChecksUI(options =>
         {
             options.UIPath = "/healthchecks-ui";
-        });
+            options.ApiPath = "/healthchecks-api";
+        }).RequireAuthorization("AdminPolicy");
         app.MapControllers();
         app.MapRazorPages();
 

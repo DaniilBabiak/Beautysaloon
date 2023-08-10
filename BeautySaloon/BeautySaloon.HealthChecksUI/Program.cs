@@ -1,5 +1,6 @@
 using BeautySaloon.HealthChecksUI.Extensions;
 using Microsoft.IdentityModel.Logging;
+using Serilog;
 
 namespace BeautySaloon.HealthChecksUI;
 
@@ -7,14 +8,22 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        IdentityModelEventSource.ShowPII = true;
-        var builder = WebApplication.CreateBuilder(args);
-        builder.ConfigureServices();
+        try
+        {
+            IdentityModelEventSource.ShowPII = true;
+            var builder = WebApplication.CreateBuilder(args);
+            builder.ConfigureServices();
 
-        var app = builder.Build();
+            var app = builder.Build();
 
-        app.ConfigureApplication();
+            app.ConfigureApplication();
 
-        app.Run();
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Stopping application.");
+        }
+
     }
 }

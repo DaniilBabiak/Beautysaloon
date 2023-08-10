@@ -1,6 +1,4 @@
 ﻿using BeautySaloon.API.Entities.Contexts;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 

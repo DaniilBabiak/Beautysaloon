@@ -1,4 +1,5 @@
 ﻿using BeautySaloon.Shared;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using IdentityModel;
 
@@ -11,14 +12,7 @@ public static class Config
             new IdentityResources.OpenId(),
             new IdentityResources.Email(),
             new IdentityResources.Profile(),
-            new IdentityResource()
-            {
-                Name = "role",
-                UserClaims = new List<string>
-                {
-                    JwtClaimTypes.Role
-                }
-            }
+            new IdentityResource("roles", new[] { "role" })
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>

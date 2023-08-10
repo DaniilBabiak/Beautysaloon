@@ -64,7 +64,7 @@ services:
 
     identity:
         container_name: beautysaloon-identity
-        image: beautysaloon-identity-service:2.1
+        image: beautysaloon-identity-service:4.2
         build:
             dockerfile: ./BeautySaloon.Identity/Dockerfile
         ports:
@@ -86,7 +86,7 @@ services:
 
     beautysaloon:
         container_name: beautysaloon
-        image: beautysaloon-service:2.12
+        image: beautysaloon-service:4
         build:
             dockerfile: ./BeautySaloon.API/Dockerfile
         ports:
@@ -104,7 +104,7 @@ services:
 
     healthchecks:
         container_name: healthchecks
-        image: beautysaloon-healthcheck-service:2.24
+        image: beautysaloon-healthcheck-service:4.12
         build:
             dockerfile: ./BeautySaloon.HealthChecksUI/Dockerfile
         ports:

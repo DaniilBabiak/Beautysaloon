@@ -1,16 +1,13 @@
 using BeautySaloon.Identity.Data;
+using BeautySaloon.Identity.HealthChecks;
 using BeautySaloon.Identity.Models;
 using BeautySaloon.Identity.RabbitMQ;
 using BeautySaloon.Shared;
 using Duende.IdentityServer;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Duende.IdentityServer.AspNetIdentity;
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 namespace BeautySaloon.Identity;
@@ -20,7 +17,8 @@ internal static class HostingExtensions
     {
         var configuration = builder.Configuration;
         builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
-
+        builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
+        //builder.Services.AddTransient<IProfileService, ProfileService>();
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -124,6 +122,7 @@ internal static class HostingExtensions
                         .AddRabbitMQ(configuration.GetSection("RabbitMQSettings")["Uri"],
                                      name: "RabbitMQ",
                                      tags: new[] { "Queue services" });
-        builder.Services.AddSingleton<IHealthCheckPublisher, RabbitMQHealthCheckPublisher>();
+
+        builder.Services.AddHostedService<RabbitMQHealthCheckListener>();
     }
 }

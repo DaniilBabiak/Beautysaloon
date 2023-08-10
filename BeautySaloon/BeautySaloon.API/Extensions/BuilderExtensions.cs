@@ -1,14 +1,8 @@
 ﻿using BeautySaloon.API.Entities.Contexts;
+using BeautySaloon.API.HealthChecks;
 using BeautySaloon.API.RabbitMQ;
 using BeautySaloon.Shared;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.Net.Http.Headers;
 using Serilog;
 
 namespace BeautySaloon.API.Extensions;
@@ -20,6 +14,7 @@ public static class BuilderExtensions
         var configuration = builder.Configuration;
 
         builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
+        builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
 
         builder.Services.AddControllers();
 
@@ -84,8 +79,8 @@ public static class BuilderExtensions
         var configuration = builder.Configuration;
 
         string connectionString = configuration.GetConnectionString("BeautysaloonDbConnection");
-        
-        builder.Services.AddSingleton<IHealthCheckPublisher, RabbitMQHealthCheckPublisher>();
+
+        builder.Services.AddHostedService<RabbitMQHealthCheckListener>();
 
         builder.Services.AddHealthChecks()
                         .AddSqlServer(

@@ -1,9 +1,5 @@
-﻿using Duende.IdentityServer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 
 namespace BeautySaloon.Shared;
 public static class ClientsConfig
@@ -14,7 +10,7 @@ public static class ClientsConfig
         ClientId = "angular_spa",
         ClientName = "Angular SPA",
         AllowedGrantTypes = GrantTypes.Implicit,
-        AllowedScopes = { "openid", "profile", "email", "api.read", "api.edit", "role" },
+        AllowedScopes = { "openid", "profile", "email", "api.read", "api.edit", "roles" },
         RedirectUris = { "http://localhost:4200/auth-callback" },
         PostLogoutRedirectUris = { "http://localhost:4200/user/main" },
         AllowedCorsOrigins = { "http://localhost:4200" },
@@ -26,8 +22,11 @@ public static class ClientsConfig
     {
         ClientId = "HealthCheckUI",
         ClientSecrets = { new Secret("secret".Sha256()) },
-        AllowedGrantTypes = GrantTypes.ClientCredentials,
-        AllowedScopes = { "health" }
+        AllowedGrantTypes = GrantTypes.Code,
+        RedirectUris = { "http://localhost:5003/signin-oidc", "http://localhost:5030/signin-oidc" },
+        AllowOfflineAccess = true,
+        PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc" },
+        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "roles" }
     };
 
     public static IEnumerable<Client> GetAll()
