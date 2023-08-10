@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Minio;
 
 namespace BeautySaloon.API.Controllers;
 [ApiController]
@@ -17,6 +18,12 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public async Task<IActionResult> Get()
     {
+        var endpoint = "your-minio-endpoint";
+        var accessKey = "your-access-key";
+        var secretKey = "your-secret-key";
+
+        var minio = new MinioClient();
+        minio.WithEndpoint(endpoint);
         return Ok(Summaries);
     }
 }

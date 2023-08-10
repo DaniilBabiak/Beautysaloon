@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {UserComponent} from "./user.component";
+import { AdminGuard } from 'src/app/shared/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -13,7 +14,7 @@ children: [
   { path: 'contacts', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule) },
   { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule) },
   { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },
   {path : '**', redirectTo: 'about'},
 ]
   },
