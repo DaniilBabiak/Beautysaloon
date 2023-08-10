@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserManager, User } from 'oidc-client';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
-import { ConfigService} from "./config.service";
+import { ConfigService } from "./config.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,10 @@ export class AuthService {
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
   // Observable navItem stream
   authNavStatus$ = this._authNavStatusSource.asObservable();
+
+  private _adminNavStatusSource = new BehaviorSubject<boolean>(false);
+  // Observable navItem stream
+  adminNavStatus$ = this._adminNavStatusSource.asObservable();
 
   private manager: UserManager | null = null;
   private user: User | null = null;
@@ -44,9 +48,17 @@ export class AuthService {
     return this.user != null && !this.user.expired;
   }
 
-  isAdmin(): boolean{
-    var role = this.user?.profile["role"];
-    return this.user?.profile["role"] == 'admin';
+  isAdmin(): Promise<boolean> {
+    if (!this.manager) {
+      return Promise.resolve(false);
+    }
+    return this.manager.getUser().then(user => {
+      if (!user) {
+        return false
+      }
+
+      return user.profile["role"] == 'admin';
+    });
   }
 
   get authorizationHeaderValue(): string {
