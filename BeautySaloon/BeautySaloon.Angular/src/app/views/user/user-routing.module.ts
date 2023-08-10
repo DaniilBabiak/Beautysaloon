@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {UserComponent} from "./user.component";
 import { AdminGuard } from 'src/app/shared/guards/admin.guard';
+import {AuthGuard} from "../../shared/guards/auth.guard";
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ children: [
   { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule) },
   { path: 'works', loadChildren: () => import('./works/works.module').then(m => m.WorksModule) },
   { path: 'contacts', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule) },
-  { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule) },
+  { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule), canActivate: [AuthGuard], },
   { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },
   {path : '**', redirectTo: 'about'},

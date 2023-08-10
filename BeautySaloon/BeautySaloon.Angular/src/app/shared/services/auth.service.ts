@@ -25,7 +25,7 @@ export class AuthService {
     this.manager = new UserManager(userManageConfig);
     this.manager.getUser().then(user => {
       this.user = user;
-      this._authNavStatusSource.next(this.isAuthenticated());
+      //this._authNavStatusSource.next(this.isAuthenticated());
     });
   }
 
@@ -40,12 +40,18 @@ export class AuthService {
   async completeAuthentication() {
     if (this.manager) {
       this.user = await this.manager.signinRedirectCallback();
-      this._authNavStatusSource.next(this.isAuthenticated());
+      //this._authNavStatusSource.next(this.isAuthenticated());
     }
   }
 
-  isAuthenticated(): boolean {
-    return this.user != null && !this.user.expired;
+  isAuthenticated(): Promise<boolean> {
+
+    if (!this.manager) {
+      return Promise.resolve(false);
+    }
+    return this.manager.getUser().then(user => {
+      return user != null && !user.expired;
+    });
   }
 
   isAdmin(): Promise<boolean> {
