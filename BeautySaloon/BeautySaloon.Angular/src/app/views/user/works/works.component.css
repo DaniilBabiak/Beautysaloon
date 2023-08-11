@@ -61,7 +61,6 @@
 .slider span:hover img {
   transform: translateY(-50px) scale(1.2);
 }
-
 .modal {
   position: fixed;
   top: 0;
@@ -73,12 +72,10 @@
   align-items: center;
   justify-content: center;
 }
-
 .modal img {
   max-width: 80%;
   max-height: 80%;
 }
-
 .modal-close {
   position: absolute;
   top: 10px;
@@ -102,13 +99,10 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, .1);
   transition: .5s;
 }
-
 .appoinmentsBtn:hover {
   background-position: right center;
   transform: scale(1.1);
 }
-
-
 .sign-wrap-2 {
 
   text-align: center;
@@ -138,13 +132,8 @@
     0 0 800px #BFE2FF;
   }
 }
-
-
-
-
-
 .rhomb {
-  min-width: 230px;
+  min-width: 200px;
   max-width: 1200px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -153,55 +142,38 @@
   width: 43%;
   position: relative;
 }
-/* .rhomb::before{
-  content: '';
-  position: absolute;
-  width: 20vw;
-  height: 20vw;
-  border-top: 2px solid yellow;
-  border-left: 2px solid yellow;
-  rotate: -45deg;
-  top: 14%;
-  left: -13%;
-
+.rhomb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: calc(var(--index) *.8); /* Расстояние между ромбами */
 }
-
-.rhomb::after{
-  content: '';
-  position: absolute;
-  width: 20vw;
-  height: 20vw;
-  border-top: 2px solid yellow;
-  border-right: 2px solid yellow;
-  rotate: 45deg;
-  top: 14%;
-  right: -13%;
-} */
-
-.rhomb a {
-  grid-column: span 2;
-  z-index: 1;
+.rhomb {
   position: relative;
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  margin-bottom: -52%;
-  transform: scale(1);
-  transition: all .25s;
+  height: calc(var(--index) * 6.5);
+  overflow: hidden; /* Обрезаем выступающие углы ромбов */
+  transition: transform 0.25s, z-index 0.25s;
+  border-radius: 1em;
 }
-.rhomb a:nth-child(7n + 1) {
-  grid-column: 2 / span 2;
-}
-.rhomb a:hover {
-  z-index: 2;
-  transform: scale(1.4);
+.rhomb-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 .rhomb img {
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-
+.rhomb:hover {
+  transform: scale(1.15);
+  z-index: 2;
+}
 .current-page{
   color: rgb(219, 179, 0);
 }
-
 .arrow-left-5,
 .arrow-right-5,
 .arrow-top-5,
@@ -212,7 +184,7 @@
   transition: fill 0.5s ease-out, transform 0.3s ease-in;
 }
 .arrow-left-5 {
-  transform: rotate(90deg);
+  transform: rotate(90deg)
 }
 .arrow-right-5 {
   transform: rotate(270deg);
@@ -228,7 +200,7 @@
   transform: scale(1.2);
 }
 .arrow-left-5:hover {
-  transform: translate(50%, 0%);
+  transform: rotate(90deg) scale(1.2);
 }
 .arrow-right-5:hover {
   transform: rotate(270deg) scale(1.2);
@@ -236,7 +208,6 @@
 .arrow-top-5:hover {
   transform: rotate(180deg) scale(1.2);
 }
-
 .pag-nav-left{
   position: absolute;
   top: 33.5%;
@@ -266,8 +237,70 @@
 
     transform: translate(-50%, 0%);
   }
-  .rhomb{
-    margin-top: 10%;
-    min-width: 300px;
+}
+@media screen and (max-width: 1440px) {
+  .pag-nav-left{
+   left:-2%
+ }
+  .pag-nav-right{
+    right: -2%;
   }
 }
+@media screen and (max-width: 1024px){
+  .rhomb{
+    height: calc(var(--index) * 8.5);
+  }
+  .rhomb-grid {
+    grid-template-columns: repeat(2, 1fr); /* Отображаем 3 ромба в ряду */
+  }
+}
+
+@media screen and (max-width: 768px){
+  .work-header{
+    flex-basis: 0;
+  }
+  .rhomb{
+    height: calc(var(--index) * 11);
+  }
+  .pag-nav-left{
+    left:5%;
+    top: 39.5%;
+  }
+  .pag-nav-right{
+    right: 5%;
+    top: 39.5%;
+  }
+  .rhomb-grid {
+    grid-template-columns:  1fr; /* Отображаем 3 ромба в ряду */
+  }
+}
+@media screen and (max-width: 576px){
+
+ .pag-nav-right{
+   top: 40%!important;
+   left: 76%!important;
+   transform: translate(0%, 0%)!important;
+   rotate: -90deg!important;
+   width: 20%;
+ }
+  .pag-nav-left{
+    top: 40%!important;
+    left: 4%!important;
+    transform: translate(0%, 0%)!important;
+    rotate: 90deg!important;
+    width: 20%;
+  }
+}
+@media screen and (max-width: 425px) {
+  .work-header {
+    flex-basis: 7%;
+  }
+  .work-wrapper {
+    justify-content: space-between;
+  }
+  .rhomb {
+    min-width: 160px;
+    height: calc(var(--index) * 11);
+  }
+}
+
