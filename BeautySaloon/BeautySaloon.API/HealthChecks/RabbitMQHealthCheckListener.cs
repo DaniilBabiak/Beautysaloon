@@ -14,31 +14,45 @@ public class RabbitMQHealthCheckListener : BackgroundService
 {
     private readonly RabbitMQSettings _settings;
     private readonly HealthChecksSettings _healthChecksSettings;
-    private readonly HealthCheckService _healthCheckService;
-    private readonly ConnectionFactory _connectionFactory;
-    private readonly IConnection _connection;
-    private readonly IModel _channel;
-    private readonly EventingBasicConsumer _consumer;
+    private HealthCheckService _healthCheckService;
+    private ConnectionFactory _connectionFactory;
+    private IConnection _connection;
+    private IModel _channel;
+    private EventingBasicConsumer _consumer;
 
     public RabbitMQHealthCheckListener(IOptions<RabbitMQSettings> settings, IOptions<HealthChecksSettings> healthChecksSettings, HealthCheckService healthCheckService)
     {
         _settings = settings.Value;
         _healthChecksSettings = healthChecksSettings.Value;
         _healthCheckService = healthCheckService;
-        _connectionFactory = new ConnectionFactory()
-        {
-            HostName = _settings.HostName,
-            UserName = _settings.UserName,
-            Password = _settings.Password,
-            Uri = new Uri(_settings.Uri)
-        };
-
-        _connection = _connectionFactory.CreateConnection();
-        _channel = _connection.CreateModel();
-        _consumer = new EventingBasicConsumer(_channel);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        try
+        {
+            _connectionFactory = new ConnectionFactory()
+            {
+                HostName = _settings.HostName,
+                UserName = _settings.UserName,
+                Password = _settings.Password,
+                Uri = new Uri(_settings.Uri)
+            };
+
+            _connection = _connectionFactory.CreateConnection();
+            _channel = _connection.CreateModel();
+            _consumer = new EventingBasicConsumer(_channel);
+            await ConnectAndExecute(stoppingToken);
+        }
+        catch (Exception ex)
+        {
+            Log.Error("An error occurred while connecting to RabbitMQ.");
+
+            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+        }
+    }
+
+    private async Task ConnectAndExecute(CancellationToken stoppingToken)
     {
         _channel.QueueDeclare(queue: _healthChecksSettings.ApiRequestQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
