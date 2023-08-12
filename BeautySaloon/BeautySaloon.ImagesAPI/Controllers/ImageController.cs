@@ -31,11 +31,10 @@ public class ImageController : ControllerBase
             var supportedFormats = string.Join(", ", validExtensions);
             return BadRequest($"Invalid file format. Supported formats: {supportedFormats}");
         }
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
+
         var result = await _imageService.SaveImageAsync(file, bucketName);
-        var elapsedTime = stopwatch.Elapsed;
-        return Ok(new { result, elapsedTime });
+
+        return Ok(result);
     }
 
     [HttpGet]

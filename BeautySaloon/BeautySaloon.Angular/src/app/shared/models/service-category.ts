@@ -6,5 +6,6 @@ export interface ServiceCategory {
     description: string | null,
     imageBucket: string | null,
     imageUrl: string | null,
-    services: Service[] | null
+    services: Service[] | null,
+    image: string | null
 }

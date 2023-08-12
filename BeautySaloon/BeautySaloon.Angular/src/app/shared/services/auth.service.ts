@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserManager, User } from 'oidc-client';
+import { UserManager, User, OidcClient } from 'oidc-client';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { ConfigService } from "./config.service";
 
@@ -21,6 +21,7 @@ export class AuthService {
   adminNavStatus$ = this._adminNavStatusSource.asObservable();
 
   private manager: UserManager | null = null;
+  private oidcClient: OidcClient | null = null;
   private user: User | null = null;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
@@ -30,6 +31,8 @@ export class AuthService {
       this.user = user;
       //this._authNavStatusSource.next(this.isAuthenticated());
     });
+    var oidcClientConfig = configService.getOidcClientSettings();
+    this.oidcClient = new OidcClient(oidcClientConfig);
   }
 
   login() {

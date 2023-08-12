@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserManagerSettings } from 'oidc-client';
+import { OidcClientSettings, UserManagerSettings } from 'oidc-client';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +11,10 @@ export class ConfigService {
     return 'http://localhost:5020';
   }
 
+  get imageApiURI(){
+    return 'http://localhost:5040';
+  }
+
   getClientSettings(): UserManagerSettings {
     return {
       authority: 'https://localhost:5001',
@@ -18,11 +22,19 @@ export class ConfigService {
       redirect_uri: 'http://localhost:4200/auth-callback',
       post_logout_redirect_uri: 'http://localhost:4200/user/main',
       response_type: "id_token token",
-      scope: "openid profile email api.read api.edit roles",
+      scope: "openid profile email api.read api.edit roles image.read image.edit",
       filterProtocolClaims: true,
       loadUserInfo: true,
       automaticSilentRenew: true,
       silent_redirect_uri: 'http://localhost:4200/silent-refresh.html'
     };
+  }
+
+  getOidcClientSettings(): OidcClientSettings{
+    return{
+      authority: 'https://localhost:5001',
+      client_id: 'angular_spa',
+      response_type: 'id_token token'
+    }
   }
 }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeautySaloon.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-[Authorize("admin")]
 public class ServiceCategoryController : ControllerBase
 {
     private readonly IServiceCategoryService _category;
@@ -33,6 +32,7 @@ public class ServiceCategoryController : ControllerBase
 
     // POST api/<ServiceController>
     [HttpPost]
+    [Authorize("admin")]
     public async Task<IActionResult> Post([FromBody] ServiceCategory category)
     {
         var result = await _category.CreateCategoryAsync(category);

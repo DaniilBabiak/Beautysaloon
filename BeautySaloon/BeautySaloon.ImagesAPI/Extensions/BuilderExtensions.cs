@@ -41,29 +41,26 @@ public static class BuilderExtensions
 
     private static void ConfigureAuthentication(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication(options =>
-                        {
-                            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                        })
-                        .AddJwtBearer(options =>
-                        {
-                            if (builder.Environment.IsDevelopment())
-                            {
-                                options.Authority = "https://localhost:5001";
-                            }
-                            else
-                            {
-                                options.Authority = "http://identity";
-                            }
+        builder.Services.AddAuthentication("Bearer")
+                                .AddJwtBearer(options =>
+                                {
+                                    if (builder.Environment.IsDevelopment())
+                                    {
+                                        options.Authority = "https://localhost:5001";
+                                    }
+                                    else
+                                    {
+                                        options.Authority = "http://identity";
+                                    }
 
-                            options.TokenValidationParameters = new TokenValidationParameters()
-                            {
-                                ClockSkew = TimeSpan.FromMinutes(0)
-                            };
-                            options.TokenValidationParameters.ValidateAudience = false;
-                            options.RequireHttpsMetadata = false;
-                        });
+                                    options.TokenValidationParameters = new TokenValidationParameters()
+                                    {
+                                        ClockSkew = TimeSpan.FromMinutes(0)
+                                    };
+                                    options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001", "http://identity" };
+                                    options.TokenValidationParameters.ValidateAudience = false;
+                                    options.RequireHttpsMetadata = false;
+                                });
     }
 
     private static void ConfigureAuthorization(this WebApplicationBuilder builder)

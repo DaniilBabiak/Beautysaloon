@@ -3,6 +3,22 @@
     <div *ngFor="let category of serviceCategories">
         <h2>{{ category.name }}</h2>
         <p>{{ category.description }}</p>
+        <p>{{category.imageUrl}}</p>
+        <img [src]="category.image" alt={{category.imageUrl}}>
+
         <!-- Дополнительные элементы, связанные с категорией -->
     </div>
+</div>
+
+<button (click)="showAddCategoryForm = true">Добавить категорию</button>
+
+<div *ngIf="showAddCategoryForm">
+    <input [(ngModel)]="newCategory.name" placeholder="Имя категории">
+    <input [(ngModel)]="newCategory.description" placeholder="Описание категории">
+    <img [src]="newCategory.image" alt={{newCategory.imageUrl}}>
+
+    <input type="file" (change)="onFileSelected($event)">
+    <!-- Другие поля для ввода -->
+
+    <button (click)="createCategory()">Создать</button>
 </div>
