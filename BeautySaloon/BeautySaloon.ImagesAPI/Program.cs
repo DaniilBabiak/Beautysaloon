@@ -1,4 +1,6 @@
 using BeautySaloon.ImagesAPI.Extensions;
+using BeautySaloon.ImagesAPI.HealthChecks;
+using BeautySaloon.ImagesAPI.RabbitMQ;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -8,6 +10,10 @@ Log.Logger = new LoggerConfiguration()
 Log.Information("Starting up");
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration;
+builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
+builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
 
 builder.ConfigureServices();
 

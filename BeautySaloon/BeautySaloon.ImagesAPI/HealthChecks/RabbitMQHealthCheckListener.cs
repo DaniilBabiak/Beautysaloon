@@ -1,4 +1,4 @@
-﻿using BeautySaloon.Identity.RabbitMQ;
+﻿using BeautySaloon.ImagesAPI.RabbitMQ;
 using BeautySaloon.Shared;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -8,7 +8,7 @@ using RabbitMQ.Client.Events;
 using Serilog;
 using System.Text;
 
-namespace BeautySaloon.Identity.HealthChecks;
+namespace BeautySaloon.ImagesAPI.HealthChecks;
 
 public class RabbitMQHealthCheckListener : BackgroundService
 {
@@ -54,9 +54,9 @@ public class RabbitMQHealthCheckListener : BackgroundService
 
     private async Task ConnectAndExecute(CancellationToken stoppingToken)
     {
-        _channel.QueueDeclare(queue: _healthChecksSettings.IdentityRequestQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+        _channel.QueueDeclare(queue: _healthChecksSettings.ImagesRequestQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-        _channel.BasicConsume(queue: _healthChecksSettings.IdentityRequestQueueName, autoAck: true, consumer: _consumer);
+        _channel.BasicConsume(queue: _healthChecksSettings.ImagesRequestQueueName, autoAck: true, consumer: _consumer);
 
         _consumer.Received += (model, ea) =>
         {

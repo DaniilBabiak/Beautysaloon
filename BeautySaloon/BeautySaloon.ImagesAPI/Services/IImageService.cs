@@ -1,5 +1,4 @@
 ﻿using BeautySaloon.ImagesAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.ImagesAPI.Services;
 

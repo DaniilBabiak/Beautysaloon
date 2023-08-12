@@ -72,8 +72,9 @@ export class AuthService {
 
   get authorizationHeaderValue(): string {
     if (this.user) {
-      return `${this.user.token_type} ${this.user.access_token};`
+      return `${this.user.token_type} ${this.user.access_token}`;
     }
+
     return '';
   }
 

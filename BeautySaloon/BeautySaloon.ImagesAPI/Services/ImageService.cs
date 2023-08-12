@@ -1,11 +1,5 @@
 ﻿using BeautySaloon.ImagesAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using Minio;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
-using System.IO.Pipelines;
-using System.Net.Mime;
 
 namespace BeautySaloon.ImagesAPI.Services;
 

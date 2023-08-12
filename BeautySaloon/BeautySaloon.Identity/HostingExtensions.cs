@@ -2,9 +2,9 @@ using BeautySaloon.Identity.Data;
 using BeautySaloon.Identity.HealthChecks;
 using BeautySaloon.Identity.Models;
 using BeautySaloon.Identity.RabbitMQ;
+using BeautySaloon.Identity.Services;
 using BeautySaloon.Shared;
 using Duende.IdentityServer;
-using Duende.IdentityServer.AspNetIdentity;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,6 @@ internal static class HostingExtensions
         var configuration = builder.Configuration;
         builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
         builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
-        //builder.Services.AddTransient<IProfileService, ProfileService>();
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -57,7 +56,7 @@ internal static class HostingExtensions
                                 options.Authority = "http://identity";
                             }
 
-                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001" };
+                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001", "http://identity" };
                             options.TokenValidationParameters.ValidateAudience = false;
                             options.RequireHttpsMetadata = false;
                         })
@@ -79,6 +78,7 @@ internal static class HostingExtensions
         builder.Services.AddAuthorization();
 
         builder.ConfigureHealthChecks();
+        builder.Services.AddTransient<IProfileService, ProfileService>();
 
 
         return builder;

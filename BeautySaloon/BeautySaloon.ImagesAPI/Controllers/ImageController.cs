@@ -1,7 +1,7 @@
 using BeautySaloon.ImagesAPI.Models;
 using BeautySaloon.ImagesAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
@@ -9,7 +9,7 @@ namespace BeautySaloon.ImagesAPI.Controllers;
 [ApiController]
 [Route("/api/[controller]")]
 public class ImageController : ControllerBase
-{    
+{
     private readonly IImageService _imageService;
 
     public ImageController(IImageService imageService)
@@ -17,6 +17,7 @@ public class ImageController : ControllerBase
         _imageService = imageService;
     }
 
+    [Authorize("image.edit")]
     [HttpPost()]
     public async Task<IActionResult> UploadFile([Required] IFormFile file, [Required, FromQuery] string bucketName)
     {

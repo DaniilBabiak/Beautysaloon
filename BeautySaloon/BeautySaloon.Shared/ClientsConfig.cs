@@ -10,7 +10,7 @@ public static class ClientsConfig
         ClientId = "angular_spa",
         ClientName = "Angular SPA",
         AllowedGrantTypes = GrantTypes.Implicit,
-        AllowedScopes = { "openid", "profile", "email", "api.read", "api.edit", "roles" },
+        AllowedScopes = { "openid", "profile", "email", "api.read", "api.edit", "roles", "image.read", "image.edit" },
         RedirectUris = { "http://localhost:4200/auth-callback" },
         PostLogoutRedirectUris = { "http://localhost:4200/user/main" },
         AllowedCorsOrigins = { "http://localhost:4200" },
@@ -26,7 +26,7 @@ public static class ClientsConfig
         RedirectUris = { "http://localhost:5003/signin-oidc", "http://localhost:5030/signin-oidc" },
         AllowOfflineAccess = true,
         PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc" },
-        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "roles" }
+        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "roles", "health" }
     };
 
     public static IEnumerable<Client> GetAll()
