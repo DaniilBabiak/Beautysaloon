@@ -18,7 +18,7 @@ public class Program
         builder.ConfigureServices();
 
         var app = builder.Build();
-
+        app.UseMiddleware<LoggingHeadersMiddleware>();
         await app.ConfigureApplication();
 
         app.Run();

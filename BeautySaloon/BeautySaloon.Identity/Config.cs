@@ -1,7 +1,5 @@
 ﻿using BeautySaloon.Shared;
-using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-using IdentityModel;
 
 namespace BeautySaloon.Identity;
 public static class Config
@@ -21,6 +19,8 @@ public static class Config
     public static IEnumerable<ApiResource> ApiResources =>
         new List<ApiResource>
         {
+            new ApiResource(ScopesConfig.ApiRead.Name, " ", new[] { "rolse" }),
+            new ApiResource(ScopesConfig.ApiEdit.Name, " ", new[] { "roles" })
         };
 
     public static IEnumerable<Client> Clients =>

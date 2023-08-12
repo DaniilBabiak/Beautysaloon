@@ -2,7 +2,6 @@
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace BeautySaloon.API.Controllers;
 [Route("api/[controller]")]

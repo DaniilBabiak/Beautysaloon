@@ -1,4 +1,8 @@
-﻿using BeautySaloon.ImagesAPI.Services;
+﻿using BeautySaloon.ImagesAPI.HealthChecks;
+using BeautySaloon.ImagesAPI.Services;
+using BeautySaloon.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Minio;
 using Minio.AspNetCore;
 using Minio.AspNetCore.HealthChecks;
@@ -10,16 +14,7 @@ public static class BuilderExtensions
 {
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
-        // Add services to the container.
-        builder.Host.UseSerilog((ctx, lc) => lc
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-            .Enrich.FromLogContext()
-            .ReadFrom.Configuration(ctx.Configuration));
-
-        builder.Services.AddLogging(loggingBuilder =>
-        {
-            loggingBuilder.AddSerilog(dispose: true);
-        });
+        builder.ConfigureSerilog();
         builder.Services.AddTransient<IImageService, ImageService>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +31,62 @@ public static class BuilderExtensions
             });
         });
 
+        builder.ConfigureAuthentication();
+        builder.ConfigureAuthorization();
+
+        builder.ConfigureMinio();
+
+        return builder;
+    }
+
+    private static void ConfigureAuthentication(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthentication(options =>
+                        {
+                            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                        })
+                        .AddJwtBearer(options =>
+                        {
+                            if (builder.Environment.IsDevelopment())
+                            {
+                                options.Authority = "https://localhost:5001";
+                            }
+                            else
+                            {
+                                options.Authority = "http://identity";
+                            }
+
+                            options.TokenValidationParameters = new TokenValidationParameters()
+                            {
+                                ClockSkew = TimeSpan.FromMinutes(0)
+                            };
+                            options.TokenValidationParameters.ValidateAudience = false;
+                            options.RequireHttpsMetadata = false;
+                        });
+    }
+
+    private static void ConfigureAuthorization(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("image.read", policy =>
+            {
+                policy.RequireClaim("scope", ScopesConfig.ImageRead.Name);
+            });
+            options.AddPolicy("image.edit", policy =>
+            {
+                policy.RequireClaim("scope", ScopesConfig.ImageEdit.Name);
+            });
+            options.AddPolicy("health", policy =>
+            {
+                policy.RequireClaim("scope", ScopesConfig.Health.Name);
+            });
+        });
+    }
+
+    private static void ConfigureMinio(this WebApplicationBuilder builder)
+    {
         builder.Services.AddMinio(options =>
         {
             if (builder.Environment.IsDevelopment())
@@ -57,6 +108,20 @@ public static class BuilderExtensions
 
         builder.Services.AddHealthChecks()
                         .AddMinio(sp => sp.GetRequiredService<MinioClient>());
-        return builder;
+        builder.Services.AddHostedService<RabbitMQHealthCheckListener>();
+    }
+
+    private static void ConfigureSerilog(this WebApplicationBuilder builder)
+    {
+        // Add services to the container.
+        builder.Host.UseSerilog((ctx, lc) => lc
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+            .Enrich.FromLogContext()
+            .ReadFrom.Configuration(ctx.Configuration));
+
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddSerilog(dispose: true);
+        });
     }
 }

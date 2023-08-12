@@ -2,8 +2,9 @@
 using BeautySaloon.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Net.Http;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
 
@@ -16,9 +17,7 @@ public static class BuilderExtensions
         builder.Services.AddMemoryCache();
         // Add services to the container.
         builder.ConfigureSerilog();
-
         builder.Services.AddRazorPages();
-
         builder.ConfigureHealthChecks();
 
         builder.ConfigureHealthChecksUI();
@@ -53,18 +52,17 @@ public static class BuilderExtensions
                                     return Task.CompletedTask;
                                 };
                             }
-
-                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001" };
+                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001", "http://identity" };
                             options.RequireHttpsMetadata = false;
                             options.ClientId = ClientsConfig.HealthCheckUI.ClientId;
                             options.ClientSecret = "secret";
                             options.ResponseType = "code";
-
                             options.SaveTokens = true;
 
                             options.Scope.Clear();
                             options.Scope.Add("openid");
                             options.Scope.Add("roles");
+                            options.Scope.Add("health");
                             options.ClaimActions.MapJsonKey("role", "role", "role");
                             options.TokenValidationParameters.RoleClaimType = "role";
 
@@ -79,7 +77,6 @@ public static class BuilderExtensions
 
                             options.Events.OnUserInformationReceived = context =>
                             {
-
                                 return Task.CompletedTask;
                             };
 
@@ -128,6 +125,15 @@ public static class BuilderExtensions
                             Password = "guest",
                             Uri = rabbitUri
                         })
+                        .AddRabbitMQHealthCheck("Images", new HealthChecksSettings
+                        {
+                            RequestQueueName = "request-health-images",
+                            ReplyQueueName = "reply-health-images",
+                            HostName = "beautysaloon-rabbit",
+                            UserName = "guest",
+                            Password = "guest",
+                            Uri = rabbitUri
+                        })
                         .AddSqlServer(configuration.GetConnectionString("HealthChecksDb"),
                                       name: "Health Checks SQL Server",
                                       tags: new[] { "database" });
@@ -145,6 +151,7 @@ public static class BuilderExtensions
             {
                 return new HttpClientHandler
                 {
+                    UseCookies = true,
                     ClientCertificateOptions = ClientCertificateOption.Manual,
                     ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; }
                 };
@@ -158,7 +165,6 @@ public static class BuilderExtensions
             {
                 options.AddHealthCheckEndpoint("Healthcheck API", "http://localhost/health");
             }
-
         }).AddSqlServerStorage(configuration.GetConnectionString("HealthChecksDb"), options =>
         {
             options.EnableDetailedErrors();

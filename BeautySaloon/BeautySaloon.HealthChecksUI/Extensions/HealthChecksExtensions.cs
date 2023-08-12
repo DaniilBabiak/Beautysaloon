@@ -1,7 +1,5 @@
 ﻿using BeautySaloon.HealthChecksUI.HealthChecks;
-using HealthChecks.SqlServer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
 

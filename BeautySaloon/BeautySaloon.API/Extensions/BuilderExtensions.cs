@@ -1,9 +1,15 @@
 ﻿using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.HealthChecks;
 using BeautySaloon.API.RabbitMQ;
+using BeautySaloon.API.Services;
+using BeautySaloon.API.Services.Interfaces;
 using BeautySaloon.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 namespace BeautySaloon.API.Extensions;
 
@@ -16,7 +22,11 @@ public static class BuilderExtensions
         builder.Services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
         builder.Services.Configure<HealthChecksSettings>(configuration.GetSection("HealthChecksSettings"));
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // Используем Preserve, чтобы сохранить ссылки на объекты
+            });
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -35,6 +45,9 @@ public static class BuilderExtensions
 
         builder.ConfigureHealthChecks();
 
+        builder.Services.AddTransient<IServiceService, ServiceService>();
+        builder.Services.AddTransient<IServiceCategoryService, ServiceCategoryService>();
+
         return builder;
     }
 
@@ -52,7 +65,12 @@ public static class BuilderExtensions
                                 options.Authority = "http://identity";
                             }
 
-                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001" };
+                            options.TokenValidationParameters = new TokenValidationParameters()
+                            {
+                                ClockSkew = TimeSpan.FromMinutes(0)
+                            };
+                            options.TokenValidationParameters.ValidIssuers = new[] { "https://localhost:5001", "http://identity" };
+                            options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
                             options.TokenValidationParameters.ValidateAudience = false;
                             options.RequireHttpsMetadata = false;
                         });
@@ -70,6 +88,12 @@ public static class BuilderExtensions
             {
                 policy.RequireClaim("scope", ScopesConfig.ApiEdit.Name);
                 policy.RequireAuthenticatedUser();
+            });
+            options.AddPolicy("admin", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", "api.read");
+                policy.RequireClaim("scope", "api.edit");
                 policy.RequireRole(RolesConfig.Admin);
             });
         });

@@ -44,7 +44,7 @@ public static class SeedData
                 {
                     throw new Exception(result.Errors.First().Description);
                 }
-                
+
                 result = userMgr.AddClaimsAsync(alice, new Claim[]{
                             new Claim(JwtClaimTypes.Name, "Alice Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Alice"),

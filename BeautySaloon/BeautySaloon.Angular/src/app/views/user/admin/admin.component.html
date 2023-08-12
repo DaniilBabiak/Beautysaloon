@@ -1,1 +1,8 @@
 <p>admin works!</p>
+<div *ngIf="serviceCategories">
+    <div *ngFor="let category of serviceCategories">
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
+        <!-- Дополнительные элементы, связанные с категорией -->
+    </div>
+</div>
