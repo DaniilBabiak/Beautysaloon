@@ -19,6 +19,8 @@ const routes: Routes = [
       { path: '**', redirectTo: 'about' },
     ]
   },
+
+
 ];
 
 @NgModule({
