@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { CategoryService } from '../../../shared/services/category.service';
-import { ServiceCategory } from '../../../shared/models/service-category';
-import { ImageService } from 'src/app/shared/services/image.service';
+import {Component, OnInit} from '@angular/core';
+import {CategoryService} from '../../../shared/services/category.service';
+import {ServiceCategory} from '../../../shared/models/service-category';
+import {ImageService} from 'src/app/shared/services/image.service';
 
 @Component({
   selector: 'app-admin',
@@ -25,8 +25,18 @@ export class AdminComponent implements OnInit {
   constructor(private categoryService: CategoryService, private imageService: ImageService) {
 
   }
+
   ngOnInit(): void {
     this.loadCategories();
+  }
+
+  deleteCategory(id: number | null) {
+    if (id){
+      this.categoryService.deleteCategory(id).subscribe(result => {
+        this.loadCategories();
+      })
+    }
+
   }
 
   loadCategories() {

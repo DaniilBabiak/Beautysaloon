@@ -23,6 +23,7 @@ export class CategoryService {
   }
 
   createCategory(serviceCategory: ServiceCategory): Observable<ServiceCategory> {
+
     const categoryWithoutImage: ServiceCategory = {
       id: serviceCategory.id,
       name: serviceCategory.name,
@@ -39,7 +40,11 @@ export class CategoryService {
 
     return this.http.post<ServiceCategory>(`${url}/api/ServiceCategory`, categoryWithoutImage, options);
   }
-
+deleteCategory(id:number):Observable<any>{
+    var url = this.config.resourceApiURI;
+    var options = this.getOptions();
+    return this.http.delete(`${url}/api/ServiceCategory/${id}`, options);
+}
   private getOptions() {
     return {
       headers: new HttpHeaders({
