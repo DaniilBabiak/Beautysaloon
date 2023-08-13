@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { CategoryService } from 'src/app/shared/services/category.service';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -56,8 +57,10 @@ export class ServiceComponent implements OnInit {
   servicesPhoto2: SafeResourceUrl;
   servicesPhoto3: SafeResourceUrl;
   servicesPhoto4: SafeResourceUrl;
-  constructor(private sanitizer: DomSanitizer) {
-
+  constructor(private sanitizer: DomSanitizer, private categoryService: CategoryService) {
+    this.categoryService.getCategories().subscribe(result =>{
+      console.log(result);
+    })
     const imagePath = 'assets/images/services-image1.jpg';
     const imagePath2 = 'assets/images/services-image2.jpg';
     const imagePath3 = 'assets/images/services-image3.jpg';
