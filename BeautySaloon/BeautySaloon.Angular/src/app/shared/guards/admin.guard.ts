@@ -15,6 +15,7 @@ export class AdminGuard implements CanActivate {
       return true;
     }
     else{
+      this.router.navigate(['/user/about']);
       return false;
     }
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 
 @Component({
@@ -6,14 +7,18 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit {
   userName: string = '';
   phoneNumber: string = '';
   showChangePhoneNumberForm: boolean = false;
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
 
   ngOnInit(): void {
+    this.authService.loadUser()?.then(() => {
+      this.phoneNumber = this.authService.phoneNumber;
+      this.userName = this.authService.name;
+    });
   }
 }
