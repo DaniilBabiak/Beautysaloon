@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserManager, User, OidcClient } from 'oidc-client';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { ConfigService } from "./config.service";
@@ -16,23 +16,17 @@ export class AuthService {
   // Observable navItem stream
   authNavStatus$ = this._authNavStatusSource.asObservable();
 
-  private _adminNavStatusSource = new BehaviorSubject<boolean>(false);
-  // Observable navItem stream
-  adminNavStatus$ = this._adminNavStatusSource.asObservable();
+  private _isAdminNavStatusSource = new BehaviorSubject<boolean>(false);
+
+  isAdminNavStatus$ = this._isAdminNavStatusSource.asObservable();
 
   private manager: UserManager | null = null;
-  private oidcClient: OidcClient | null = null;
   private user: User | null = null;
+  private tokenResponse: any;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     var userManageConfig = configService.getClientSettings();
     this.manager = new UserManager(userManageConfig);
-    this.manager.getUser().then(user => {
-      this.user = user;
-      //this._authNavStatusSource.next(this.isAuthenticated());
-    });
-    var oidcClientConfig = configService.getOidcClientSettings();
-    this.oidcClient = new OidcClient(oidcClientConfig);
   }
 
   login() {
@@ -43,39 +37,38 @@ export class AuthService {
     return null;
   }
 
+  loadUser(){
+    return this.manager?.getUser().then(user => {
+      this.user = user;
+      this._authNavStatusSource.next(this.isAuthenticated);
+      this._isAdminNavStatusSource.next(this.isAdmin);
+    });
+  }
+
   async completeAuthentication() {
     if (this.manager) {
       this.user = await this.manager.signinRedirectCallback();
-      //this._authNavStatusSource.next(this.isAuthenticated());
+      this._authNavStatusSource.next(this.isAuthenticated);
+      this._isAdminNavStatusSource.next(this.isAdmin);
     }
   }
 
-  isAuthenticated(): Promise<boolean> {
-
-    if (!this.manager) {
-      return Promise.resolve(false);
-    }
-    return this.manager.getUser().then(user => {
-      return user != null && !user.expired;
-    });
+  get isAuthenticated(): boolean {
+    return this.user != null && !this.user.expired;
   }
 
-  isAdmin(): Promise<boolean> {
-    if (!this.manager) {
-      return Promise.resolve(false);
-    }
-    return this.manager.getUser().then(user => {
-      if (!user) {
-        return false
-      }
-
-      return user.profile["role"] == 'admin';
-    });
+  get isAdmin(): boolean {
+    var result = this.user != null && !this.user.expired && this.user.profile["role"] == 'admin';
+    return result;
   }
 
   get authorizationHeaderValue(): string {
     if (this.user) {
       return `${this.user.token_type} ${this.user.access_token}`;
+    }
+
+    if (this.tokenResponse) {
+      return `${this.tokenResponse.token_type} ${this.tokenResponse.access_token}`;
     }
 
     return '';

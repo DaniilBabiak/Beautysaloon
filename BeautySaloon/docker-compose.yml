@@ -96,7 +96,7 @@ services:
             - beautysaloon-network
     identity:
         container_name: beautysaloon-identity
-        image: beautysaloon-identity-service:5.1
+        image: beautysaloon-identity-service:5.5
         build:
             dockerfile: ./BeautySaloon.Identity/Dockerfile
         ports:

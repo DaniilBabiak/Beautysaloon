@@ -8,16 +8,16 @@ import { AuthService } from "../services/auth.service";
 })
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) { }
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):  Promise<boolean> {
+    await this.authService.loadUser();
 
-  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    const isAuthenticated = await this.authService.isAuthenticated();
-
-    if (isAuthenticated) {
+    if (this.authService.isAuthenticated) {
       return true;
-    } else {
+    }
+    else{
       var url = state.url;
       this.authService.redirectUrl = url;
-      this.router.navigate(['/login']); // Перенаправление на страницу логина
+      this.authService.login();
       return false;
     }
   }

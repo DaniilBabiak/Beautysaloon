@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import{AuthService} from "../../services/auth.service";
+import { AuthService } from "../../services/auth.service";
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -12,28 +13,38 @@ export class HeaderComponent implements OnInit {
   isAuthenticated: boolean = false;
   userName: string | undefined;
   isAdmin: boolean = false;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit(): void {
-     this.authService.isAuthenticated().then(authResult=> {
-       if (authResult){
-         this.isAuthenticated = true;
-         this.userName = this.authService.name
-         this.authService.isAdmin().then(isAdmin =>{
-           this.isAdmin = isAdmin;
-         })
-       }
-     })
+    this.authService.loadUser()?.then(() => {
+      if (this.authService.isAuthenticated) {
+        this.isAuthenticated = true;
+        this.userName = this.authService.name;
+        this.isAdmin = this.authService.isAdmin;
+      } else {
+        this.userName = '';
+        this.isAdmin = false;
+      }
+    });
 
-    }
+  }
 
 
   login() {
-    this.authService.login();
-    this.userName = this.authService.name;
+    this.authService.login()?.then(()=>{
+      if (this.authService.isAuthenticated) {
+        this.isAuthenticated = true;
+        this.userName = this.authService.name;
+        this.isAdmin = this.authService.isAdmin;
+      } else {
+        this.userName = '';
+        this.isAdmin = false;
+      }
+    });
   }
 
-  async signout(){
+  async signout() {
     await this.authService.signout();
   }
 }
