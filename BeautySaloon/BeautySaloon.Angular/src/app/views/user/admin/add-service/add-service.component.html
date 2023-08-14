@@ -3,8 +3,8 @@
   <div *ngFor="let category of serviceCategories">
     <h2>{{ category.name }}</h2>
     <p>{{ category.description }}</p>
-    <p>{{category.imageUrl}}</p>
-    <img [src]="category.image" alt={{category.imageUrl}}>
+    <p>{{category.imageFileName}}</p>
+    <img [src]="category.image" alt={{category.imageFileName}}>
     <button (click)="deleteCategory(category.id)">detele</button>
     <!-- Дополнительные элементы, связанные с категорией -->
   </div>
@@ -15,7 +15,7 @@
 <div *ngIf="showAddCategoryForm">
   <input [(ngModel)]="newCategory.name" placeholder="Имя категории">
   <input [(ngModel)]="newCategory.description" placeholder="Описание категории">
-  <img [src]="newCategory.image" alt={{newCategory.imageUrl}}>
+  <img [src]="newCategory.image" alt={{newCategory.imageFileName}}>
 
   <input type="file" (change)="onFileSelected($event)">
   <!-- Другие поля для ввода -->

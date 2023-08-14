@@ -97,27 +97,6 @@
   content: "";
   background-color: rgba(0,0,0,0.2);
 }
-.sgroup:nth-child(1) {
-  top: 0;
-  left: 0;
-  background-image:  url(/assets/images/services-image3.jpg);
-
-}
-.sgroup:nth-child(2) {
-  top: 0;
-  left: 50%;
-  background-image:  url(/assets/images/services-image2.jpg);
-}
-.sgroup:nth-child(3) {
-  top: 50%;
-  left: 0;
-  background-image: url(/assets/images/services-image1.jpg);
-}
-.sgroup:nth-child(4) {
-  top: 50%;
-  left: 50%;
-  background-image: url(/assets/images/services-image4.jpg);
-}
 .sgroup.is-expanded {
   top: 0;
   left: 0;

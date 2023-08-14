@@ -52,9 +52,10 @@ export class AddServiceComponent implements OnInit {
   loadImages() {
     this.serviceCategories?.forEach(element => {
       if (element.imageBucket && element.imageFileName) {
-        this.imageService.getImage(element.imageBucket, element.imageFileName).then(result => {
-          element.image = result;
-        });
+        this.imageService.getImage(element.imageBucket, element.imageFileName).subscribe(
+          (data: Blob) => {
+            element.image = URL.createObjectURL(data);
+          })
       }
     });
   }
@@ -81,9 +82,10 @@ export class AddServiceComponent implements OnInit {
       this.newCategory.imageBucket = result.bucketName;
       this.newCategory.imageFileName = result.fileName;
       if (this.newCategory.imageBucket && this.newCategory.imageFileName) {
-        this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageFileName).then(result => {
-          this.newCategory.imageFileName = result;
-        });
+        this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageFileName).subscribe(
+          (data: Blob) => {
+            this.newCategory.image = URL.createObjectURL(data);
+          })
       }
 
     })
