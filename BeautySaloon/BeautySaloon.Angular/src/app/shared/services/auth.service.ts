@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserManager, User, OidcClient } from 'oidc-client';
-import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
 import { ConfigService } from "./config.service";
 
 const REDIRECT_URL_KEY = 'redirectUrl';
@@ -37,11 +37,22 @@ export class AuthService {
     return null;
   }
 
-  loadUser(){
-    return this.manager?.getUser().then(user => {
+  loadUser() {
+    return this.manager?.getUser().then(async user => {
       this.user = user;
       this._authNavStatusSource.next(this.isAuthenticated);
       this._isAdminNavStatusSource.next(this.isAdmin);
+
+      var settings = this.configService.getClientSettings();
+      var tokensUrl = `${settings.authority}/connect/token`;
+      const formData = new URLSearchParams();
+      formData.set('client_id', settings.client_id ?? '');
+      formData.set('client_secret', settings.client_secret ?? '');
+      formData.set('grant_type', 'client_credentials');
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      this.tokenResponse = await this.http.post<any>(tokensUrl, formData.toString(), { headers }).toPromise();
     });
   }
 
@@ -64,10 +75,12 @@ export class AuthService {
 
   get authorizationHeaderValue(): string {
     if (this.user) {
+      console.log('Using user token.')
       return `${this.user.token_type} ${this.user.access_token}`;
     }
 
     if (this.tokenResponse) {
+      console.log('Using client token.')
       return `${this.tokenResponse.token_type} ${this.tokenResponse.access_token}`;
     }
 
