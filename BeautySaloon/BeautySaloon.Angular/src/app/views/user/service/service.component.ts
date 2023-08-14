@@ -93,4 +93,17 @@ export class ServiceComponent implements OnInit {
 
     Boxlayout.init();
   }
+
+  getSectionStyles(index: number, image: string): { [key: string]: string } {
+    const totalColumns = 2; // Number of columns
+    const categoriesPerRow = Math.ceil(this.categories.length / totalColumns);
+    const row = Math.floor(index / categoriesPerRow);
+    const col = index % totalColumns;
+  
+    const top = (row * 50) + '%';
+    const left = (col * 50) + '%';
+    const backgroundImage = `url(${image})`;
+    return { top, left, backgroundImage };
+  }
+  
 }

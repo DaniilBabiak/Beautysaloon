@@ -1,6 +1,6 @@
 <div class="services-wrapper">
   <main class="sgroup-container">
-    <section *ngFor="let category of categories" class="sgroup">
+    <section *ngFor="let category of categories let i = index" class="sgroup" [ngStyle]="getSectionStyles(i, category.image?? '')">
       <div class="close-sgroup">&times;</div>
       <div class="title-box">{{category.name}}</div>
       <div class="info-box">
