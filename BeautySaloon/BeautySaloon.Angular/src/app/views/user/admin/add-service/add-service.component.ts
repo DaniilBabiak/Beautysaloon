@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import{CategoryService} from "../../../../shared/services/category.service";
-import {ServiceCategory} from "../../../../shared/models/service-category";
-import {ImageService} from 'src/app/shared/services/image.service';
+import { Component, OnInit } from '@angular/core';
+import { CategoryService } from "../../../../shared/services/category.service";
+import { ServiceCategory } from "../../../../shared/models/service-category";
+import { ImageService } from 'src/app/shared/services/image.service';
+import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-add-service',
@@ -22,16 +23,18 @@ export class AddServiceComponent implements OnInit {
   showAddCategoryForm = false;
   selectedFile: File | null = null;
 
-  constructor(private categoryService: CategoryService, private imageService: ImageService) {
+  constructor(private categoryService: CategoryService, private imageService: ImageService, private authService: AuthService) {
 
   }
 
   ngOnInit(): void {
-    this.loadCategories();
+    this.authService.loadUser()?.then(() => {
+      this.loadCategories();
+    })
   }
 
   deleteCategory(id: number | null) {
-    if (id){
+    if (id) {
       this.categoryService.deleteCategory(id).subscribe(result => {
         this.loadCategories();
       })

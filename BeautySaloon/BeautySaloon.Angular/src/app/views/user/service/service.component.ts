@@ -1,13 +1,53 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ServiceCategory } from 'src/app/shared/models/service-category';
 import { CategoryService } from 'src/app/shared/services/category.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { ImageService } from 'src/app/shared/services/image.service';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css']
 })
 export class ServiceComponent implements OnInit {
+  categories: ServiceCategory[] = [];
   ngOnInit() {
+    this.authService.loadUser()?.then(() => {
+      this.loadCategories();
+    })
+
+  }
+
+  constructor(private imageService: ImageService, private categoryService: CategoryService, private authService: AuthService) {
+    this.authService.loadUser()?.then(() => {
+      this.categoryService.getCategories().subscribe(result => {
+        console.log(result);
+      })
+    });
+  }
+
+  loadCategories() {
+    this.categoryService.getCategories().subscribe(result => {
+      this.categories = result;
+      this.loadImages().then(() => {
+        this.initButtons();
+      });
+    });
+  }
+
+  async loadImages() {
+    for (const element of this.categories) {
+      if (element.imageBucket && element.imageUrl) {
+        const data = await this.imageService.getImage(element.imageBucket, element.imageUrl).toPromise();
+        if (data) {
+          element.image = URL.createObjectURL(data);
+        }
+      }
+    }
+
+  }
+
+  initButtons() {
     const Boxlayout = (function () {
       const wrapper = document.body;
       const sgroups = Array.from(document.querySelectorAll(".sgroup")) as HTMLElement[];
@@ -23,13 +63,13 @@ export class ServiceComponent implements OnInit {
 
       function _initEvents() {
         sgroups.forEach((element: HTMLElement) => {
-          element.addEventListener('click', function(this: HTMLElement) {
+          element.addEventListener('click', function (this: HTMLElement) {
             _opensgroup(this);
           });
         });
 
         closeButtons.forEach((element: HTMLElement) => {
-          element.addEventListener('click', function(this: HTMLElement, event: Event) {
+          element.addEventListener('click', function (this: HTMLElement, event: Event) {
             event.stopPropagation();
             _closesgroup(this.parentElement as HTMLElement);
           });
@@ -52,22 +92,5 @@ export class ServiceComponent implements OnInit {
     })();
 
     Boxlayout.init();
-  }
-  servicesPhoto1: SafeResourceUrl;
-  servicesPhoto2: SafeResourceUrl;
-  servicesPhoto3: SafeResourceUrl;
-  servicesPhoto4: SafeResourceUrl;
-  constructor(private sanitizer: DomSanitizer, private categoryService: CategoryService) {
-    this.categoryService.getCategories().subscribe(result =>{
-      console.log(result);
-    })
-    const imagePath = 'assets/images/services-image1.jpg';
-    const imagePath2 = 'assets/images/services-image2.jpg';
-    const imagePath3 = 'assets/images/services-image3.jpg';
-    const imagePath4 = 'assets/images/services-image4.jpg';
-    this.servicesPhoto1 = this.sanitizer.bypassSecurityTrustResourceUrl(imagePath);
-    this.servicesPhoto2 = this.sanitizer.bypassSecurityTrustResourceUrl(imagePath2);
-    this.servicesPhoto3 = this.sanitizer.bypassSecurityTrustResourceUrl(imagePath3);
-    this.servicesPhoto4 = this.sanitizer.bypassSecurityTrustResourceUrl(imagePath4);
   }
 }

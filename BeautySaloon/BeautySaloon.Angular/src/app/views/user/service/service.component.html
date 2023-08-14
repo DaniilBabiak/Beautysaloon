@@ -1,219 +1,27 @@
 <div class="services-wrapper">
   <main class="sgroup-container">
-
-    <section class="sgroup">
+    <section *ngFor="let category of categories" class="sgroup">
       <div class="close-sgroup">&times;</div>
-      <div class="title-box">SHADED EYELASH ENHANCEMENT</div>
+      <div class="title-box">{{category.name}}</div>
       <div class="info-box">
         <div class="info-col-1">
-          <img [src]=" servicesPhoto3" alt="" />
+          <img [src]="category.image" alt="" />
         </div>
         <div class="info-col-2">
-
           <div class="service-info">
-
-            <div class="services-text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.<br>
-              Voluptas fugit illo quam mollitia nihil nemo corrupti,<br>
-              consectetur dignissimos laboriosam ullam iusto nam laudantium,<br>
-              explicabo, voluptatum iste molestias rerum deleniti voluptate!<br>
-            </div>
-
-            <div class="services-prices">
-
+            <div class="services-text">{{category.description}}</div>
+            <div *ngFor="let service of category.services" class="services-prices">
               <div class="services-prices-wrapper">
-                <div class="services-name">INITIAL TRETMENT</div>
-                <div class="services-price">$300</div>
+                <div class="services-name">{{service.name}}</div>
+                <div class="services-price">{{service.price}}</div>
               </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1-12 MONTH)  </div>
-                <div class="services-price">$80</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1+ YEAR)  </div>
-                <div class="services-price">$250</div>
-              </div>
-
             </div>
             <div class="service-btn-makeappoitment">
               <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
             </div>
-
-
           </div>
         </div>
       </div>
     </section>
-
-
-
-    <section class="sgroup">
-      <div class="close-sgroup">&times;</div>
-      <div class="title-box">NATURAL LIPS</div>
-      <div class="info-box">
-        <div class="info-col-1">
-          <img [src]=" servicesPhoto2" alt="" />
-        </div>
-        <div class="info-col-2">
-          <div class="service-info">
-
-            <div class="services-text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.<br>
-              Voluptas fugit illo quam mollitia nihil nemo corrupti,<br>
-              consectetur dignissimos laboriosam ullam iusto nam laudantium,<br>
-              explicabo, voluptatum iste molestias rerum deleniti voluptate!<br>
-            </div>
-
-            <div class="services-prices">
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">INITIAL TRETMENT</div>
-                <div class="services-price">$300</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1-12 MONTH)  </div>
-                <div class="services-price">$80</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(2-12 MONTH)  </div>
-                <div class="services-price">$250</div>
-              </div>
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1+ YEAR)  </div>
-                <div class="services-price">$150</div>
-              </div>
-
-
-            </div>
-
-            <div class="service-btn-makeappoitment">
-              <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
-            </div>
-
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
-    <section class="sgroup">
-      <div class="close-sgroup">&times;</div>
-      <div class="title-box"> POWDER EYEBROWS</div>
-      <div class="info-box">
-        <div class="info-col-1">
-          <img [src]=" servicesPhoto1" alt="" />
-        </div>
-        <div class="info-col-2">
-          <div class="service-info">
-
-            <div class="services-text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.<br>
-              Voluptas fugit illo quam mollitia nihil nemo corrupti,<br>
-              consectetur dignissimos laboriosam ullam iusto nam laudantium,<br>
-              explicabo, voluptatum iste molestias rerum deleniti voluptate!<br>
-            </div>
-
-            <div class="services-prices">
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">INITIAL TRETMENT</div>
-                <div class="services-price">$300</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1-12 MONTH)  </div>
-                <div class="services-price">$80</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(2-12 MONTH)  </div>
-                <div class="services-price">$250</div>
-              </div>
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1+ YEAR)  </div>
-                <div class="services-price">$150</div>
-              </div>
-
-
-            </div>
-
-            <div class="service-btn-makeappoitment">
-              <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
-            </div>
-
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sgroup">
-      <div class="close-sgroup">&times;</div>
-      <div class="title-box">CLASSIC EYELINER OR SMOKER EYES</div>
-      <div class="info-box">
-        <div class="info-col-1">
-          <img [src]=" servicesPhoto4" alt="" />
-        </div>
-        <div class="info-col-2">
-          <div class="service-info">
-
-            <div class="services-text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.<br>
-              Voluptas fugit illo quam mollitia nihil nemo corrupti,<br>
-              consectetur dignissimos laboriosam ullam iusto nam laudantium,<br>
-              explicabo, voluptatum iste molestias rerum deleniti voluptate!<br>
-            </div>
-
-            <div class="services-prices">
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">INITIAL TRETMENT</div>
-                <div class="services-price">$300</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1-12 MONTH)  </div>
-                <div class="services-price">$80</div>
-              </div>
-
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(2-12 MONTH)  </div>
-                <div class="services-price">$250</div>
-              </div>
-
-              <div class="services-prices-wrapper">
-                <div class="services-name">TOUCH-UP(1+ YEAR)  </div>
-                <div class="services-price">$150</div>
-              </div>
-
-
-            </div>
-
-            <div class="service-btn-makeappoitment">
-              <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
-            </div>
-
-
-          </div>
-        </div>
-      </div>
-    </section>
-
   </main>
 </div>

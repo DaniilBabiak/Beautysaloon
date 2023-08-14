@@ -23,7 +23,6 @@ export class CategoryService {
   }
 
   createCategory(serviceCategory: ServiceCategory): Observable<ServiceCategory> {
-
     const categoryWithoutImage: ServiceCategory = {
       id: serviceCategory.id,
       name: serviceCategory.name,
