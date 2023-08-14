@@ -33,9 +33,10 @@ export class ServiceComponent implements OnInit {
   async loadImages() {
     for (const element of this.categories) {
       if (element.imageBucket && element.imageFileName) {
-        const data = await this.imageService.getImage(element.imageBucket, element.imageFileName).toPromise();
+        const data = await this.imageService.getImage(element.imageBucket, element.imageFileName);
         if (data) {
-          element.image = URL.createObjectURL(data);
+          console.log("loaded image");
+          element.image = data;
         }
       }
     }
@@ -43,6 +44,7 @@ export class ServiceComponent implements OnInit {
   }
 
   initButtons() {
+    console.log("init buttons")
     const Boxlayout = (function () {
       const wrapper = document.body;
       const sgroups = Array.from(document.querySelectorAll(".sgroup")) as HTMLElement[];
