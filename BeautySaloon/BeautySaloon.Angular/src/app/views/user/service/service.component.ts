@@ -32,8 +32,8 @@ export class ServiceComponent implements OnInit {
 
   async loadImages() {
     for (const element of this.categories) {
-      if (element.imageBucket && element.imageUrl) {
-        const data = await this.imageService.getImage(element.imageBucket, element.imageUrl).toPromise();
+      if (element.imageBucket && element.imageFileName) {
+        const data = await this.imageService.getImage(element.imageBucket, element.imageFileName).toPromise();
         if (data) {
           element.image = URL.createObjectURL(data);
         }

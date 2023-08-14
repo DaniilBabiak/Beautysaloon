@@ -27,7 +27,7 @@ export class CategoryService {
       name: serviceCategory.name,
       description: serviceCategory.description,
       imageBucket: serviceCategory.imageBucket,
-      imageUrl: serviceCategory.imageUrl,
+      imageFileName: serviceCategory.imageFileName,
       services: serviceCategory.services,
       image: null // Указываем, что image равен null
     };
