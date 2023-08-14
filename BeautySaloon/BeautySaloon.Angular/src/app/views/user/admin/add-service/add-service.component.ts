@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import{CategoryService} from "../../../../shared/services/category.service";
-import {ServiceCategory} from "../../../../shared/models/service-category";
-import {ImageService} from 'src/app/shared/services/image.service';
+import { Component, OnInit } from '@angular/core';
+import { CategoryService } from "../../../../shared/services/category.service";
+import { ServiceCategory } from "../../../../shared/models/service-category";
+import { ImageService } from 'src/app/shared/services/image.service';
+import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-add-service',
@@ -15,23 +16,25 @@ export class AddServiceComponent implements OnInit {
     name: null,
     description: null,
     imageBucket: null,
-    imageUrl: null,
+    imageFileName: null,
     services: null,
     image: null
   };
   showAddCategoryForm = false;
   selectedFile: File | null = null;
 
-  constructor(private categoryService: CategoryService, private imageService: ImageService) {
+  constructor(private categoryService: CategoryService, private imageService: ImageService, private authService: AuthService) {
 
   }
 
   ngOnInit(): void {
-    this.loadCategories();
+    this.authService.loadUser()?.then(() => {
+      this.loadCategories();
+    })
   }
 
   deleteCategory(id: number | null) {
-    if (id){
+    if (id) {
       this.categoryService.deleteCategory(id).subscribe(result => {
         this.loadCategories();
       })
@@ -48,11 +51,10 @@ export class AddServiceComponent implements OnInit {
 
   loadImages() {
     this.serviceCategories?.forEach(element => {
-      if (element.imageBucket && element.imageUrl) {
-        this.imageService.getImage(element.imageBucket, element.imageUrl).subscribe(
-          (data: Blob) => {
-            element.image = URL.createObjectURL(data);
-          })
+      if (element.imageBucket && element.imageFileName) {
+        this.imageService.getImage(element.imageBucket, element.imageFileName).then(result => {
+          element.image = result;
+        });
       }
     });
   }
@@ -65,7 +67,7 @@ export class AddServiceComponent implements OnInit {
         name: null,
         description: null,
         imageBucket: null,
-        imageUrl: null,
+        imageFileName: null,
         services: null,
         image: null
       };
@@ -77,12 +79,11 @@ export class AddServiceComponent implements OnInit {
     this.selectedFile = event.target.files[0] as File;
     this.imageService.uploadImage(this.selectedFile, "categories").subscribe(result => {
       this.newCategory.imageBucket = result.bucketName;
-      this.newCategory.imageUrl = result.fileName;
-      if (this.newCategory.imageBucket && this.newCategory.imageUrl) {
-        this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageUrl).subscribe(
-          (data: Blob) => {
-            this.newCategory.image = URL.createObjectURL(data);
-          })
+      this.newCategory.imageFileName = result.fileName;
+      if (this.newCategory.imageBucket && this.newCategory.imageFileName) {
+        this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageFileName).then(result => {
+          this.newCategory.imageFileName = result;
+        });
       }
 
     })
