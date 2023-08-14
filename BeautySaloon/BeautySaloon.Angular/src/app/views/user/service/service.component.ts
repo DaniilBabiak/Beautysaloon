@@ -19,11 +19,6 @@ export class ServiceComponent implements OnInit {
   }
 
   constructor(private imageService: ImageService, private categoryService: CategoryService, private authService: AuthService) {
-    this.authService.loadUser()?.then(() => {
-      this.categoryService.getCategories().subscribe(result => {
-        console.log(result);
-      })
-    });
   }
 
   loadCategories() {

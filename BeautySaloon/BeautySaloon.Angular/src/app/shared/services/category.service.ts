@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CategoryService {
-
   constructor(private auth: AuthService, private config: ConfigService, private http: HttpClient) {
   }
 
@@ -39,11 +38,11 @@ export class CategoryService {
 
     return this.http.post<ServiceCategory>(`${url}/api/ServiceCategory`, categoryWithoutImage, options);
   }
-deleteCategory(id:number):Observable<any>{
+  deleteCategory(id: number): Observable<any> {
     var url = this.config.resourceApiURI;
     var options = this.getOptions();
     return this.http.delete(`${url}/api/ServiceCategory/${id}`, options);
-}
+  }
   private getOptions() {
     return {
       headers: new HttpHeaders({
