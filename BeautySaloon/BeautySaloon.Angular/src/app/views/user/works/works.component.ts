@@ -24,19 +24,21 @@ export class WorksComponent implements OnInit {
     this.auth.loadUser()?.then(() => {
       this.bestWorkService.getBestWorks().subscribe(result => {
         this.bestWorks = result;
-
-        this.totalPages = this.bestWorks.length % this.itemsPerPage == 0 ?
-          this.bestWorks.length / this.itemsPerPage
-          : this.bestWorks.length / this.itemsPerPage + 1;
-        this.totalPages = Math.ceil(this.bestWorks.length / this.itemsPerPage);
+        this.countTotalPages();
         this.loadImages();
       })
     })
     this.updateItemsPerPage();
   }
+  countTotalPages(){
+    this.totalPages = this.bestWorks.length % this.itemsPerPage == 0 ? this.bestWorks.length / this.itemsPerPage: this.bestWorks.length / this.itemsPerPage ;
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.updateItemsPerPage(); // Вызов метода обновления itemsPerPage
+    this.countTotalPages();
+    this.currentPage = 1;
   }
 
   async loadImages() {
@@ -62,9 +64,9 @@ export class WorksComponent implements OnInit {
   getCurrentPageImages() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    
+
     const images = this.bestWorks.slice(startIndex, endIndex).map(work => work.image);
-  
+
     return images;
   }
   openModal(alt: string, image: string) {
