@@ -40,7 +40,6 @@ export class ServiceComponent implements OnInit {
         }
       }
     }
-
   }
 
   initButtons() {

@@ -47,6 +47,7 @@ public static class BuilderExtensions
 
         builder.Services.AddTransient<IServiceService, ServiceService>();
         builder.Services.AddTransient<IServiceCategoryService, ServiceCategoryService>();
+        builder.Services.AddTransient<IBestWorkService, BestWorkService>();
 
         return builder;
     }

@@ -1,26 +1,18 @@
+<div>{{currentPage}}</div>
 <div class="work-wrapper">
-
-
   <div class="sign-wrap-2 work-header" style="padding: 0;">
     <span class="sign_word">Our Best Works</span>
   </div>
-
-
-
-
   <div class="rhomb-grid">
     <ng-container *ngFor="let image of getCurrentPageImages(); let i = index">
-      <a (click)="openModal('My Image', image)" class="rhomb">
+      <a (click)="openModal('My Image', image?? '')" class="rhomb">
         <div class="rhomb-inner">
           <img [src]="image" alt="" />
         </div>
       </a>
     </ng-container>
   </div>
-
   <div class="pagination">
-
-
     <svg class="arrow-left-5 pag-nav-left" viewBox="0 0 154 109" (click)="previousPage()">
       <symbol id="Arrow" viewBox="-73.9 -55.3 135.9 85.4">
         <g>
@@ -31,12 +23,8 @@
         </g>
       </symbol>
       <use xlink:href="#Arrow" width="135.9" height="85.4" id="XMLID_1_" x="-73.9" y="-55.3"
-           transform="matrix(1.007 0 0 -1.007 83.0005 42)" />
+        transform="matrix(1.007 0 0 -1.007 83.0005 42)" />
     </svg>
-
-    <!-- <span class="current-page" style="position: absolute; top: 45%;">{{ currentPage }}</span> -->
-
-
     <svg class="arrow-right-5 pag-nav-right" viewBox="0 0 154 109" (click)="nextPage()">
       <symbol id="Arrow" viewBox="-73.9 -55.3 135.9 85.4">
         <g>
@@ -47,18 +35,13 @@
         </g>
       </symbol>
       <use xlink:href="#Arrow" width="135.9" height="85.4" id="XMLID_1_" x="-73.9" y="-55.3"
-           transform="matrix(1.007 0 0 -1.007 83.0005 42)" />
+        transform="matrix(1.007 0 0 -1.007 83.0005 42)" />
     </svg>
-
   </div>
-
-
   <div class="work-btn">
     <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
   </div>
-
 </div>
-
 <div class="modal" *ngIf="showModal">
   <span class="modal-close" (click)="closeModal()">&times;</span>
   <img [src]="modalImage" [alt]="modalAlt">

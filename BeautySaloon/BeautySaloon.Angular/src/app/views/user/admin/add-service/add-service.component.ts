@@ -78,7 +78,7 @@ export class AddServiceComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0] as File;
-    this.imageService.uploadImage(this.selectedFile, "categories").subscribe(result => {
+    this.imageService.uploadImage(this.selectedFile, "bestWorks").subscribe(result => {
       this.newCategory.imageBucket = result.bucketName;
       this.newCategory.imageFileName = result.fileName;
       if (this.newCategory.imageBucket && this.newCategory.imageFileName) {

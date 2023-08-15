@@ -1,0 +1,19 @@
+<p>add-best-works works!</p>
+<div *ngIf="bestWorks">
+  <div *ngFor="let bestWork of bestWorks">
+    <img [src]="bestWork.image" alt={{bestWork.imageFileName}}>
+    <button (click)="deleteBestWork(bestWork.id)">detele</button>
+    <!-- Дополнительные элементы, связанные с категорией -->
+  </div>
+</div>
+
+<button (click)="showAddBestWorkForm = true">Добавить категорию</button>
+
+<div *ngIf="showAddBestWorkForm">
+  <img [src]="newBestWork.image" alt={{newBestWork.imageFileName}}>
+
+  <input type="file" (change)="onFileSelected($event)">
+  <!-- Другие поля для ввода -->
+
+  <button (click)="createBestWork()">Создать</button>
+</div>

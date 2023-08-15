@@ -13,6 +13,7 @@ public class BeautySaloonContext : DbContext
     public DbSet<Comment> Comments { get; set; }
     public DbSet<ServiceCategory> ServiceCategories { get; set; }
     public DbSet<Service> Services { get; set; }
+    public DbSet<BestWork> BestWorks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
