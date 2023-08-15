@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeautySaloon.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-[Authorize("admin")]
 public class ServiceController : ControllerBase
 {
     private readonly IServiceService _service;
@@ -35,6 +34,7 @@ public class ServiceController : ControllerBase
 
     // POST api/<ServiceController>
     [HttpPost]
+    [Authorize("admin")]
     public async Task<IActionResult> Post([FromBody] Service service)
     {
         var result = await _service.CreateServiceAsync(service);
@@ -44,12 +44,14 @@ public class ServiceController : ControllerBase
 
     // PUT api/<ServiceController>/5
     [HttpPut("{id}")]
+    [Authorize("admin")]
     public void Put(int id, [FromBody] string value)
     {
     }
 
     // DELETE api/<ServiceController>/5
     [HttpDelete("{id}")]
+    [Authorize("admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.DeleteServiceAsync(id);

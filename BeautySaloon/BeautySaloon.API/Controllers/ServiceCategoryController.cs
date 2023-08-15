@@ -42,12 +42,14 @@ public class ServiceCategoryController : ControllerBase
 
     // PUT api/<ServiceController>/5
     [HttpPut("{id}")]
+    [Authorize("admin")]
     public void Put(int id, [FromBody] string value)
     {
     }
 
     // DELETE api/<ServiceController>/5
     [HttpDelete("{id}")]
+    [Authorize("admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _category.DeleteCategoryAsync(id);

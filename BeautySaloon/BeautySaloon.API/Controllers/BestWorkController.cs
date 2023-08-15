@@ -1,6 +1,6 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Controllers;
@@ -23,6 +23,7 @@ public class BestWorkController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize("admin")]
     public async Task<IActionResult> CreateBestWorkAsync([FromBody] BestWork bestWork)
     {
         var result = await _bestWorkService.CreateBestWorkAsync(bestWork);
@@ -31,6 +32,7 @@ public class BestWorkController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize("admin")]
     public async Task<IActionResult> DeleteBestWorkAsync(int id)
     {
         await _bestWorkService.DeleteBestWorkAsync(id);
