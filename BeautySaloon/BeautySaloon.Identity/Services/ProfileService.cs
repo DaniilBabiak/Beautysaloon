@@ -2,7 +2,6 @@
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
-using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
@@ -26,7 +25,7 @@ public class ProfileService : IProfileService
         var user = await _userManager.FindByIdAsync(sub);
         var roles = await _userManager.GetRolesAsync(user);
         var roleClaimValue = string.Join(" ", roles);
-        context.IssuedClaims.AddRange(new []{ new Claim(ClaimTypes.Role, roleClaimValue), new Claim("role", roleClaimValue)});
+        context.IssuedClaims.AddRange(new[] { new Claim(ClaimTypes.Role, roleClaimValue), new Claim("role", roleClaimValue) });
         context.IssuedClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
         var principal = await _claimsFactory.CreateAsync(user);
         context.IssuedClaims.AddRange(principal.Claims);

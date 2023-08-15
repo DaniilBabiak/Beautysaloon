@@ -1,10 +1,7 @@
 ﻿using BeautySaloon.HealthChecksUI.HealthChecks;
 using BeautySaloon.Shared;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System.Net.Http;
 
 namespace BeautySaloon.HealthChecksUI.Extensions;
 

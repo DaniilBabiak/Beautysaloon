@@ -4,6 +4,7 @@ using BeautySaloon.API.Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeautySaloon.API.Migrations
 {
     [DbContext(typeof(BeautySaloonContext))]
-    partial class BeautySaloonContextModelSnapshot : ModelSnapshot
+    [Migration("20230815135225_Added startTime endTime and duration")]
+    partial class AddedstartTimeendTimeandduration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,8 +109,8 @@ namespace BeautySaloon.API.Migrations
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -116,8 +119,8 @@ namespace BeautySaloon.API.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -155,6 +158,33 @@ namespace BeautySaloon.API.Migrations
                     b.ToTable("ServiceCategories");
                 });
 
+            modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceWorkingTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("TimeSlots");
+                });
+
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Reservation", b =>
                 {
                     b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", "Service")
@@ -175,6 +205,15 @@ namespace BeautySaloon.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceWorkingTime", b =>
+                {
+                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", b =>
