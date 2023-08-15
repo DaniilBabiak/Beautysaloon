@@ -4,6 +4,7 @@ using BeautySaloon.API.Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeautySaloon.API.Migrations
 {
     [DbContext(typeof(BeautySaloonContext))]
-    partial class BeautySaloonContextModelSnapshot : ModelSnapshot
+    [Migration("20230815134350_Added reservations")]
+    partial class Addedreservations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,21 +106,12 @@ namespace BeautySaloon.API.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
@@ -155,6 +149,34 @@ namespace BeautySaloon.API.Migrations
                     b.ToTable("ServiceCategories");
                 });
 
+            modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceWorkingTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId")
+                        .IsUnique();
+
+                    b.ToTable("TimeSlots");
+                });
+
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Reservation", b =>
                 {
                     b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", "Service")
@@ -177,9 +199,23 @@ namespace BeautySaloon.API.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceWorkingTime", b =>
+                {
+                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", "Service")
+                        .WithOne("ServiceWorkingTime")
+                        .HasForeignKey("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceWorkingTime", "ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", b =>
                 {
                     b.Navigation("Reservations");
+
+                    b.Navigation("ServiceWorkingTime")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceCategory", b =>

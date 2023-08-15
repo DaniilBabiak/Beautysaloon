@@ -3,7 +3,6 @@ using BeautySaloon.ImagesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 
 namespace BeautySaloon.ImagesAPI.Controllers;
 [ApiController]

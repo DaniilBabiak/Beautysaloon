@@ -29,13 +29,18 @@ public class ServiceService : IServiceService
 
     public async Task<List<Service>> GetServicesByCategoryIdAsync(int id)
     {
-        var result = await _context.Services.Include(s => s.Category).Where(s => s.Category.Id == id).ToListAsync();
+        var result = await _context.Services
+                                   .Include(s => s.Category)
+                                   .Include(s => s.Reservations)
+                                   .Where(s => s.Category.Id == id).ToListAsync();
         return result;
     }
 
     public async Task<Service> CreateServiceAsync(Service service)
     {
-        var category = await _context.ServiceCategories.Include(c => c.Services).FirstOrDefaultAsync(c => c.Id == service.CategoryId);
+        var category = await _context.ServiceCategories
+                                     .Include(c => c.Services)
+                                     .FirstOrDefaultAsync(c => c.Id == service.CategoryId);
 
         if (category is null)
         {

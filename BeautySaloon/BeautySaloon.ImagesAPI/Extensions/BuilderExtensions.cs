@@ -1,7 +1,6 @@
 ﻿using BeautySaloon.ImagesAPI.HealthChecks;
 using BeautySaloon.ImagesAPI.Services;
 using BeautySaloon.Shared;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Minio;
 using Minio.AspNetCore;
