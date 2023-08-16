@@ -31,31 +31,4 @@ public class ServiceController : ControllerBase
             return Ok(result);
         }
     }
-
-    [HttpPost]
-    [Authorize("admin")]
-    public async Task<IActionResult> Post([FromBody] Service service)
-    {
-        var result = await _service.CreateServiceAsync(service);
-
-        return Ok(result);
-    }
-
-    [HttpPut]
-    [Authorize("admin")]
-    public async Task<IActionResult> Put([FromBody] Service service)
-    {
-        var result = await _service.UpdateServiceAsync(service);
-
-        return Ok(result);
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize("admin")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _service.DeleteServiceAsync(id);
-
-        return Ok();
-    }
 }
