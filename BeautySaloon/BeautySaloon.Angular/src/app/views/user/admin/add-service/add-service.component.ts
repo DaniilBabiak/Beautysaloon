@@ -1,92 +1,89 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoryService } from "../../../../shared/services/category.service";
-import { ServiceCategory } from "../../../../shared/models/service-category";
-import { ImageService } from 'src/app/shared/services/image.service';
+import { ServiceCategory } from '../../../../shared/models/service-category';
+import { CategoryService } from '../../../../shared/services/category.service';
+import { ImageService } from '../../../../shared/services/image.service';
 import { AuthService } from '../../../../shared/services/auth.service';
+import { Service } from 'src/app/shared/models/service';
+import { ServiceService } from '../../../../shared/services/service.service';
 
 @Component({
   selector: 'app-add-service',
   templateUrl: './add-service.component.html',
-  styleUrls: ['./add-service.component.css']
+  styleUrls: ['./add-service.component.css'],
 })
 export class AddServiceComponent implements OnInit {
+
+  services: Service[] | null = null;
   serviceCategories: ServiceCategory[] | null = null;
-  newCategory: ServiceCategory = {
+  newService: Service = {
     id: null,
     name: null,
-    description: null,
-    imageBucket: null,
-    imageFileName: null,
-    services: null,
-    image: null
+    duration: null,
+    endTime: null,
+    startTime: null,
+    category: null,
+    reservations: null,
+    price: null,
+    categoryId: null,
   };
-  showAddCategoryForm = false;
-  selectedFile: File | null = null;
+  showAddServiceForm = false;
 
-  constructor(private categoryService: CategoryService, private imageService: ImageService, private authService: AuthService) {
-
-  }
+  constructor(
+    private categoryService: CategoryService,
+    private imageService: ImageService,
+    private authService: AuthService,
+    private service: ServiceService
+  ) {}
 
   ngOnInit(): void {
     this.authService.loadUser()?.then(() => {
       this.loadCategories();
-    })
+    });
   }
 
   deleteCategory(id: number | null) {
     if (id) {
-      this.categoryService.deleteCategory(id).subscribe(result => {
+      this.categoryService.deleteCategory(id).subscribe((result) => {
         this.loadCategories();
-      })
+      });
     }
-
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe(result => {
+    this.categoryService.getCategories().subscribe((result) => {
       this.serviceCategories = result;
       this.loadImages();
     });
   }
 
   loadImages() {
-    this.serviceCategories?.forEach(element => {
+    this.serviceCategories?.forEach((element) => {
       if (element.imageBucket && element.imageFileName) {
-        this.imageService.getImage(element.imageBucket, element.imageFileName).then(data => {
-          element.image = data;
-
-        });
+        this.imageService
+          .getImage(element.imageBucket, element.imageFileName)
+          .then((data) => {
+            element.image = data;
+          });
       }
     });
   }
-
-  createCategory() {
-    this.categoryService.createCategory(this.newCategory).subscribe(result => {
-      this.loadCategories(); // Обновляем список категорий после создания
-      this.newCategory = {
+  selectCategory(category:ServiceCategory){
+    this.newService.categoryId = category.id;
+    this.newService.category = category;
+  }
+  saveService(){
+    this.service.createService(this.newService).subscribe(result => {
+      this.newService  = {
         id: null,
         name: null,
-        description: null,
-        imageBucket: null,
-        imageFileName: null,
-        services: null,
-        image: null
-      };
-      this.showAddCategoryForm = false;
-    });
-  }
-
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0] as File;
-    this.imageService.uploadImage(this.selectedFile, "category").subscribe(result => {
-      this.newCategory.imageBucket = result.bucketName;
-      this.newCategory.imageFileName = result.fileName;
-      if (this.newCategory.imageBucket && this.newCategory.imageFileName) {
-        this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageFileName).then(data => {
-          this.newCategory.image = data;
-        })
+        duration: null,
+        endTime: null,
+        startTime: null,
+        category: null,
+        reservations: null,
+        price: null,
+        categoryId: null,
       }
-
     })
   }
 }
