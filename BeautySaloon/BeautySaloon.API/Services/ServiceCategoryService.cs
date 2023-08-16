@@ -17,21 +17,26 @@ public class ServiceCategoryService : IServiceCategoryService
 
     public async Task<List<ServiceCategory>> GetAllCategoriesAsync()
     {
-        var result = await _context.ServiceCategories.Include(c => c.Services).ToListAsync();
+        var result = await _context.ServiceCategories
+                                   .AsNoTracking()
+                                   .Include(c => c.Services)
+                                       .ThenInclude(s => s.Reservations)
+                                   .ToListAsync();
         return result;
     }
 
     public async Task<ServiceCategory> GetCategoryByIdAsync(int id)
     {
-        var result = await _context.ServiceCategories.FirstOrDefaultAsync(c => c.Id == id);
+        var result = await _context.ServiceCategories
+                                   .AsNoTracking()
+                                   .Include(c => c.Services)
+                                        .ThenInclude(s => s.Reservations)
+                                   .FirstOrDefaultAsync(c => c.Id == id);
 
-        return result;
-    }
-
-    public async Task<ServiceCategory> GetServiceCategoryAsync(int id)
-    {
-        var result = await _context.ServiceCategories.Include(c => c.Services)
-                                                     .SingleOrDefaultAsync(c => c.Id == id);
+        if (result is null)
+        {
+            throw new CategoryNotFoundException($"Category with id {id} not found!");
+        }
 
         return result;
     }
@@ -46,7 +51,9 @@ public class ServiceCategoryService : IServiceCategoryService
 
     public async Task<ServiceCategory> UpdateCategoryAsync(ServiceCategory category)
     {
-        var existingCategory = await _context.ServiceCategories.FirstOrDefaultAsync(s => s.Id == category.Id);
+        var existingCategory = await _context.ServiceCategories
+                                             .AsNoTracking()
+                                             .FirstOrDefaultAsync(s => s.Id == category.Id);
 
         if (existingCategory is null)
         {

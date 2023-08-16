@@ -41,9 +41,10 @@ public class ReservationService : IReservationService
     public async Task<List<Reservation>> GetReservationsByServiceId(int serviceId)
     {
         var result = await _context.Reservations
-                             .Include(r => r.Service)
-                             .Include(r => r.Customer)
-                             .ToListAsync();
+                                   .AsNoTracking()
+                                   .Include(r => r.Service)
+                                   .Include(r => r.Customer)
+                                   .ToListAsync();
 
         return result;
     }
@@ -51,6 +52,7 @@ public class ReservationService : IReservationService
     public async Task<List<Reservation>> GetAvailableReseravtionsByServiceId(int serviceId)
     {
         var service = await _context.Services
+                                    .AsNoTracking()
                                     .Include(s => s.Reservations)
                                     .Where(s => s.Id == serviceId).FirstOrDefaultAsync();
 
@@ -59,9 +61,40 @@ public class ReservationService : IReservationService
             throw new ServiceNotFoundException($"Service with id {serviceId} not found.");
         }
 
+        var availableReservations = GetAvailableReservations(serviceId, service);
+
+        return availableReservations;
+    }
+
+    public async Task<Reservation> CreateReservationAsync(Reservation reservation)
+    {
+        var availableReservations = await GetAvailableReseravtionsByServiceId(reservation.ServiceId);
+        var validReservation = availableReservations.FirstOrDefault(r => r.DateTime == reservation.DateTime);
+
+        if (validReservation is null)
+        {
+            throw new ReservationNotAvailableException(reservation.ServiceId, reservation.DateTime);
+        }
+
+        var customer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.Id == reservation.CustomerId);
+
+        if (customer is null)
+        {
+            throw new CustomerNotFoundException($"Customer with id {reservation.CustomerId} not found.");
+        }
+
+        await _context.Reservations.AddAsync(reservation);
+        await _context.SaveChangesAsync();
+
+        return reservation;
+    }
+
+    private List<Reservation> GetAvailableReservations(int serviceId, Service service)
+    {
         var existingReservationTimes = service.Reservations.Where(r => r.ServiceId == serviceId)
-                                                           .Select(r => r.DateTime)
-                                                           .ToList();
+                                                   .Select(r => r.DateTime)
+                                                   .ToList();
+
         var availableReservations = new List<Reservation>();
 
         DateTime currentDate = DateTime.Now.Date; // Сегодняшняя дата без времени
@@ -94,28 +127,5 @@ public class ReservationService : IReservationService
         }
 
         return availableReservations;
-    }
-
-    public async Task<Reservation> CreateReservationAsync(Reservation reservation)
-    {
-        var availableReservations = await GetAvailableReseravtionsByServiceId(reservation.ServiceId);
-        var validReservation = availableReservations.FirstOrDefault(r => r.DateTime == reservation.DateTime);
-
-        if (validReservation is null)
-        {
-            throw new ReservationNotAvailableException(reservation.ServiceId, reservation.DateTime);
-        }
-
-        var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == reservation.CustomerId);
-
-        if (customer is null)
-        {
-            throw new CustomerNotFoundException($"Customer with id {reservation.CustomerId} not found.");
-        }
-
-        await _context.Reservations.AddAsync(reservation);
-        await _context.SaveChangesAsync();
-
-        return reservation;
     }
 }

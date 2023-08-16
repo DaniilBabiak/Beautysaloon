@@ -1,4 +1,5 @@
-﻿using BeautySaloon.API.Entities.Contexts;
+﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.HealthChecks;
 using BeautySaloon.API.RabbitMQ;
 using BeautySaloon.API.Services;
@@ -10,6 +11,9 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using FluentValidation.AspNetCore;
+using BeautySaloon.API.Validators;
+using FluentValidation;
 
 namespace BeautySaloon.API.Extensions;
 
@@ -27,6 +31,10 @@ public static class BuilderExtensions
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // Используем Preserve, чтобы сохранить ссылки на объекты
             });
+
+        builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddFluentValidationClientsideAdapters();
+        builder.Services.AddValidatorsFromAssemblyContaining<CustomerValidator>();
 
         builder.ConfigureSwagger();
 
@@ -48,6 +56,7 @@ public static class BuilderExtensions
         builder.Services.AddTransient<IServiceCategoryService, ServiceCategoryService>();
         builder.Services.AddTransient<IBestWorkService, BestWorkService>();
         builder.Services.AddTransient<IReservationService, ReservationService>();
+        builder.Services.AddTransient<ICustomerService, CustomerService>();
         builder.Services.AddHostedService<CustomerListener>();
         return builder;
     }
@@ -88,6 +97,11 @@ public static class BuilderExtensions
             options.AddPolicy("api.edit", policy =>
             {
                 policy.RequireClaim("scope", ScopesConfig.ApiEdit.Name);
+            });
+            options.AddPolicy("customer", policy =>
+            {
+                policy.RequireClaim("api.read");
+                policy.RequireClaim("api.edit");
                 policy.RequireAuthenticatedUser();
             });
             options.AddPolicy("admin", policy =>
