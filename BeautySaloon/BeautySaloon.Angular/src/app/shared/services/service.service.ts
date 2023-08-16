@@ -28,12 +28,12 @@ export class ServiceService {
 
     var options = this.getOptions();
 
-    return this.http.post<Service>(`${url}/api/Service`, service, options);
+    return this.http.post<Service>(`${url}/api/admin/Service`, service, options);
   }
   deleteService(id: number): Observable<any> {
     var url = this.config.resourceApiURI;
     var options = this.getOptions();
-    return this.http.delete(`${url}/api/Service/${id}`, options);
+    return this.http.delete(`${url}/api/admin/Service/${id}`, options);
   }
   private getOptions() {
     return {
