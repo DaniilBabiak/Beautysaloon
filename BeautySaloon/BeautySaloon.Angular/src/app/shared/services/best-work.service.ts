@@ -33,12 +33,12 @@ export class BestWorkService {
 
     var options = this.getOptions();
 
-    return this.http.post<BestWork>(`${url}/api/BestWork`, bestWorkWithoutImage, options);
+    return this.http.post<BestWork>(`${url}/api/admin/BestWork`, bestWorkWithoutImage, options);
   }
   deleteBestWork(id: number): Observable<any> {
     var url = this.config.resourceApiURI;
     var options = this.getOptions();
-    return this.http.delete(`${url}/api/BestWork/${id}`, options);
+    return this.http.delete(`${url}/api/admin/BestWork/${id}`, options);
   }
   private getOptions() {
     return {
