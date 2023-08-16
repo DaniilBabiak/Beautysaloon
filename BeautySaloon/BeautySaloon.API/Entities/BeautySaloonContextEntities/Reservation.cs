@@ -6,4 +6,6 @@ public class Reservation
     public int ServiceId { get; set; }
     public Service? Service { get; set; }
     public DateTime DateTime { get; set; }
+    public string CustomerId { get; set; }
+    public Customer Customer { get; set; }
 }

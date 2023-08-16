@@ -15,6 +15,7 @@ public class BeautySaloonContext : DbContext
     public DbSet<Service> Services { get; set; }
     public DbSet<BestWork> BestWorks { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Customer> Customers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

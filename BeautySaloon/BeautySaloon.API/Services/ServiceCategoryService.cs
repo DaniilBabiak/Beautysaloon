@@ -1,5 +1,6 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
+using BeautySaloon.API.Exceptions;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,13 +44,28 @@ public class ServiceCategoryService : IServiceCategoryService
         return category;
     }
 
+    public async Task<ServiceCategory> UpdateCategoryAsync(ServiceCategory category)
+    {
+        var existingCategory = await _context.ServiceCategories.FirstOrDefaultAsync(s => s.Id == category.Id);
+
+        if (existingCategory is null)
+        {
+            throw new CategoryNotFoundException($"Category with id {category.Id} not found.");
+        }
+
+        _context.ServiceCategories.Update(category);
+        await _context.SaveChangesAsync();
+
+        return category;
+    }
+
     public async Task DeleteCategoryAsync(int id)
     {
         var category = await _context.ServiceCategories.FirstOrDefaultAsync(c => c.Id == id);
 
         if (category is null)
         {
-            throw new ArgumentException($"Category with id {id} not found!");
+            throw new CategoryNotFoundException($"Category with id {id} not found!");
         }
 
         _context.ServiceCategories.Remove(category);

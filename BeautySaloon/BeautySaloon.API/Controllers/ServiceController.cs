@@ -32,7 +32,6 @@ public class ServiceController : ControllerBase
         }
     }
 
-    // POST api/<ServiceController>
     [HttpPost]
     [Authorize("admin")]
     public async Task<IActionResult> Post([FromBody] Service service)
@@ -42,14 +41,15 @@ public class ServiceController : ControllerBase
         return Ok(result);
     }
 
-    // PUT api/<ServiceController>/5
-    [HttpPut("{id}")]
+    [HttpPut]
     [Authorize("admin")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> Put([FromBody] Service service)
     {
+        var result = await _service.UpdateServiceAsync(service);
+
+        return Ok(result);
     }
 
-    // DELETE api/<ServiceController>/5
     [HttpDelete("{id}")]
     [Authorize("admin")]
     public async Task<IActionResult> Delete(int id)

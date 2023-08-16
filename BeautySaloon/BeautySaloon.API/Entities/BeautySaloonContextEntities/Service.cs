@@ -10,5 +10,5 @@ public class Service
     public TimeSpan StartTime { get; set; } = TimeSpan.FromHours(9);
     public TimeSpan EndTime { get; set; } = TimeSpan.FromHours(17);
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
-    public List<Reservation> Reservations { get; set; }
+    public List<Reservation>? Reservations { get; set; }
 }

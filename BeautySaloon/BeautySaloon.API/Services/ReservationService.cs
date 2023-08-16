@@ -1,6 +1,7 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
+using BeautySaloon.API.Models;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,10 +16,33 @@ public class ReservationService : IReservationService
         _context = context;
     }
 
+    public async Task<List<GetAllReservationsResponse>> GetAllReservationsAsync()
+    {
+        var services = await _context.Services
+                                     .Include(s => s.Reservations)
+                                     .ThenInclude(r => r.Customer)
+                                     .ToListAsync();
+
+        var result = new List<GetAllReservationsResponse>();
+
+        foreach (var service in services)
+        {
+            result.Add(new GetAllReservationsResponse
+            {
+                ServiceId = service.Id.Value,
+                ServiceName = service.Name,
+                Reservations = service.Reservations
+            });
+        }
+
+        return result;
+    }
+
     public async Task<List<Reservation>> GetReservationsByServiceId(int serviceId)
     {
         var result = await _context.Reservations
                              .Include(r => r.Service)
+                             .Include(r => r.Customer)
                              .ToListAsync();
 
         return result;
@@ -32,7 +56,7 @@ public class ReservationService : IReservationService
 
         if (service is null)
         {
-            throw new ArgumentException($"Service with id {serviceId} not found.");
+            throw new ServiceNotFoundException($"Service with id {serviceId} not found.");
         }
 
         var existingReservationTimes = service.Reservations.Where(r => r.ServiceId == serviceId)
@@ -80,6 +104,13 @@ public class ReservationService : IReservationService
         if (validReservation is null)
         {
             throw new ReservationNotAvailableException(reservation.ServiceId, reservation.DateTime);
+        }
+
+        var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == reservation.CustomerId);
+
+        if (customer is null)
+        {
+            throw new CustomerNotFoundException($"Customer with id {reservation.CustomerId} not found.");
         }
 
         await _context.Reservations.AddAsync(reservation);

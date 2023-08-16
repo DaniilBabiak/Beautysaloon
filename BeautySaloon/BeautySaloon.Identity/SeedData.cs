@@ -38,6 +38,7 @@ public static class SeedData
                     UserName = "alice",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
+                    FullName = "Alice Smith"
                 };
                 var result = userMgr.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
@@ -69,7 +70,8 @@ public static class SeedData
                 {
                     UserName = "bob",
                     Email = "BobSmith@email.com",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    FullName = "Bob Smith"
                 };
                 var result = userMgr.CreateAsync(bob, "Pass123$").Result;
                 if (!result.Succeeded)

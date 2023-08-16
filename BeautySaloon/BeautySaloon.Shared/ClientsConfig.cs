@@ -10,7 +10,7 @@ public static class ClientsConfig
         ClientId = "angular_spa",
         ClientName = "Angular SPA",
         ClientSecrets = { new Secret("secret".Sha256()) },
-        AllowedGrantTypes = GrantTypes.ClientCredentials.Concat(GrantTypes.Implicit).ToList(),
+        AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
         AllowedScopes = { "openid", "profile", "email", "api.read", "api.edit", "roles", "image.read", "image.edit" },
         RedirectUris = { "http://localhost:4200/auth-callback" },
         PostLogoutRedirectUris = { "http://localhost:4200/user/main" },
