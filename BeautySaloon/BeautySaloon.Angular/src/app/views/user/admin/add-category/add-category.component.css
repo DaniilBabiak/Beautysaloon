@@ -1,24 +1,110 @@
-img {
-  max-width: 50px;
-  height: auto;
+
+.category-image {
   display: block;
-  margin-top: 20px;
+  height: 10.17vh;
+  width: 5.2vw;
+  margin: 0;
+  border: 3px solid;
+  border-radius: 5px;
+  border-image-source: linear-gradient(to left,  #e63600 0%, #fae904 51%, #eec302 100%);
+  border-image-slice: 1;
+  min-width: 100px;
 }
+
 .service-dropzone-container {
-  border: 1px solid #ccc; /* Граница контейнера */
-  padding: 10px; /* Отступ вокруг контейнера */
+  border: 1px solid #ccc;
+  padding: 10px;
+  overflow-x:hidden ;
+  margin: 10px 0;
+  font-size: calc(var(--index)*.55);
 }
+
 .main-container {
-  display: flex; /* Размещение блоков внутри контейнера в одной строке */
+  display: flex;
+  min-height: 84.4vh;
+  background: #f1f1f1;
+  min-width: 300px;
 }
 
 .category-service-container {
-  flex: 1; /* Растягивание блока на всю доступную ширину */
+  flex: 2;
   padding: 10px;
+  border-right: 2px solid black;
 }
 
 .service-list {
-  flex: 2; /* Растягивание блока на вдвое большую ширину, чем category-service-container */
+  flex: 2;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
-
+.category-list{
+  display: flex;
+  flex-direction: column;
+}
+.add-category-name{
+  font-size: calc(var(--index)*.85);
+}
+.add-category-description{
+  font-size: calc(var(--index)*.6);
+}
+.service-name{
+  font-size: calc(var(--index)*.80);
+}
+.service-price{
+  font-size: calc(var(--index)*.6);
+}
+.category-wrapper{
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid black;
+}
+.deleteBtn_wrapper{
+  display: flex;
+  margin-bottom: 10px;
+}
+.deleteBtn{
+  display: flex;
+  width: 5vw;
+  justify-content: center;
+  background-image: linear-gradient(45deg, #e33737, #ebe522);
+  border-radius: 7px;
+  font-size: calc(var(--index)*.7);
+  min-width: 50px;
+}
+.addCategoryBtn_wrapper{
+  margin-top: 20px;
+  display: flex;
+}
+.addCategoryBtn{
+  background-image: linear-gradient(45deg, #1f45f3, #07efef);
+  height: 5vh;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 1s;
+}
+.addCategoryBtn:hover{
+  background-image: linear-gradient(45deg, #4b6bf3, #29f3f3);
+  transform: scale(1.06);
+}
+.service-dropzone{
+  display: flex;
+  flex-direction: column;
+}
+.service-list-wrapper{
+  font-size: calc(var(--index)*1);
+}
+@media(max-width: 768px){
+  .service-price{
+    font-weight: 700;
+  }
+  .add-category-description{
+    font-weight: 700;
+  }
+  .service-dropzone-container{
+    font-weight: 700;
+    font-size: calc(var(--index)*.60);
+  }
+}
