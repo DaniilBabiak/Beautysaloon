@@ -8,10 +8,6 @@ public class ServiceCategoryConfiguration : IEntityTypeConfiguration<ServiceCate
 {
     public void Configure(EntityTypeBuilder<ServiceCategory> builder)
     {
-        builder
-            .HasMany(category => category.Services)
-            .WithOne(service => service.Category)
-            .HasForeignKey(category => category.CategoryId)
-            .OnDelete(DeleteBehavior.Cascade);
+
     }
 }

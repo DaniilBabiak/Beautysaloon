@@ -56,18 +56,25 @@ public class ServiceService : IServiceService
 
     public async Task<Service> CreateServiceAsync(Service service)
     {
-        var category = await _context.ServiceCategories
-                                     .Include(c => c.Services)
-                                     .FirstOrDefaultAsync(c => c.Id == service.CategoryId);
-
-        if (category is null)
+        if (service.CategoryId.HasValue)
         {
-            throw new CategoryNotFoundException($"Category with id {service.CategoryId} not found!");
+            var category = await _context.ServiceCategories
+                             .Include(c => c.Services)
+                             .FirstOrDefaultAsync(c => c.Id == service.CategoryId);
+
+            if (category is null)
+            {
+                throw new CategoryNotFoundException($"Category with id {service.CategoryId} not found!");
+            }
+            category.Services ??= new List<Service>();
+            category.Services.Add(service);
+
+            await _context.SaveChangesAsync();
+
+            return service;
         }
 
-        category.Services ??= new List<Service>();
-        category.Services.Add(service);
-
+        await _context.Services.AddAsync(service);
         await _context.SaveChangesAsync();
 
         return service;
