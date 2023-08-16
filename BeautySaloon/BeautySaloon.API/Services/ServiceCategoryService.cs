@@ -68,14 +68,25 @@ public class ServiceCategoryService : IServiceCategoryService
 
     public async Task DeleteCategoryAsync(int id)
     {
-        var category = await _context.ServiceCategories.FirstOrDefaultAsync(c => c.Id == id);
+        var category = await _context.ServiceCategories
+                                     .Include(c => c.Services)
+                                     .FirstOrDefaultAsync(c => c.Id == id);
 
         if (category is null)
         {
             throw new CategoryNotFoundException($"Category with id {id} not found!");
         }
 
+        if (category.Services.Any())
+        {
+            foreach (var service in category.Services)
+            {
+                service.CategoryId = null;
+            }
+        }
+
         _context.ServiceCategories.Remove(category);
+
         await _context.SaveChangesAsync();
     }
 }
