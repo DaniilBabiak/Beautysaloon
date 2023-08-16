@@ -29,34 +29,4 @@ public class ServiceCategoryController : ControllerBase
             return Ok(result);
         }
     }
-
-    // POST api/<ServiceController>
-    [HttpPost]
-    [Authorize("admin")]
-    public async Task<IActionResult> Post([FromBody] ServiceCategory category)
-    {
-        var test = User;
-        var result = await _category.CreateCategoryAsync(category);
-
-        return Ok(result);
-    }
-
-    [HttpPut]
-    [Authorize("admin")]
-    public async Task<IActionResult> Put([FromBody] ServiceCategory category)
-    {
-        var result = await _category.UpdateCategoryAsync(category);
-
-        return Ok(result);
-    }
-
-    // DELETE api/<ServiceController>/5
-    [HttpDelete("{id}")]
-    [Authorize("admin")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _category.DeleteCategoryAsync(id);
-
-        return Ok();
-    }
 }

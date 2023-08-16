@@ -21,21 +21,4 @@ public class BestWorkController : ControllerBase
         var result = await _bestWorkService.GetAllBestWorksAsync();
         return Ok(result);
     }
-
-    [HttpPost]
-    [Authorize("admin")]
-    public async Task<IActionResult> CreateBestWorkAsync([FromBody] BestWork bestWork)
-    {
-        var result = await _bestWorkService.CreateBestWorkAsync(bestWork);
-
-        return Ok(result);
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize("admin")]
-    public async Task<IActionResult> DeleteBestWorkAsync(int id)
-    {
-        await _bestWorkService.DeleteBestWorkAsync(id);
-        return Ok();
-    }
 }
