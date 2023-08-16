@@ -16,9 +16,11 @@ const routes: Routes = [
       { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule), canActivate: [AuthGuard], },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
       { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },
+      { path: 'reservations', loadChildren: () => import('./reservation/reservation.module').then(m => m.ReservationModule) },
       { path: '**', redirectTo: 'about' },
     ]
   },
+
 
 
 ];
