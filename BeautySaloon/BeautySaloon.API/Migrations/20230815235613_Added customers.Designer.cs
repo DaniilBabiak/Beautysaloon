@@ -4,6 +4,7 @@ using BeautySaloon.API.Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeautySaloon.API.Migrations
 {
     [DbContext(typeof(BeautySaloonContext))]
-    partial class BeautySaloonContextModelSnapshot : ModelSnapshot
+    [Migration("20230815235613_Added customers")]
+    partial class Addedcustomers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,10 +96,6 @@ namespace BeautySaloon.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -104,8 +103,6 @@ namespace BeautySaloon.API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ServiceId");
 
@@ -177,19 +174,11 @@ namespace BeautySaloon.API.Migrations
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Reservation", b =>
                 {
-                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", "Service")
                         .WithMany("Reservations")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Service");
                 });

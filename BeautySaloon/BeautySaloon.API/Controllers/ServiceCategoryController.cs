@@ -35,16 +35,19 @@ public class ServiceCategoryController : ControllerBase
     [Authorize("admin")]
     public async Task<IActionResult> Post([FromBody] ServiceCategory category)
     {
+        var test = User;
         var result = await _category.CreateCategoryAsync(category);
 
         return Ok(result);
     }
 
-    // PUT api/<ServiceController>/5
-    [HttpPut("{id}")]
+    [HttpPut]
     [Authorize("admin")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> Put([FromBody] ServiceCategory category)
     {
+        var result = await _category.UpdateCategoryAsync(category);
+
+        return Ok(result);
     }
 
     // DELETE api/<ServiceController>/5

@@ -28,32 +28,7 @@ public static class BuilderExtensions
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // Используем Preserve, чтобы сохранить ссылки на объекты
             });
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-                    var securityScheme = new OpenApiSecurityScheme
-                    {
-                        Name = "Authorization",
-                        Description = "Enter 'Bearer {token}'",
-                        Type = SecuritySchemeType.Http,
-                        Scheme = "bearer",
-                        BearerFormat = "JWT",
-                        In = ParameterLocation.Header,
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    };
-                    c.AddSecurityDefinition("Bearer", securityScheme);
-
-                    var securityRequirement = new OpenApiSecurityRequirement
-                    {
-                        { securityScheme, new[] { "Bearer" } }
-                    };
-                    c.AddSecurityRequirement(securityRequirement);
-                });
+        builder.ConfigureSwagger();
 
         builder.Services.AddLogging(loggingBuilder =>
         {
@@ -152,7 +127,35 @@ public static class BuilderExtensions
             });
         });
     }
+    private static void ConfigureSwagger(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "Enter 'Bearer {token}'",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            };
+            c.AddSecurityDefinition("Bearer", securityScheme);
 
+            var securityRequirement = new OpenApiSecurityRequirement
+                    {
+                        { securityScheme, new[] { "Bearer" } }
+                    };
+            c.AddSecurityRequirement(securityRequirement);
+        });
+    }
     private static void ConfigureSqlContexts(this WebApplicationBuilder builder)
     {
         var configuration = builder.Configuration;
