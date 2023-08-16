@@ -38,6 +38,24 @@ export class CategoryService {
 
     return this.http.post<ServiceCategory>(`${url}/api/admin/ServiceCategory`, categoryWithoutImage, options);
   }
+
+  updateCategory(serviceCategory: ServiceCategory): Observable<ServiceCategory>{
+    const categoryWithoutImage: ServiceCategory = {
+      id: serviceCategory.id,
+      name: serviceCategory.name,
+      description: serviceCategory.description,
+      imageBucket: serviceCategory.imageBucket,
+      imageFileName: serviceCategory.imageFileName,
+      services: serviceCategory.services,
+      image: null // Указываем, что image равен null
+    };
+    var url = this.config.resourceApiURI;
+    
+    var options = this.getOptions();
+
+    return this.http.put<ServiceCategory>(`${url}/api/admin/ServiceCategory`, categoryWithoutImage, options)
+  }
+
   deleteCategory(id: number): Observable<any> {
     var url = this.config.resourceApiURI;
     var options = this.getOptions();
