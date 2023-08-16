@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Text;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+using BeautySaloon.API.Services.Interfaces;
 
 namespace BeautySaloon.API.RabbitMQ;
 
@@ -66,21 +67,25 @@ public class CustomerListener : BackgroundService
                 var customer = JsonConvert.DeserializeObject<Customer>(body);
 
                 using var scope = _scopeFactory.CreateScope();
-                using var context = scope.ServiceProvider.GetRequiredService<BeautySaloonContext>();
-                var existingCustomer = await context.Customers.FindAsync(customer.Id);
+                var customerService = scope.ServiceProvider.GetRequiredService<ICustomerService>();
+
+                Customer existingCustomer;
+
+                try
+                {
+                    existingCustomer = await customerService.GetCustomerAsync(customer.Id);
+                }
+                catch
+                {
+                    existingCustomer = null;
+                }
+
 
                 if (existingCustomer is null)
                 {
-                    // Создание нового объекта Customer, так как объект с указанным id не найден
-                    context.Customers.Add(customer);
-                }
-                else
-                {
-                    existingCustomer.Name = customer.Name;
-                    // Обновление других свойств
+                    await customerService.CreateCustomerAsync(customer);
                 }
 
-                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

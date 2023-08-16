@@ -16,7 +16,7 @@ public class BestWorkService : IBestWorkService
 
     public async Task<List<BestWork>> GetAllBestWorksAsync()
     {
-        var result = await _context.BestWorks.ToListAsync();
+        var result = await _context.BestWorks.AsNoTracking().ToListAsync();
 
         return result;
     }

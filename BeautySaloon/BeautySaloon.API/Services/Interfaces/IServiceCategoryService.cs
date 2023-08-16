@@ -8,6 +8,5 @@ public interface IServiceCategoryService
     Task DeleteCategoryAsync(int id);
     Task<List<ServiceCategory>> GetAllCategoriesAsync();
     Task<ServiceCategory> GetCategoryByIdAsync(int id);
-    Task<ServiceCategory> GetServiceCategoryAsync(int id);
     Task<ServiceCategory> UpdateCategoryAsync(ServiceCategory category);
 }

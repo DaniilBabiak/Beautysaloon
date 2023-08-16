@@ -17,23 +17,40 @@ public class ServiceService : IServiceService
 
     public async Task<List<ServiceCategory>> GetAllServiceCategoriesAsync()
     {
-        var result = await _context.ServiceCategories.Include(c => c.Services).ToListAsync();
+        var result = await _context.ServiceCategories
+                                   .AsNoTracking()
+                                   .Include(c => c.Services)
+                                       .ThenInclude(s => s.Reservations)
+                                   .Include(c => c.Services)
+                                       .ThenInclude(s => s.Category)
+                                   .ToListAsync();
 
         return result;
     }
 
     public async Task<List<Service>> GetAllServicesAsync()
     {
-        var result = await _context.Services.Include(c => c.Category).ToListAsync();
+        var result = await _context.Services.Include(c => c.Category).AsNoTracking().ToListAsync();
         return result;
     }
 
     public async Task<List<Service>> GetServicesByCategoryIdAsync(int id)
     {
-        var result = await _context.Services
-                                   .Include(s => s.Category)
-                                   .Include(s => s.Reservations)
-                                   .Where(s => s.Category.Id == id).ToListAsync();
+        var category = await _context.ServiceCategories
+                                     .AsNoTracking()
+                                     .Include(c => c.Services)
+                                        .ThenInclude(s => s.Reservations)
+                                     .Include(c => c.Services)
+                                        .ThenInclude(s => s.Category)
+                                     .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (category is null)
+        {
+            throw new CategoryNotFoundException($"Category with id {id} not found!");
+        }
+
+        var result = category.Services;
+
         return result;
     }
 
@@ -51,7 +68,6 @@ public class ServiceService : IServiceService
         category.Services ??= new List<Service>();
         category.Services.Add(service);
 
-        await _context.Services.AddAsync(service);
         await _context.SaveChangesAsync();
 
         return service;
@@ -59,7 +75,7 @@ public class ServiceService : IServiceService
 
     public async Task<Service> UpdateServiceAsync(Service service)
     {
-        var existingService = await _context.Services.FirstOrDefaultAsync(s => s.Id == service.Id);
+        var existingService = await _context.Services.AsNoTracking().FirstOrDefaultAsync(s => s.Id == service.Id);
 
         if (existingService is null)
         {
