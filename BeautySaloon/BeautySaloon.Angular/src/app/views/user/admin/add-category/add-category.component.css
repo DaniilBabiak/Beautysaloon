@@ -1,6 +1,24 @@
 img {
-  max-width: 100%;
+  max-width: 50px;
   height: auto;
   display: block;
   margin-top: 20px;
 }
+.service-dropzone-container {
+  border: 1px solid #ccc; /* Граница контейнера */
+  padding: 10px; /* Отступ вокруг контейнера */
+}
+.main-container {
+  display: flex; /* Размещение блоков внутри контейнера в одной строке */
+}
+
+.category-service-container {
+  flex: 1; /* Растягивание блока на всю доступную ширину */
+  padding: 10px;
+}
+
+.service-list {
+  flex: 2; /* Растягивание блока на вдвое большую ширину, чем category-service-container */
+  padding: 10px;
+}
+
