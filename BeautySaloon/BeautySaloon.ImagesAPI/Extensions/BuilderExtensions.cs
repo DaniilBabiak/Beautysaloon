@@ -1,4 +1,5 @@
 ﻿using BeautySaloon.ImagesAPI.HealthChecks;
+using BeautySaloon.ImagesAPI.RabbitMQ;
 using BeautySaloon.ImagesAPI.Services;
 using BeautySaloon.Shared;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ public static class BuilderExtensions
     {
         builder.ConfigureSerilog();
         builder.Services.AddTransient<IImageService, ImageService>();
+        builder.Services.AddHostedService<UnusedImagePublisher>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

@@ -1,7 +1,7 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.HealthChecks;
-using BeautySaloon.API.RabbitMQ;
+using BeautySaloon.API.RabbitMq;
 using BeautySaloon.API.Services;
 using BeautySaloon.API.Services.Interfaces;
 using BeautySaloon.Shared;
@@ -57,6 +57,7 @@ public static class BuilderExtensions
         builder.Services.AddTransient<IBestWorkService, BestWorkService>();
         builder.Services.AddTransient<IReservationService, ReservationService>();
         builder.Services.AddTransient<ICustomerService, CustomerService>();
+        builder.Services.AddHostedService<UnusedImageListener>();
         builder.Services.AddHostedService<CustomerListener>();
         return builder;
     }

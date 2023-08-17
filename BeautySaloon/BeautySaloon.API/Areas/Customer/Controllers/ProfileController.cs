@@ -18,7 +18,7 @@ public class ProfileController : CustomerControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProfileAsync()
     {
-        var id = User.Identity.Name;
+        var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var customer = await _customerService.GetCustomerAsync(id);
 
         var result = new GetProfileResponse
