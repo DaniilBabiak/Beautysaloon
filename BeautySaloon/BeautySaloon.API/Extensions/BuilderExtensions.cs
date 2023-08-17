@@ -100,8 +100,8 @@ public static class BuilderExtensions
             });
             options.AddPolicy("customer", policy =>
             {
-                policy.RequireClaim("api.read");
-                policy.RequireClaim("api.edit");
+                policy.RequireClaim("scope", ScopesConfig.ApiRead.Name);
+                policy.RequireClaim("scope", ScopesConfig.ApiEdit.Name);
                 policy.RequireAuthenticatedUser();
             });
             options.AddPolicy("admin", policy =>

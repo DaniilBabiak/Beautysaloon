@@ -59,6 +59,12 @@ public static class ApplicationExtensions
                    {
                        ex.Message
                    }));
+
+            options.Map<ValidationException>().ToStatusCode(StatusCodes.Status400BadRequest)
+                   .WithBody((ex, context) => JsonConvert.SerializeObject(new
+                   {
+                       ex.Message
+                   }));
         });
     }
 
