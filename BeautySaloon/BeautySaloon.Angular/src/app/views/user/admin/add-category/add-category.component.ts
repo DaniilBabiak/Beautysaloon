@@ -12,6 +12,13 @@ import { ServiceService } from 'src/app/shared/services/service.service';
   styleUrls: ['./add-category.component.css']
 })
 export class AddCategoryComponent implements OnInit {
+  divDisplayStyle = 'flex';
+  showServiceList(){
+    this.divDisplayStyle = 'flex';
+  }
+  hideServiceList(){
+    this.divDisplayStyle = 'none';
+  }
   serviceCategories: ServiceCategory[] | null = null;
   servicesWithoutCategory: Service[] | null = null;
 
@@ -177,5 +184,6 @@ export class AddCategoryComponent implements OnInit {
         });
       }
     }
+
   }
 }
