@@ -40,7 +40,7 @@ public class ImageService : IImageService
 
     public async Task<MinioLocation> SaveImageAsync(IFormFile file, string bucketName)
     {
-        var fileName = file.FileName;
+        var fileName = Guid.NewGuid().ToString();
         var resizedImageTask = ResizeImage(file);
 
         var ensureBucketExistsTask = EnsureBucketExists(_minio, bucketName);

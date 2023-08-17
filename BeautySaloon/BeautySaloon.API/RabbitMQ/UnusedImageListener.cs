@@ -104,7 +104,7 @@ public class UnusedImageListener : BackgroundService
 
     public async Task<List<MinioLocation>> GetUnusedObjectsAsync(List<MinioLocation> minioLocations)
     {
-        var getAllCategoriesTask = _context.ServiceCategories
+        var allCategoryImages = await _context.ServiceCategories
                                             .Where(c => c.ImageBucket != null && c.ImageFileName != null)
                                             .Select(c => new MinioLocation
                                             {
@@ -113,7 +113,7 @@ public class UnusedImageListener : BackgroundService
                                             })
                                             .ToListAsync();
 
-        var getAllBestWorksTask = _context.BestWorks
+        var allBestWorkImages = await _context.BestWorks
                                             .Where(b => b.ImageBucket != null && b.ImageFileName != null)
                                             .Select(b => new MinioLocation
                                             {
@@ -122,9 +122,8 @@ public class UnusedImageListener : BackgroundService
                                             })
                                             .ToListAsync();
 
-        await Task.WhenAll(getAllCategoriesTask, getAllBestWorksTask);
 
-        var allObjectsInDb = getAllCategoriesTask.Result.Concat(getAllBestWorksTask.Result);
+        var allObjectsInDb = allCategoryImages.Concat(allBestWorkImages);
 
         var allObjectsInMinio = minioLocations;
 
