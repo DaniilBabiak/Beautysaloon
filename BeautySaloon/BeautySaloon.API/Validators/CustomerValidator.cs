@@ -1,5 +1,8 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using FluentValidation;
+using Microsoft.AspNetCore.Localization;
+using PhoneNumbers;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace BeautySaloon.API.Validators;
@@ -20,12 +23,21 @@ public class CustomerValidator : AbstractValidator<Customer>
 
     private bool BeAValidPhoneNumber(string phoneNumber)
     {
-        if (string.IsNullOrEmpty(phoneNumber))
-            return true;
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.GetInstance();
+        var regions = phoneNumberUtil.GetSupportedRegions();
 
-        // Регулярное выражение для проверки номера телефона в формате (XXX) XXX-XXXX
-        string pattern = @"^\(\d{3}\) \d{3}-\d{4}$";
+        foreach (var region in regions)
+        {
+            PhoneNumber number = phoneNumberUtil.Parse(phoneNumber, region);
 
-        return Regex.IsMatch(phoneNumber, pattern);
+            var isValid = phoneNumberUtil.IsValidNumberForRegion(number, region);
+
+            if (isValid)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
