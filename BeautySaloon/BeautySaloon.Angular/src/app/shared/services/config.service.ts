@@ -14,7 +14,9 @@ export class ConfigService {
   get imageApiURI(){
     return 'http://localhost:5040';
   }
-
+get healthCheckURI(){
+    return 'http://localhost:5030/';
+}
   getClientSettings(): UserManagerSettings {
     return {
       authority: 'https://localhost:5001',
