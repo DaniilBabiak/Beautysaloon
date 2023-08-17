@@ -1,6 +1,7 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
+using BeautySaloon.API.Exceptions.NotFound;
 using BeautySaloon.API.Helpers;
 using BeautySaloon.API.Services.Interfaces;
 using BeautySaloon.API.Validators;

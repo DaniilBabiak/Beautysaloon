@@ -57,6 +57,7 @@ public static class BuilderExtensions
         builder.Services.AddTransient<IBestWorkService, BestWorkService>();
         builder.Services.AddTransient<IReservationService, ReservationService>();
         builder.Services.AddTransient<ICustomerService, CustomerService>();
+        builder.Services.AddTransient<IMasterService, MasterService>();
         builder.Services.AddHostedService<UnusedImageListener>();
         builder.Services.AddHostedService<CustomerListener>();
         return builder;

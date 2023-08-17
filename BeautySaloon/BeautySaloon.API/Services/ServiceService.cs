@@ -1,6 +1,7 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
+using BeautySaloon.API.Exceptions.NotFound;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,10 +39,6 @@ public class ServiceService : IServiceService
     {
         var category = await _context.ServiceCategories
                                      .AsNoTracking()
-                                     .Include(c => c.Services)
-                                        .ThenInclude(s => s.Reservations)
-                                     .Include(c => c.Services)
-                                        .ThenInclude(s => s.Category)
                                      .FirstOrDefaultAsync(c => c.Id == id);
 
         if (category is null)
@@ -49,7 +46,14 @@ public class ServiceService : IServiceService
             throw new CategoryNotFoundException($"Category with id {id} not found!");
         }
 
-        var result = category.Services;
+        var result = await _context.Services
+                                   .AsNoTracking()
+                                   .Include(s => s.Masters)
+                                   .Include(s => s.Category)
+                                   .Include(s => s.Reservations)
+                                   .Where(s => s.CategoryId == id)
+                                   .ToListAsync();
+
 
         return result;
     }

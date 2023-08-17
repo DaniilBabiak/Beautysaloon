@@ -1,4 +1,4 @@
-﻿namespace BeautySaloon.API.Exceptions;
+﻿namespace BeautySaloon.API.Exceptions.NotFound;
 
 public class CategoryNotFoundException : NotFoundException
 {

@@ -16,19 +16,17 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
   styleUrls: ['./add-service.component.css'],
 })
 export class AddServiceComponent implements OnInit {
-  totalServicesPossible: number = 0;
   services: Service[] | null = null;
   serviceCategories: ServiceCategory[] | null = null;
   newService: Service = {
     id: null,
     name: null,
     duration: "00:00:00",
-    endTime: "00:00:00",
-    startTime: "00:00:00",
     category: null,
     reservations: null,
     price: null,
     categoryId: null,
+    masters: null
   };
   showAddServiceForm = false;
 
@@ -45,9 +43,7 @@ export class AddServiceComponent implements OnInit {
       this.loadCategories();
     });
   }
-  ngDoCheck() {
-    this.updateTimes();
-  }
+
   deleteCategory(id: number | null) {
     if (id) {
       this.categoryService.deleteCategory(id).subscribe((result) => {
@@ -84,47 +80,13 @@ export class AddServiceComponent implements OnInit {
         id: null,
         name: null,
         duration: "00:00:00",
-        endTime: "00:00:00",
-        startTime: "00:00:00",
         category: null,
         reservations: null,
         price: null,
         categoryId: null,
+        masters: null
       }
     })
   }
 
-  private updateTimes() {
-    var startTimeModel = this.NgbTimeStringAdapter.fromModel(this.newService.startTime) as NgbTimeStruct;
-    var durationModel = this.NgbTimeStringAdapter.fromModel(this.newService.duration) as NgbTimeStruct;
-    var endTimeModel = this.NgbTimeStringAdapter.fromModel(this.newService.endTime) as NgbTimeStruct;
-
-    const startTimeMinutes = startTimeModel.hour * 60 + startTimeModel.minute;
-    const durationMinutes = durationModel.hour * 60 + durationModel.minute;
-    const endTimeMinutes = endTimeModel.hour * 60 + endTimeModel.minute;
-
-    if (startTimeMinutes == 0 || endTimeMinutes == 0) {
-      return;
-    }
-
-    if (endTimeMinutes < startTimeMinutes + durationMinutes) {
-      var endTimeCorrectMinutes = startTimeMinutes + durationMinutes;
-    }
-    else {
-      var totalServicePossible = Math.floor((endTimeMinutes - startTimeMinutes) / durationMinutes);
-      var remainingTimeAfterServices = endTimeMinutes % (startTimeMinutes + durationMinutes * totalServicePossible)
-
-      var endTimeCorrectMinutes = endTimeMinutes - remainingTimeAfterServices;
-    }
-
-    endTimeModel = {
-      hour: Math.floor(endTimeCorrectMinutes / 60),
-      minute: endTimeCorrectMinutes % 60,
-      second: 0
-    }
-
-    this.totalServicesPossible = (endTimeCorrectMinutes - startTimeMinutes) / durationMinutes;
-
-    this.newService.endTime = this.NgbTimeStringAdapter.toModel(endTimeModel);
-  }
 }

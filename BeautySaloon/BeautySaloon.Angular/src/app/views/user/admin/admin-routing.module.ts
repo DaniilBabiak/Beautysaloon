@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'add-category', loadChildren: () => import('./add-category/add-category.module').then(m => m.AddCategoryModule) },
   { path: 'add-best-works', loadChildren: () => import('./add-best-works/add-best-works.module').then(m => m.AddBestWorksModule) },
   { path: 'add-service', loadChildren: () => import('./add-service/add-service.module').then(m => m.AddServiceModule) },
+  { path: 'master', loadChildren: () => import('./master/master.module').then(m => m.MasterModule) },
 ];
 
 @NgModule({

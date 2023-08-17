@@ -10,5 +10,6 @@ public static class BeautySaloonContextConfiguration
         modelBuilder.ApplyConfiguration(new CommentConfiguration());
         modelBuilder.ApplyConfiguration(new ServiceCategoryConfiguration());
         modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+        modelBuilder.ApplyConfiguration(new MasterConfiguration());
     }
 }

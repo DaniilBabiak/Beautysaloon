@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace BeautySaloon.API.Exceptions;
+namespace BeautySaloon.API.Exceptions.NotFound;
 [Serializable]
 internal class CustomerNotFoundException : NotFoundException
 {

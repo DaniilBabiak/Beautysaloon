@@ -6,4 +6,5 @@ public class CreateReservationRequest
 {
     public int ServiceId { get; set; }
     public DateTime DateTime { get; set; }
+    public int MasterId { get; set; }
 }
