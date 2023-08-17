@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddServiceRoutingModule } from './add-service-routing.module';
 import { AddServiceComponent } from './add-service.component';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import {FormsModule} from "@angular/forms";
+import { NgbDropdownModule, NgbTimeAdapter, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from "@angular/forms";
+import { NgbTimeStringAdapter } from 'src/app/shared/helpers/ngb-time-string-adapter';
 @NgModule({
   declarations: [
     AddServiceComponent
@@ -13,6 +14,8 @@ import {FormsModule} from "@angular/forms";
     AddServiceRoutingModule,
     NgbDropdownModule,
     FormsModule,
-  ]
+    NgbTimepickerModule,
+  ],
+  providers: [NgbTimeStringAdapter]
 })
 export class AddServiceModule { }

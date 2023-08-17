@@ -1,12 +1,29 @@
 <div>{{newService.categoryId}}</div>
 <input [(ngModel)]="newService.name" placeholder="Имя сервиса">
 <input [(ngModel)]="newService.price" placeholder="Цена">
+<hr>
 
-<input type="text"  [(ngModel)]="newService.startTime" />
+<span>Total Services Possible: {{totalServicesPossible}}</span>
+<hr>
 
-<input type="text"  [(ngModel)]="newService.endTime" />
+<span>StartTime: </span>
+<div class="test1">
+  <ngb-timepicker [spinners]="false" 
+    [(ngModel)]="newService.startTime"></ngb-timepicker>
+</div>
 
-<input type="text"  [(ngModel)]="newService.duration" />
+<span>EndTime: </span>
+
+<div class="test1">
+  <ngb-timepicker [spinners]="false"
+    [(ngModel)]="newService.endTime"></ngb-timepicker>
+</div>
+
+<span>Duration: </span>
+
+<ngb-timepicker [spinners]="false"
+  [(ngModel)]="newService.duration"></ngb-timepicker>
+
 
 <div class="row">
   <div class="col">
@@ -32,5 +49,3 @@
   </div>
 </div>
 <button (click)="saveService()">Save</button>
-
-

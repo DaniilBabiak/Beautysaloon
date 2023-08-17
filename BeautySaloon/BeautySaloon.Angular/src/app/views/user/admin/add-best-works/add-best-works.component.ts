@@ -73,7 +73,7 @@ export class AddBestWorksComponent {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0] as File;
-    this.imageService.uploadImage(this.selectedFile, "categories").subscribe(result => {
+    this.imageService.uploadImage(this.selectedFile, "best-works").subscribe(result => {
       this.newBestWork.imageBucket = result.bucketName;
       this.newBestWork.imageFileName = result.fileName;
       if (this.newBestWork.imageBucket && this.newBestWork.imageFileName) {
