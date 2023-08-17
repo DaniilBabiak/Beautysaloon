@@ -30,9 +30,19 @@ public static class ClientsConfig
         AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "roles", "health" }
     };
 
+    public static readonly Client PostmanClient = new Client
+    {
+        ClientId = "postman",
+        ClientSecrets = { new Secret("secret".Sha256()) },
+        AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+        AllowedScopes = { "openid", "profile", "email", "api.read", "api.edit", "roles", "image.read", "image.edit" },
+        AccessTokenLifetime = 3600
+    };
+
     public static IEnumerable<Client> GetAll()
     {
         yield return AngularSpa;
         yield return HealthCheckUI;
+        yield return PostmanClient;
     }
 }
