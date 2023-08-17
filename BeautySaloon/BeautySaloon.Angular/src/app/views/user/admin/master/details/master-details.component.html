@@ -1,0 +1,17 @@
+<p>details works!</p>
+<div *ngIf="master">
+    {{master.id}}
+    <br>
+    {{master.name}}
+
+    Services:
+    <div *ngFor="let service of master.services">
+        {{service.name}}
+    </div>
+
+    Working days:
+    <div *ngFor="let workingDay of master.schedule?.workingDays">
+        {{workingDay.day}}
+        From {{workingDay.startTime}} to {{workingDay.endTime}}
+    </div>
+</div>

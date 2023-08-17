@@ -1,31 +1,34 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from "./auth.service";
-import { ConfigService } from "./config.service";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { Service } from "../models/service";
+import { Observable } from 'rxjs';
+import { Service } from '../models/service';
+import { AuthService } from './auth.service';
+import { ConfigService } from './config.service';
+import { Master } from '../models/master';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceService {
+export class MasterService {
+
   constructor(private auth: AuthService, private config: ConfigService, private http: HttpClient) {
   }
 
-  getServices(categoryId: number | null = null): Observable<Service[]> {
+  getAllMasters(): Observable<Master[]> {
     var url = this.config.resourceApiURI;
-
-    if (categoryId) {
-      url = url + '/api/Service?categoryId=' + categoryId;
-    }
-    else {
-      url = url + '/api/Service'
-    }
-
+    url = url + '/api/customer/master'
     var options = this.getOptions();
 
-    return this.http.get<Service[]>(url, options);
+    return this.http.get<Master[]>(url, options);
 
+  }
+
+  getMaster(id: number): Observable<Master> {
+    var url = this.config.resourceApiURI;
+    url = url + `/api/customer/master/${id}`
+    var options = this.getOptions();
+
+    return this.http.get<Master>(url, options);
   }
 
   createService(service: Service): Observable<Service> {
