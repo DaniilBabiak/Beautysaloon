@@ -1,7 +1,10 @@
-<!-- Список категорий и сервисов внутри категорий -->
 <div class="main-container">
   <div class="category-service-container">
     <div class="category-list">
+      <div class="addCategoryBtn_wrapper">
+        <button (click)="showAddCategoryForm = true; hideServiceList();" class="addCategoryBtn">Add Category</button>
+      </div>
+      <hr>
       <div *ngFor="let category of serviceCategories" class="category-wrapper">
         <h2 class="add-category-name">Category name:<span>{{ category.name }}</span></h2>
         <p class="add-category-description">Description:<span>{{ category.description }}</span></p>
@@ -22,25 +25,30 @@
         <div class="deleteBtn_wrapper">
           <button (click)="deleteCategory(category.id)" class="deleteBtn">Delete</button>
         </div>
+
       </div>
-      <div class="addCategoryBtn_wrapper">
-        <button (click)="showAddCategoryForm = true" class="addCategoryBtn">Add Category</button>
-      </div>
+
 
     </div>
-
   </div>
-  <div *ngIf="showAddCategoryForm">
+
+  <div *ngIf="showAddCategoryForm" class="create-category-wrapper">
+    <div class="create-category-flex_wrapper">
+      <button class="goBackBtn" (click)="showServiceList(); showAddCategoryForm = false;">Go back</button><hr>
+      <div class="category-create-wrapper">
     <input [(ngModel)]="newCategory.name" placeholder="Category Name">
-    <input [(ngModel)]="newCategory.description" placeholder="Category Description">
+    <input [(ngModel)]="newCategory.description" placeholder="Category Description" style="margin: 2% 0">
     <img [src]="newCategory.image" alt={{newCategory.imageFileName}}>
-    <input type="file" (change)="onFileSelected($event)">
+    <input type="file" (change)="onFileSelected($event)" style="margin: 2% 0">
+      </div>
     <!-- Другие поля для ввода -->
+    <button (click)="createCategory()" class="create-categoryBtn">Create</button>
 
-    <button (click)="createCategory()">Create</button>
+    </div>
   </div>
-  <div class="service-list">
-    <h2 class="service-list-wrapper">Services without Category</h2><hr>
+  <div class="service-list" [ngStyle]="{ 'display': divDisplayStyle }">
+    <h2 class="service-list-wrapper">Services without Category</h2>
+    <hr>
     <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"
          (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropRemoveService($event)">
       <div *ngIf="servicesWithoutCategory?.length == 0">
