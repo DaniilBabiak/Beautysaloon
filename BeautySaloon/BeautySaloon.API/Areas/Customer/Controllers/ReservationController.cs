@@ -4,6 +4,7 @@ using BeautySaloon.API.Services.Interfaces;
 using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BeautySaloon.API.Areas.Customer.Controllers;
 
@@ -33,7 +34,7 @@ public class ReservationController : CustomerControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateReservationAsync(CreateReservationRequest createReservationRequest)
     {
-        var customerId = User.Identity.Name;
+        var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var reservation = new Reservation
         {
             ServiceId = createReservationRequest.ServiceId,

@@ -1,5 +1,8 @@
 ﻿using BeautySaloon.ImagesAPI.Models;
 using Minio;
+using Minio.DataModel;
+using System.Net.Sockets;
+using System.Reactive.Linq;
 
 namespace BeautySaloon.ImagesAPI.Services;
 
@@ -10,6 +13,29 @@ public class ImageService : IImageService
     public ImageService(MinioClient minio)
     {
         _minio = minio;
+    }
+
+    public async Task<List<MinioLocation>> GetAllImagesAsync()
+    {
+        List<MinioLocation> allObjects = new List<MinioLocation>();
+
+        try
+        {
+            var buckets = await _minio.ListBucketsAsync();
+
+            foreach (var bucket in buckets.Buckets)
+            {
+                var listObjectsArgs = new ListObjectsArgs().WithBucket(bucket.Name);
+                var files = await _minio.ListObjectsAsync(listObjectsArgs).ToList();
+                allObjects.AddRange(files.Select(f => new MinioLocation { BucketName = bucket.Name, FileName = f.Key }));
+            }
+        }
+        catch (Minio.Exceptions.MinioException ex)
+        {
+            Console.WriteLine($"Error retrieving Minio objects: {ex.Message}");
+        }
+
+        return allObjects;
     }
 
     public async Task<MinioLocation> SaveImageAsync(IFormFile file, string bucketName)
@@ -105,5 +131,12 @@ public class ImageService : IImageService
             default:
                 return "image/jpeg";
         }
+    }
+
+    public async Task DeleteImageAsync(MinioLocation location)
+    {
+        var removeObjectArgs = new RemoveObjectArgs().WithBucket(location.BucketName)
+                                                     .WithObject(location.FileName);
+        await _minio.RemoveObjectAsync(removeObjectArgs);
     }
 }

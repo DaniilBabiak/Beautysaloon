@@ -10,7 +10,7 @@ using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Services.Interfaces;
 
-namespace BeautySaloon.API.RabbitMQ;
+namespace BeautySaloon.API.RabbitMq;
 
 public class CustomerListener : BackgroundService
 {

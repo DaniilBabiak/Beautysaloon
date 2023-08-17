@@ -1,5 +1,6 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
+using BeautySaloon.API.RabbitMq;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,6 @@ namespace BeautySaloon.API.Services;
 public class BestWorkService : IBestWorkService
 {
     private readonly BeautySaloonContext _context;
-
     public BestWorkService(BeautySaloonContext context)
     {
         _context = context;
