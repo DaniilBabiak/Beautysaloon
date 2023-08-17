@@ -1,7 +1,9 @@
 ﻿using BeautySaloon.API.Models;
 using BeautySaloon.API.Services.Interfaces;
+using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BeautySaloon.API.Areas.Customer.Controllers;
 public class ProfileController : CustomerControllerBase
@@ -24,6 +26,23 @@ public class ProfileController : CustomerControllerBase
             Name = customer.Name,
             PhoneNumber = customer.PhoneNumber
         };
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateProfileAsync(UpdateProfileRequest updateProfileRequest)
+    {
+        var id = User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.NameIdentifier).Value;
+
+        var customer = new Entities.BeautySaloonContextEntities.Customer
+        {
+            Id = id,
+            Name = updateProfileRequest.Name,
+            PhoneNumber = updateProfileRequest.PhoneNumber
+        };
+
+        var result = await _customerService.UpdateCustomerAsync(customer);
 
         return Ok(result);
     }
