@@ -4,6 +4,7 @@ using BeautySaloon.API.Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeautySaloon.API.Migrations
 {
     [DbContext(typeof(BeautySaloonContext))]
-    partial class BeautySaloonContextModelSnapshot : ModelSnapshot
+    [Migration("20230817184214_Made some fields nullable")]
+    partial class Madesomefieldsnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,10 +102,15 @@ namespace BeautySaloon.API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MasterId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ScheduleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MasterId");
 
                     b.HasIndex("ScheduleId");
 
@@ -282,9 +290,17 @@ namespace BeautySaloon.API.Migrations
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.DayOff", b =>
                 {
+                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Master", "Master")
+                        .WithMany()
+                        .HasForeignKey("MasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", null)
                         .WithMany("DayOffs")
                         .HasForeignKey("ScheduleId");
+
+                    b.Navigation("Master");
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Reservation", b =>

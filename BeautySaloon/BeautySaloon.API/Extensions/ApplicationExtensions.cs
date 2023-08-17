@@ -1,5 +1,6 @@
 ﻿using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
+using BeautySaloon.API.Exceptions.NotFound;
 using GlobalExceptionHandler.WebApi;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

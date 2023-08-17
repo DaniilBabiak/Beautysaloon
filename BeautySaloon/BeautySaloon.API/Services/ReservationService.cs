@@ -1,6 +1,7 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
+using BeautySaloon.API.Exceptions.NotFound;
 using BeautySaloon.API.Models;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,11 @@ namespace BeautySaloon.API.Services;
 public class ReservationService : IReservationService
 {
     private readonly BeautySaloonContext _context;
-
-    public ReservationService(BeautySaloonContext context)
+    private readonly IMasterService _masterService;
+    public ReservationService(BeautySaloonContext context, IMasterService masterService)
     {
         _context = context;
+        _masterService = masterService;
     }
 
     public async Task<List<GetAllReservationsResponse>> GetAllReservationsAsync()
@@ -54,6 +56,7 @@ public class ReservationService : IReservationService
         var service = await _context.Services
                                     .AsNoTracking()
                                     .Include(s => s.Reservations)
+                                    .Include(s => s.Masters)
                                     .Where(s => s.Id == serviceId).FirstOrDefaultAsync();
 
         if (service is null)
@@ -61,7 +64,7 @@ public class ReservationService : IReservationService
             throw new ServiceNotFoundException($"Service with id {serviceId} not found.");
         }
 
-        var availableReservations = GetAvailableReservations(serviceId, service);
+        var availableReservations = await GetAvailableReservations(serviceId);
 
         return availableReservations;
     }
@@ -83,46 +86,72 @@ public class ReservationService : IReservationService
             throw new CustomerNotFoundException($"Customer with id {reservation.CustomerId} not found.");
         }
 
+        var master = await _context.Masters.AsNoTracking().FirstOrDefaultAsync(c => c.Id == reservation.MasterId);
+
+        if (master is null)
+        {
+            throw new MasterNotFoundException($"Master with id {reservation.MasterId} not found.");
+        }
+
         await _context.Reservations.AddAsync(reservation);
         await _context.SaveChangesAsync();
 
         return reservation;
     }
 
-    private List<Reservation> GetAvailableReservations(int serviceId, Service service)
+    private async Task<List<Reservation>> GetAvailableReservations(int serviceId)
     {
-        var existingReservationTimes = service.Reservations.Where(r => r.ServiceId == serviceId)
-                                                   .Select(r => r.DateTime)
-                                                   .ToList();
+        var masters = await _masterService.GetAllMastersByServiceIdAsync(serviceId);
 
+        if (!masters.Any())
+        {
+            return new List<Reservation>();
+        }
+
+        var service = masters.First().Services.First(s => s.Id == serviceId);
+
+        var existingReservationTimes = masters.SelectMany(m => m.Reservations) // Получаем все резервации из мастеров
+                                              .Select(r => r.DateTime)
+                                              .ToList();
+            
         var availableReservations = new List<Reservation>();
 
-        DateTime currentDate = DateTime.Now.Date; // Сегодняшняя дата без времени
-        DateTime endDate = currentDate.AddDays(13); // Дата, на 2 недели вперед
+        DateTime currentDate = DateTime.Now.Date;
+        DateTime endDate = currentDate.AddDays(13);
 
-        TimeSpan startTime = service.StartTime;
-        TimeSpan endTime = service.EndTime;
-        TimeSpan duration = service.Duration;
+        TimeSpan duration = service.Duration.Value;
 
-        for (DateTime date = currentDate; date <= endDate; date = date.AddDays(1))
+        foreach (var master in masters)
         {
-            DateTime startDateTime = date.Add(startTime);
-            DateTime endDateTime = date.Add(endTime);
-
-            while (startDateTime.Add(duration) <= endDateTime)
+            foreach (var workingDay in master.Schedule.WorkingDays)
             {
-                DateTime reservationTime = startDateTime;
-                if (!existingReservationTimes.Any(r => r >= reservationTime && r < reservationTime.Add(duration)) && reservationTime >= DateTime.Now)
+                DateTime date = currentDate.Date;
+                while (date <= endDate)
                 {
-                    availableReservations.Add(new Reservation
+                    if (workingDay.Day == date.DayOfWeek.ToString())
                     {
-                        ServiceId = serviceId,
-                        Service = service,
-                        DateTime = reservationTime
-                    });
-                }
+                        DateTime startDateTime = date.Date + workingDay.StartTime;
+                        DateTime endDateTime = date.Date + workingDay.EndTime;
 
-                startDateTime = startDateTime.Add(duration);
+                        while (startDateTime.Add(duration) <= endDateTime)
+                        {
+                            DateTime reservationTime = startDateTime;
+                            if (!existingReservationTimes.Any(r => r >= reservationTime && r < reservationTime.Add(duration)) && reservationTime >= DateTime.Now)
+                            {
+                                availableReservations.Add(new Reservation
+                                {
+                                    ServiceId = serviceId,
+                                    Service = service,
+                                    DateTime = reservationTime
+                                });
+                            }
+
+                            startDateTime = startDateTime.Add(duration);
+                        }
+                    }
+
+                    date = date.AddDays(1);
+                }
             }
         }
 

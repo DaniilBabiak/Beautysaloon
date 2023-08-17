@@ -24,7 +24,7 @@ public class ReservationController : CustomerControllerBase
 
         var result = new GetAvailableReservationsForServiceResponse
         {
-            Service = availableReservations.First()?.Service,
+            Service = availableReservations.FirstOrDefault()?.Service,
             AvailableReservations = availableReservations.Select(r => r.DateTime)
         };
 
@@ -39,7 +39,8 @@ public class ReservationController : CustomerControllerBase
         {
             ServiceId = createReservationRequest.ServiceId,
             CustomerId = customerId,
-            DateTime = createReservationRequest.DateTime
+            DateTime = createReservationRequest.DateTime,
+            MasterId = createReservationRequest.MasterId
         };
 
         var result = await _reservationService.CreateReservationAsync(reservation);
