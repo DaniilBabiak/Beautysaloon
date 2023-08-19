@@ -42,14 +42,16 @@
           <div class="info-col-2">
             <div class="service-info">
               <div class="services-text">{{category.description}}</div>
+              <div class="all-service-wrapper">
               <div *ngFor="let service of category.services" class="services-prices">
                 <div class="services-prices-wrapper">
-                  <div class="services-name">{{service.name}}</div>
+                  <div class="services-name">{{service.name}} <span></span></div>
                   <div class="services-price">{{service.price}}</div>
                 </div>
               </div>
+              </div>
               <div class="service-btn-makeappoitment">
-                <button class="appoinmentsBtn" routerLink="">Appointment Online</button>
+                <button class="appoinmentsBtn"  routerLink="./appointments">Appointment Online</button>
               </div>
             </div>
           </div>

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import { BestWork } from 'src/app/shared/models/best-work';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BestWorkService } from 'src/app/shared/services/best-work.service';
 import { ImageService } from 'src/app/shared/services/image.service';
+
 
 @Component({
   selector: 'app-add-best-works',
@@ -10,6 +11,7 @@ import { ImageService } from 'src/app/shared/services/image.service';
   styleUrls: ['./add-best-works.component.css']
 })
 export class AddBestWorksComponent {
+  searchText:any;
   bestWorks: BestWork[] | null = null;
   newBestWork: BestWork = {
     id: null,
@@ -20,6 +22,7 @@ export class AddBestWorksComponent {
 
   showAddBestWorkForm = false;
   selectedFile: File | null = null;
+
 
   constructor(private bestWorkService: BestWorkService, private imageService: ImageService, private authService: AuthService) {
 
@@ -52,7 +55,6 @@ export class AddBestWorksComponent {
       if (element.imageBucket && element.imageFileName) {
         this.imageService.getImage(element.imageBucket, element.imageFileName).then(data => {
           element.image = data;
-
         });
       }
     });
@@ -84,4 +86,14 @@ export class AddBestWorksComponent {
 
     })
   }
+
+  handleMouseWheel(event: WheelEvent) {
+    const container = document.querySelector('.bestWork-wrapper') as HTMLElement;
+    if (container) {
+      container.scrollLeft += event.deltaY;
+      event.preventDefault(); // Остановим стандартную прокрутку страницы
+    }
+  }
+
+
 }
