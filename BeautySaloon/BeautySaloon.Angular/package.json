@@ -26,6 +26,7 @@
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.3",
     "gsap": "^3.12.2",
+    "ng2-search-filter": "^0.5.1",
     "ngx-pagination": "^6.0.3",
     "ngx-spinner": "^16.0.2",
     "oidc-client": "^1.11.5",

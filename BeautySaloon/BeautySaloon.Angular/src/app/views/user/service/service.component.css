@@ -9,24 +9,16 @@
   justify-content: space-between;
 }
 .services-prices{
-  display: flex;
-  justify-content: center;
   text-align: center;
-  flex-basis: 20%;
   align-items: end;
-}
-.services-prices-wrapper::before{
-  content: '';
-  position: absolute;
-  width: 4px;
-  height: 50px;
-  background: #f2f700;;
-  top: 40%;
+  min-height: 5vh;
 }
 .services-prices-wrapper{
   flex-basis: 25%;
   font-family: PlayFair;
   font-size: calc(var(--index) * .70);
+  display: flex;
+  justify-content: space-between;
 }
 .services-text{
   display: flex;

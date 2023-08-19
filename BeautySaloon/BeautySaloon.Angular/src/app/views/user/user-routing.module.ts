@@ -13,10 +13,10 @@ const routes: Routes = [
       { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule) },
       { path: 'works', loadChildren: () => import('./works/works.module').then(m => m.WorksModule) },
       { path: 'contacts', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule) },
-      { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule), canActivate: [AuthGuard], },
+      { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule) },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
       { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },
-      { path: 'reservations', loadChildren: () => import('./reservation/reservation.module').then(m => m.ReservationModule) },
+      { path: 'reservations', loadChildren: () => import('./reservation/reservation.module').then(m => m.ReservationModule),canActivate: [AuthGuard], },
       { path: '**', redirectTo: 'about' },
     ]
   },

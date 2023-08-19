@@ -19,7 +19,7 @@ import { NgbTimeStringAdapter } from './shared/helpers/ngb-time-string-adapter';
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [ConfigService, { provide: NgbTimeAdapter, useClass: NgbTimeStringAdapter }],
   bootstrap: [AppComponent]

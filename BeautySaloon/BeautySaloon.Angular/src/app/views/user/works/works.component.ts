@@ -18,10 +18,13 @@ export class WorksComponent implements OnInit {
   showModal: boolean = false;
   modalImage: string = '';
   modalAlt: string = '';
+  modalBestWorkId: number | null = null;
   currentPage = 1;
+  isAdmin:boolean = false;
   constructor(private auth: AuthService, private imageService: ImageService, private bestWorkService: BestWorkService) { }
   ngOnInit(): void {
     this.auth.loadUser()?.then(() => {
+      this.isAdmin = this.auth.isAdmin;
       this.bestWorkService.getBestWorks().subscribe(result => {
         this.bestWorks = result;
         this.countTotalPages();
@@ -61,18 +64,19 @@ export class WorksComponent implements OnInit {
       this.itemsPerPage = 9; // Значение по умолчанию
     }
   }
-  getCurrentPageImages() {
+  getCurrentPageBestWorks() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
 
-    const images = this.bestWorks.slice(startIndex, endIndex).map(work => work.image);
+    const images = this.bestWorks.slice(startIndex, endIndex);
 
     return images;
   }
-  openModal(alt: string, image: string) {
+  openModal(alt: string, image: string, id:number) {
     this.modalAlt = alt;
     this.modalImage = image;
     this.showModal = true;
+    this.modalBestWorkId = id;
   }
   closeModal() {
     this.showModal = false;
