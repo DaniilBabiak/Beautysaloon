@@ -1,0 +1,119 @@
+.add-service-container{
+  min-height: 84.4vh;
+  overflow-y:hidden ;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to right, rgb(237 159 237), rgb(176 203 213));
+  min-width: 300px;
+}
+.add-service-wrapper{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: 1%;
+}
+.service-wrapper{
+  display: flex;
+  background: linear-gradient(to right, rgb(237 159 237), rgb(176 203 213));
+  min-width: 300px;
+}
+.once-service{
+  max-width: 1000px;
+  min-width: 1000px;
+}
+.service-img{
+  width: 100%;
+  height: 31vh;
+}
+.test4{
+  border: 4px solid #6161f8;
+}
+.add-service-header{
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  margin-bottom: 1%;
+  font-size: calc(var(--index)*1);
+}
+.service-name{
+  margin-bottom: 2%;
+}
+.service-price{
+  margin-bottom: 2%;
+}
+.btn-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.saveBtn{
+  display: flex;
+  justify-content: center;
+  background-image: linear-gradient(45deg, #e33737, #ebe522);
+  border-radius: 7px;
+  font-size: calc(var(--index)*.7);
+  min-width: 50px;
+  width: 100%;
+  margin: 10px 0;
+}
+.dropdown-toggle::after{
+  margin: 10px 0!important;
+}
+.active-img{
+    max-height: 200px;
+    min-height: 10.417vw;
+}
+
+.error-message {
+  bottom: 0;
+  left: 50%;
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.error-message.active {
+  visibility: visible;
+}
+.test4{
+  margin-bottom: 1%;
+}
+@media (max-width: 768px){
+.test4{
+  display: flex;
+  margin: 1% auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  margin-bottom: 4%;
+}
+  .test3{
+    display: flex;
+    flex-direction: column;
+  }
+  .once-service{
+    margin-bottom: 5%;
+  }
+  .time-picker{
+    display: flex;
+    justify-content: center;
+  }
+  .span-duration{
+    display: flex;
+    justify-content: center;
+  }
+ .service-wrapper{
+   flex-direction: column;
+   align-items: center;
+ }
+  .add-service-header{
+    width: 100%;
+    padding: 1% 15%;
+  }
+  .saveBtn{
+    font-size: calc(var(--index) * .9);
+  }
+}
+
