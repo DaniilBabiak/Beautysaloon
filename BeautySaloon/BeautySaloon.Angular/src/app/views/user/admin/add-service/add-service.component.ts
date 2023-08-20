@@ -16,6 +16,8 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
   styleUrls: ['./add-service.component.css'],
 })
 export class AddServiceComponent implements OnInit {
+  isFieldsValid: any = false;
+  isTimeValid = false;
   services: Service[] | null = null;
   serviceCategories: ServiceCategory[] | null = null;
   newService: Service = {
@@ -87,6 +89,15 @@ export class AddServiceComponent implements OnInit {
         masters: null
       }
     })
+  }
+
+  checkFieldsValidity() {
+    this.isFieldsValid =
+      this.newService.name && this.newService.price && this.isTimeValid;
+  }
+  checkTimeValidity() {
+    this.isTimeValid = !!this.newService.duration;
+    this.checkFieldsValidity(); // Проверка всех полей после изменения времени
   }
 
 }
