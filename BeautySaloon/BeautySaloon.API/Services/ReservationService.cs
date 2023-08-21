@@ -22,7 +22,9 @@ public class ReservationService : IReservationService
     {
         var services = await _context.Services
                                      .Include(s => s.Reservations)
-                                     .ThenInclude(r => r.Customer)
+                                        .ThenInclude(r => r.Customer)
+                                     .Include(s => s.Reservations)
+                                        .ThenInclude(r => r.Master)
                                      .ToListAsync();
 
         var result = new List<GetAllReservationsResponse>();
@@ -123,6 +125,11 @@ public class ReservationService : IReservationService
 
         foreach (var master in masters)
         {
+            if (master.Schedule is null)
+            {
+                continue;
+            }
+
             foreach (var workingDay in master.Schedule.WorkingDays)
             {
                 DateTime date = currentDate.Date;

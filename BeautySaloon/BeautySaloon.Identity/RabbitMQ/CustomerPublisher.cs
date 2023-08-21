@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Polly;
 using RabbitMQ.Client;
 using Serilog;
 using System.Text;
@@ -24,27 +25,32 @@ public class CustomerPublisher
 
     public void Enqueue(object customer)
     {
-        try
-        {
-            using var connection = _connectionFactory.CreateConnection();
-            using var channel = connection.CreateModel();
-            channel.QueueDeclare(queue: _options.CustomerQueueName,
-                                  durable: false,
-                                  exclusive: false,
-                                  autoDelete: false,
-                                  arguments: null);
-            var message = JsonConvert.SerializeObject(customer);
+        Policy
+            .Handle<Exception>()
+            .WaitAndRetryForever(retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (exception, timeSpan, context) =>
+                {
+                    Log.Error(exception, "Error while sending customer to resource API.");
+                })
+            .Execute(() =>
+            {
+                using var connection = _connectionFactory.CreateConnection();
+                using var channel = connection.CreateModel();
+                channel.QueueDeclare(queue: _options.CustomerQueueName,
+                                      durable: false,
+                                      exclusive: false,
+                                      autoDelete: false,
+                                      arguments: null);
+                var message = JsonConvert.SerializeObject(customer);
 
-            var body = Encoding.UTF8.GetBytes(message);
+                var body = Encoding.UTF8.GetBytes(message);
 
-            channel.BasicPublish(exchange: string.Empty,
-                                  routingKey: _options.CustomerQueueName,
-                                  basicProperties: null,
-                                  body: body);
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Error while trying to send customer to queue.");
-        }
+                channel.BasicPublish(exchange: string.Empty,
+                                      routingKey: _options.CustomerQueueName,
+                                      basicProperties: null,
+                                      body: body);
+
+                return Task.CompletedTask;
+            });
     }
 }

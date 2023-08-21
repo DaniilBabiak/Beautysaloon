@@ -29,27 +29,30 @@ public class RabbitMQHealthCheckListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        try
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _connectionFactory = new ConnectionFactory()
+            try
             {
-                HostName = _settings.HostName,
-                UserName = _settings.UserName,
-                Password = _settings.Password,
-                Uri = new Uri(_settings.Uri)
-            };
+                _connectionFactory = new ConnectionFactory()
+                {
+                    HostName = _settings.HostName,
+                    UserName = _settings.UserName,
+                    Password = _settings.Password,
+                    Uri = new Uri(_settings.Uri)
+                };
 
-            _connection = _connectionFactory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _consumer = new EventingBasicConsumer(_channel);
-            await ConnectAndExecute(stoppingToken);
-        }
-        catch (Exception ex)
-        {
-            Log.Error("An error occurred while connecting to RabbitMQ.");
+                _connection = _connectionFactory.CreateConnection();
+                _channel = _connection.CreateModel();
+                _consumer = new EventingBasicConsumer(_channel);
+                await ConnectAndExecute(stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("An error occurred while connecting to RabbitMQ.");
 
-            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
-        }
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+            }
+        }        
     }
 
     private async Task ConnectAndExecute(CancellationToken stoppingToken)

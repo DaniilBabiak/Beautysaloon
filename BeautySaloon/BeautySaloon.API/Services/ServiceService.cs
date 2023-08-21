@@ -16,6 +16,22 @@ public class ServiceService : IServiceService
         _context = context;
     }
 
+    public async Task<Service> GetServiceByIdAsync(int id)
+    {
+        var result = await _context.Services
+                             .Include(s => s.Category)
+                             .Include(s => s.Masters)
+                             .Include(s => s.Reservations)
+                             .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (result is null)
+        {
+            throw new ServiceNotFoundException($"Service with id {id} not found.");
+        }
+
+        return result;
+    }
+
     public async Task<List<ServiceCategory>> GetAllServiceCategoriesAsync()
     {
         var result = await _context.ServiceCategories
