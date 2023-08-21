@@ -5,8 +5,7 @@ import { MasterDetailsComponent } from './details/master-details.component';
 
 const routes: Routes =
 [
-  { path: '', component: MasterComponent },
-  { path: 'details/:id', component: MasterDetailsComponent}
+  { path: '', component: MasterComponent }
 ];
 
 @NgModule({

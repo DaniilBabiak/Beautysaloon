@@ -4,6 +4,7 @@ using BeautySaloon.API.Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeautySaloon.API.Migrations
 {
     [DbContext(typeof(BeautySaloonContext))]
-    partial class BeautySaloonContextModelSnapshot : ModelSnapshot
+    [Migration("20230819224826_Made masted id nullable in schedule")]
+    partial class Mademastedidnullableinschedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,6 +123,9 @@ namespace BeautySaloon.API.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ScheduleId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -236,11 +242,11 @@ namespace BeautySaloon.API.Migrations
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.WorkingDay", b =>
                 {
-                    b.Property<int>("WorkingDayId")
+                    b.Property<int?>("WorkingDayId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkingDayId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("WorkingDayId"));
 
                     b.Property<string>("Day")
                         .IsRequired()
@@ -336,13 +342,11 @@ namespace BeautySaloon.API.Migrations
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.WorkingDay", b =>
                 {
-                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", "Schedule")
+                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", null)
                         .WithMany("WorkingDays")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("MasterService", b =>

@@ -4,6 +4,7 @@ using BeautySaloon.API.Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeautySaloon.API.Migrations
 {
     [DbContext(typeof(BeautySaloonContext))]
-    partial class BeautySaloonContextModelSnapshot : ModelSnapshot
+    [Migration("20230819132620_DayOffs now have schedule id")]
+    partial class DayOffsnowhavescheduleid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,6 +124,9 @@ namespace BeautySaloon.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ScheduleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Masters");
@@ -166,14 +172,13 @@ namespace BeautySaloon.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<int?>("MasterId")
+                    b.Property<int>("MasterId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MasterId")
-                        .IsUnique()
-                        .HasFilter("[MasterId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Schedules");
                 });
@@ -236,11 +241,11 @@ namespace BeautySaloon.API.Migrations
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.WorkingDay", b =>
                 {
-                    b.Property<int>("WorkingDayId")
+                    b.Property<int?>("WorkingDayId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkingDayId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("WorkingDayId"));
 
                     b.Property<string>("Day")
                         .IsRequired()
@@ -320,7 +325,8 @@ namespace BeautySaloon.API.Migrations
                     b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Master", "Master")
                         .WithOne("Schedule")
                         .HasForeignKey("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", "MasterId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Master");
                 });
@@ -336,13 +342,11 @@ namespace BeautySaloon.API.Migrations
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.WorkingDay", b =>
                 {
-                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", "Schedule")
+                    b.HasOne("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", null)
                         .WithMany("WorkingDays")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("MasterService", b =>

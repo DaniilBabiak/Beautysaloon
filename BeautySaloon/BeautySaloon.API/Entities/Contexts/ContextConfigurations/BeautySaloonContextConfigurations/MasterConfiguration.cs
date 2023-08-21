@@ -8,8 +8,8 @@ public class MasterConfiguration : IEntityTypeConfiguration<Master>
 {
     public void Configure(EntityTypeBuilder<Master> builder)
     {
-        builder.HasMany(m => m.Services)
-               .WithMany(s => s.Masters);
+        //builder.HasMany(m => m.Services)
+        //       .WithMany(s => s.Masters);
 
         builder.HasOne(m => m.Schedule)
                .WithOne(s => s.Master)

@@ -11,5 +11,6 @@ public static class BeautySaloonContextConfiguration
         modelBuilder.ApplyConfiguration(new ServiceCategoryConfiguration());
         modelBuilder.ApplyConfiguration(new ServiceConfiguration());
         modelBuilder.ApplyConfiguration(new MasterConfiguration());
+        modelBuilder.ApplyConfiguration(new ScheduleConfiguration());
     }
 }

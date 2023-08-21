@@ -5,6 +5,7 @@ import { Service } from '../models/service';
 import { AuthService } from './auth.service';
 import { ConfigService } from './config.service';
 import { Master } from '../models/master';
+import { Schedule } from '../models/schedule';
 
 @Injectable({
   providedIn: 'root'
@@ -31,26 +32,61 @@ export class MasterService {
     return this.http.get<Master>(url, options);
   }
 
-  createService(service: Service): Observable<Service> {
+  getSchedule(masterId: number): Observable<Schedule> {
     var url = this.config.resourceApiURI;
-
+    url = url + `/api/admin/master/schedule/${masterId}`
     var options = this.getOptions();
 
-    return this.http.post<Service>(`${url}/api/admin/Service`, service, options);
+    return this.http.get<Schedule>(url, options);
   }
 
-  updateService(service: Service): Observable<Service> {
+  createSchedule(masterId: number, schedule: Schedule): Observable<Schedule> {
     var url = this.config.resourceApiURI;
-
+    url = url + `/api/admin/master/schedule/${masterId}`
     var options = this.getOptions();
 
-    return this.http.put<Service>(`${url}/api/admin/Service`, service, options);
+    return this.http.post<Schedule>(url, schedule, options);
   }
 
-  deleteService(id: number): Observable<any> {
+  updateSchedule(schedule: Schedule): Observable<Schedule> {
+    var url = this.config.resourceApiURI;
+    url = url + `/api/admin/master/schedule`
+    var options = this.getOptions();
+
+    return this.http.put<Schedule>(url, schedule, options);
+  }
+
+  createMaster(master: Master): Observable<Master> {
+    var url = this.config.resourceApiURI;
+
+    var options = this.getOptions();
+
+    var body = {
+      name: master.name,
+      serviceIds: master.services?.map(service => service.id)
+    };
+
+    return this.http.post<Master>(`${url}/api/admin/Master`, body, options);
+  }
+
+  updateMaster(master: Master): Observable<Master> {
+    var url = this.config.resourceApiURI;
+
+    var options = this.getOptions();
+
+    var body = {
+      id: master.id,
+      name: master.name,
+      serviceIds: master.services?.map(service => service.id)
+    };
+
+    return this.http.put<Master>(`${url}/api/admin/Master`, body, options);
+  }
+
+  deleteMaster(id: number): Observable<any> {
     var url = this.config.resourceApiURI;
     var options = this.getOptions();
-    return this.http.delete(`${url}/api/admin/Service/${id}`, options);
+    return this.http.delete(`${url}/api/admin/Master/${id}`, options);
   }
   private getOptions() {
     return {

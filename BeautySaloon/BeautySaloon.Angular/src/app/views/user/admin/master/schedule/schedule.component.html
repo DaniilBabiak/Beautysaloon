@@ -1,0 +1,39 @@
+<p>schedule works!</p>
+<div class="form-group">
+    <div *ngFor="let workingDay of schedule?.workingDays">
+        {{workingDay.day}}: StartTime:
+        <ngb-timepicker [(ngModel)]="workingDay.startTime"></ngb-timepicker>
+    </div>
+    <button (click)="showAddWorkingDayForm = true">Add working day</button>
+    <div *ngIf="showAddWorkingDayForm">
+        <div>
+            <hr>
+            <div ngbDropdown class="d-inline-block">
+                <button (click)="loadAvailableDays()" type="button" class="btn btn-outline-primary" id="dropdownBasic1"
+                    ngbDropdownToggle>
+                    <div *ngIf="newWorkingDay.day">
+                        <div>{{newWorkingDay.day}}</div>
+                    </div>
+                    <div *ngIf="!newWorkingDay.day">Select Day</div>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <div *ngIf="availableWorkingDays">
+                        <div *ngFor="let day of availableWorkingDays">
+                            <button (click)="selectDay(day)">
+                                <div>{{day}}</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ngb-timepicker [(ngModel)]="newWorkingDay.startTime"></ngb-timepicker>
+                <ngb-timepicker [(ngModel)]="newWorkingDay.endTime"></ngb-timepicker>
+            </div>
+            <!-- Другие поля для ввода -->
+            <button (click)="addWorkingDay()">Create</button>
+
+        </div>
+    </div>
+</div>
+<!-- Other inputs for Schedule properties -->
+
+<button (click)="saveSchedule()" type="submit" class="btn btn-primary">Save</button>

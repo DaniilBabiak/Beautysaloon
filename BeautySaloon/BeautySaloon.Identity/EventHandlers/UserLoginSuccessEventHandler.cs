@@ -23,7 +23,7 @@ public class UserLoginSuccessEventHandler : IEventSink
                 Name = loginSuccessEvent.DisplayName
             };
 
-            _publisher.Enqueue(customer);
+            Task.Run(() => _publisher.Enqueue(customer));
         }
 
         return Task.CompletedTask;
