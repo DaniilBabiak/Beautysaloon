@@ -1,12 +1,18 @@
 <p>master works!</p>
-
 <div *ngFor="let master of masters">
-
 </div>
 <div *ngIf="masters">
     <div *ngFor="let master of masters">
-        <button routerLink="details/{{master.id}}">
+        <button (click)="openMasterDetails(master)">
             <span>{{master.name}}</span>
         </button>
+        <div *ngIf="!master.schedule">Schedule is not configured for this master!</div>
+        <button (click)="configureSchedule(master)">Configure schedule</button>
+        <br>
+        <br>
+        <br>
+        
     </div>
 </div>
+
+<button (click)="createMaster()">Add master</button>

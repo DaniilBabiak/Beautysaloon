@@ -4,16 +4,27 @@ import { CommonModule } from '@angular/common';
 import { MasterRoutingModule } from './master-routing.module';
 import { MasterComponent } from './master.component';
 import { MasterDetailsComponent } from './details/master-details.component';
+import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule, NgbModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { ScheduleComponent } from './schedule/schedule.component';
+import { NgbTimeStringAdapter } from 'src/app/shared/helpers/ngb-time-string-adapter';
 
 
 @NgModule({
   declarations: [
     MasterComponent,
-    MasterDetailsComponent
+    MasterDetailsComponent,
+    ScheduleComponent,
+    
   ],
   imports: [
     CommonModule,
-    MasterRoutingModule
-  ]
+    MasterRoutingModule,
+    FormsModule,
+    NgbModule,
+    NgbDropdownModule,
+    NgbTimepickerModule,
+  ],
+  providers: [NgbTimeStringAdapter]
 })
 export class MasterModule { }
