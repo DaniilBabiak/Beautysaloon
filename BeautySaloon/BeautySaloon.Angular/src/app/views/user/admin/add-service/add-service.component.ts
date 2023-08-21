@@ -99,5 +99,11 @@ export class AddServiceComponent implements OnInit {
     this.isTimeValid = !!this.newService.duration;
     this.checkFieldsValidity(); // Проверка всех полей после изменения времени
   }
-
+  handleMouseWheel(event: WheelEvent) {
+    const container = document.querySelector('.service-wrapper') as HTMLElement;
+    if (container) {
+      container.scrollLeft += event.deltaY;
+      event.preventDefault(); // Остановим стандартную прокрутку страницы
+    }
+  }
 }
