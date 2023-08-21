@@ -23,8 +23,8 @@
         </div>
         <div *ngIf="!newService.category">Select Category</div>
       </button>
-      <div aria-labelledby="dropdownBasic1" style="width: 100%; border: none; padding: 0">
-        <div *ngIf="serviceCategories" class="service-wrapper">
+      <div aria-labelledby="dropdownBasic1"  class="all-services" >
+        <div *ngIf="serviceCategories" class="service-wrapper" (wheel)="handleMouseWheel($event)">
           <div *ngFor="let category of serviceCategories" class="once-service">
             <button (click)="selectCategory(category)">
               <div>{{category.name}}</div>
