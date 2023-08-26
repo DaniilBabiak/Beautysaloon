@@ -6,7 +6,7 @@ namespace BeautySaloon.API;
 
 public class Program
 {
-    public async static Task Main(string[] args)
+    public static void Main(string[] args)
     {
         IdentityModelEventSource.ShowPII = true;
         var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +19,7 @@ public class Program
 
         var app = builder.Build();
         app.UseMiddleware<LoggingHeadersMiddleware>();
-        await app.ConfigureApplication();
+        app.ConfigureApplication();
 
         app.Run();
     }

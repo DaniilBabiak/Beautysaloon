@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'add-best-works', loadChildren: () => import('./add-best-works/add-best-works.module').then(m => m.AddBestWorksModule) },
   { path: 'add-service', loadChildren: () => import('./add-service/add-service.module').then(m => m.AddServiceModule) },
   { path: 'master', loadChildren: () => import('./master/master.module').then(m => m.MasterModule) },
+  { path: 'reservations', loadChildren: () => import('./reservations/reservations.module').then(m => m.ReservationsModule) },
 ];
 
 @NgModule({

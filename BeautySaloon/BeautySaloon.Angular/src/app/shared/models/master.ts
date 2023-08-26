@@ -1,4 +1,4 @@
-import { Reservation } from "./reservation";
+import { Reservation } from "./resrvation/reservation";
 import { Schedule } from "./schedule";
 import { Service } from "./service";
 

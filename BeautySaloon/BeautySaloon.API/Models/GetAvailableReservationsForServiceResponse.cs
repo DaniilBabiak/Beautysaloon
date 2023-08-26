@@ -5,5 +5,6 @@ namespace BeautySaloon.API.Models;
 public class GetAvailableReservationsForServiceResponse
 {
     public Service Service { get; set; }
-    public IEnumerable<DateTime> AvailableReservations { get; set; } = new List<DateTime>();
+    public DateTime AvailableTime { get; set; }
+    public Master Master { get; set; }
 }

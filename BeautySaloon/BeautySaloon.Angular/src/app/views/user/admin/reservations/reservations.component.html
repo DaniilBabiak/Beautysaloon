@@ -1,0 +1,35 @@
+<p>reservations works!</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col" sortable="service" (sort)="onSortChange($event)">Service Name</th>
+      <th scope="col" sortable="dateTime" (sort)="onSortChange($event)">Date and Time</th>
+      <th scope="col" sortable="master" (sort)="onSortChange($event)">Master Name</th>
+      <th scope="col">Customer phone number</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reservation of reservations">
+      <td>{{reservation.id}}</td>
+      <td>{{ reservation.service?.name }}</td>
+      <td>{{ reservation.dateTime | date:'medium' }}</td>
+      <td>{{ reservation.master?.name }}</td>
+      <td>{{reservation.customerPhoneNumber}}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="items-per-page">
+  <label for="itemsPerPage">Items Per Page:</label>
+  <select id="itemsPerPage" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+    <option value="2">2</option>
+    <option value="5">5</option>
+    <option value="10">10</option>
+  </select>
+</div>
+<div class="pagination">
+  <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+  <span>{{ currentPage }} / {{ totalPages }}</span>
+  <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+</div>

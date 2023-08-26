@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ category?.name }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <input [(ngModel)]="customerPhoneNumber" placeholder="Your phone number">
+    <div ngbDropdown class="test3">
+        <button type="button" class="test4" id="dropdownBasic1" ngbDropdownToggle>
+            <div class="btn-wrapper">
+                <div *ngIf="selectedService">{{ selectedService.name }}</div>
+                <div *ngIf="!selectedService">Select Service</div>
+            </div>
+        </button>
+        <div aria-labelledby="dropdownBasic1" class="all-services" ngbDropdownMenu>
+            <div *ngIf="services" class="service-wrapper">
+                <div *ngFor="let service of services" class="once-service">
+                    <button class="dropdown-item" (click)="loadAvailableReservations(service)">
+                        {{ service.name }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="availableReservations">
+        Available masters:
+        <button *ngFor="let master of availableMasters" (click)="saveSelectedMaster(master)">
+            {{master.name}}
+        </button>
+        <br>
+        <div *ngIf="selectedMaster">
+            Available days:
+            <button *ngFor="let day of availableDays" (click)="showAvailableSlots(day)">
+                {{ day | date:'mediumDate' }}
+            </button>
+            <div *ngIf="selectedDay">
+                <div *ngFor="let slot of getSlots()">
+                    <button (click)="selectTime(slot)"> {{ slot | date:'shortTime' }}</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="saveReservation()">Reserve</button>
+    <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Cancel</button>
+</div>

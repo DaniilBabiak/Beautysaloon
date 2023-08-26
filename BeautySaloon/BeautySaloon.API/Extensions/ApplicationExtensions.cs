@@ -10,7 +10,7 @@ namespace BeautySaloon.API.Extensions;
 
 public static class ApplicationExtensions
 {
-    public static async Task<WebApplication> ConfigureApplication(this WebApplication app)
+    public static WebApplication ConfigureApplication(this WebApplication app)
     {
         app.UseSerilogRequestLogging();
         app.UseCors("AllowAllPolicy");
@@ -34,7 +34,7 @@ public static class ApplicationExtensions
 
         app.MapControllers().RequireAuthorization("api.read");
 
-        await app.MigrateDatabase();
+        app.MigrateDatabase();
 
         return app;
     }
@@ -69,7 +69,7 @@ public static class ApplicationExtensions
         });
     }
 
-    private async static Task MigrateDatabase(this WebApplication app)
+    private static void MigrateDatabase(this WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
         {
@@ -77,7 +77,7 @@ public static class ApplicationExtensions
             {
                 try
                 {
-                    await appContext.Database.MigrateAsync();
+                    appContext.Database.MigrateAsync();
                 }
                 catch (Exception ex)
                 {

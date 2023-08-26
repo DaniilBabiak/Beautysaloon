@@ -1,5 +1,5 @@
 import { Master } from "./master";
-import { Reservation } from "./reservation";
+import { Reservation } from "./resrvation/reservation";
 import { ServiceCategory } from "./service-category";
 
 export interface Service {

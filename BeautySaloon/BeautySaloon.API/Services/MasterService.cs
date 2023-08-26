@@ -23,6 +23,7 @@ public class MasterService : IMasterService
     public async Task<Schedule> GetScheduleAsync(int masterId)
     {
         var master = await _context.Masters
+                             .AsNoTracking()
                              .Include(m => m.Schedule)
                                 .ThenInclude(s => s.WorkingDays)
                              .Include(m => m.Schedule)
@@ -97,6 +98,7 @@ public class MasterService : IMasterService
                              .Include(m => m.Schedule)
                              .ThenInclude(s => s.DayOffs)
                              .Include(m => m.Reservations)
+                             .AsNoTracking()
                              .ToListAsync();
 
         return result;
@@ -112,6 +114,7 @@ public class MasterService : IMasterService
                         .ThenInclude(s => s.DayOffs)
                      .Include(m => m.Reservations)
                      .Where(m => m.Services.Select(s => s.Id).Contains(serviceId))
+                     .AsNoTracking()
                      .ToListAsync();
 
         return result;
@@ -126,6 +129,7 @@ public class MasterService : IMasterService
                              .Include(m => m.Schedule)
                                 .ThenInclude(s => s.DayOffs)
                              .Include(m => m.Reservations)
+                             .AsNoTracking()
                              .FirstOrDefaultAsync(m => m.Id == masterId);
 
         if (result is null)

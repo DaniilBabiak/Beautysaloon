@@ -4,6 +4,8 @@ import { ServiceCategory } from 'src/app/shared/models/service-category';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ImageService } from 'src/app/shared/services/image.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ReservationComponent } from '../add-reservation/add-reservation.component';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -18,7 +20,11 @@ export class ServiceComponent implements OnInit {
 
   }
 
-  constructor(private imageService: ImageService, private categoryService: CategoryService, private authService: AuthService) {
+  constructor(
+    private imageService: ImageService,
+    private categoryService: CategoryService,
+    private authService: AuthService,
+    private modalService: NgbModal) {
   }
 
   loadCategories() {
@@ -102,4 +108,9 @@ export class ServiceComponent implements OnInit {
     return { top, left, backgroundImage };
   }
 
+  makeAppointment(category: ServiceCategory) {
+    const modalRef = this.modalService.open(ReservationComponent);
+    modalRef.componentInstance.category = category;
+    modalRef.componentInstance.init();
+  }
 }

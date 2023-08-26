@@ -179,6 +179,7 @@ public static class BuilderExtensions
 
         builder.Services.AddDbContext<BeautySaloonContext>(options =>
         {
+            options.EnableSensitiveDataLogging();
             options.UseSqlServer(connectionString);
         });
     }

@@ -17,33 +17,12 @@ public class ReservationController : CustomerControllerBase
         _reservationService = reservationService;
     }
 
-    [HttpGet("getAvailable/{serviceId}")]
-    public async Task<IActionResult> GetAvailableReservationsForServiceAsync(int serviceId)
-    {
-        var availableReservations = await _reservationService.GetAvailableReseravtionsByServiceId(serviceId);
-
-        var result = new GetAvailableReservationsForServiceResponse
-        {
-            Service = availableReservations.FirstOrDefault()?.Service,
-            AvailableReservations = availableReservations.Select(r => r.DateTime)
-        };
-
-        return Ok(result);
-    }
-
     [HttpPost]
     public async Task<IActionResult> CreateReservationAsync(CreateReservationRequest createReservationRequest)
     {
         var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-        var reservation = new Reservation
-        {
-            ServiceId = createReservationRequest.ServiceId,
-            CustomerId = customerId,
-            DateTime = createReservationRequest.DateTime,
-            MasterId = createReservationRequest.MasterId
-        };
 
-        var result = await _reservationService.CreateReservationAsync(reservation);
+        var result = await _reservationService.CreateReservationAsync(createReservationRequest, customerId);
         return Ok(result);
     }
 }

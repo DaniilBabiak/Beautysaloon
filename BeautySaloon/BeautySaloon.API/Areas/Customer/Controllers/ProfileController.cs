@@ -30,7 +30,7 @@ public class ProfileController : CustomerControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> UpdateProfileAsync(UpdateProfileRequest updateProfileRequest)
     {
         var id = User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.NameIdentifier).Value;
