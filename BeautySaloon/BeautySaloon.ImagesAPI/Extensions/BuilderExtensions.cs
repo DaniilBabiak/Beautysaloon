@@ -95,8 +95,8 @@ public static class BuilderExtensions
             {
                 options.Endpoint = "minio:9000";
             }
-            options.AccessKey = "0TQQsAlu2FmZoGR2Gdd6";
-            options.SecretKey = "oXA1pc73RQFxwyICpxCyTTLxBz0n8OKml0FiAORP";
+            options.AccessKey = "3ICm9ZcFEkyRuSELvCTR";
+            options.SecretKey = "eJAIUGTnpNgmzNmHrfGYVmtPiF6sXfoHQAbyBrjk";
             options.ConfigureClient(client =>
             {
                 client.WithSSL(false);

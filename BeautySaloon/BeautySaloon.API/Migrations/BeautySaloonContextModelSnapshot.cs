@@ -40,7 +40,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BestWorks");
+                    b.ToTable("BestWorks", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Comment", b =>
@@ -68,7 +68,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Customer", b =>
@@ -85,7 +85,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.DayOff", b =>
@@ -106,7 +106,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("DayOff");
+                    b.ToTable("DayOff", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Master", b =>
@@ -123,7 +123,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Masters");
+                    b.ToTable("Masters", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Reservation", b =>
@@ -153,7 +153,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Schedule", b =>
@@ -173,7 +173,7 @@ namespace BeautySaloon.API.Migrations
                         .IsUnique()
                         .HasFilter("[MasterId] IS NOT NULL");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedules", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.Service", b =>
@@ -200,7 +200,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.ServiceCategory", b =>
@@ -229,7 +229,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ServiceCategories");
+                    b.ToTable("ServiceCategories", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.WorkingDay", b =>
@@ -257,7 +257,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("WorkingDays");
+                    b.ToTable("WorkingDays", (string)null);
                 });
 
             modelBuilder.Entity("MasterService", b =>
@@ -272,7 +272,7 @@ namespace BeautySaloon.API.Migrations
 
                     b.HasIndex("ServicesId");
 
-                    b.ToTable("MasterService");
+                    b.ToTable("MasterService", (string)null);
                 });
 
             modelBuilder.Entity("BeautySaloon.API.Entities.BeautySaloonContextEntities.DayOff", b =>

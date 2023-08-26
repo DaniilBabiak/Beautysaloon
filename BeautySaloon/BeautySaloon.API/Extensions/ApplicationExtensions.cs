@@ -12,6 +12,8 @@ public static class ApplicationExtensions
 {
     public static WebApplication ConfigureApplication(this WebApplication app)
     {
+        app.MigrateDatabase();
+
         app.UseSerilogRequestLogging();
         app.UseCors("AllowAllPolicy");
         // Configure the HTTP request pipeline.
@@ -33,8 +35,6 @@ public static class ApplicationExtensions
         app.UseStaticFiles();
 
         app.MapControllers().RequireAuthorization("api.read");
-
-        app.MigrateDatabase();
 
         return app;
     }
@@ -77,7 +77,7 @@ public static class ApplicationExtensions
             {
                 try
                 {
-                    appContext.Database.MigrateAsync();
+                    appContext.Database.Migrate();
                 }
                 catch (Exception ex)
                 {

@@ -176,7 +176,7 @@ public static class BuilderExtensions
     {
         var configuration = builder.Configuration;
         var connectionString = configuration.GetConnectionString("BeautysaloonDbConnection");
-
+        Log.Information(connectionString);
         builder.Services.AddDbContext<BeautySaloonContext>(options =>
         {
             options.EnableSensitiveDataLogging();
