@@ -60,4 +60,10 @@ export class ReservationService {
       })
     };
   }
+  deleteReservation(reservationId: number): Observable<any> {
+    const url = `${this.config.resourceApiURI}/api/reservation/${reservationId}`;
+    const options = this.getOptions();
+
+    return this.http.delete(url, options);
+  }
 }

@@ -1,3 +1,29 @@
 .container-fluid{
   padding: 0;
 }
+.footer-wrapper{
+  font-family: "Comic Sans MS";
+}
+.social-network{
+  color: black;
+  font-size: 25px;
+}
+.social-network-icon{
+  cursor: pointer;
+  font-size: calc(var(--index)*1);
+}
+.icon:hover{
+  color: #00daff;
+}
+
+a{
+  text-decoration: none;
+  color: white;
+}
+a:hover{
+  color: #00daff;
+}
+.text-reset-p{
+  color: #00daff;
+}
+

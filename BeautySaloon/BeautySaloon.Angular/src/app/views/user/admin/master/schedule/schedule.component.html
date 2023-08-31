@@ -1,13 +1,13 @@
-<p>schedule works!</p>
+<div class="schedule-wrapper">
 <div class="form-group">
-    <div *ngFor="let workingDay of schedule?.workingDays">
+    <div *ngFor="let workingDay of schedule?.workingDays" class="timepicker-wrapper">
         {{workingDay.day}}: StartTime:
         <ngb-timepicker [(ngModel)]="workingDay.startTime"></ngb-timepicker>
     </div>
-    <button (click)="showAddWorkingDayForm = true">Add working day</button>
+    <button (click)="showAddWorkingDayForm = true" class="add-working-day_Btn">Add working day</button><hr>
     <div *ngIf="showAddWorkingDayForm">
-        <div>
-            <hr>
+        <div class="day-wrapper">
+
             <div ngbDropdown class="d-inline-block">
                 <button (click)="loadAvailableDays()" type="button" class="btn btn-outline-primary" id="dropdownBasic1"
                     ngbDropdownToggle>
@@ -29,11 +29,13 @@
                 <ngb-timepicker [(ngModel)]="newWorkingDay.endTime"></ngb-timepicker>
             </div>
             <!-- Другие поля для ввода -->
-            <button (click)="addWorkingDay()">Create</button>
+            <button (click)="addWorkingDay()" class="add-working-day_Btn">Create</button>
+          <hr>
 
         </div>
     </div>
 </div>
 <!-- Other inputs for Schedule properties -->
 
-<button (click)="saveSchedule()" type="submit" class="btn btn-primary">Save</button>
+<button (click)="saveSchedule()" type="submit" class="save-btn">Save</button>
+</div>

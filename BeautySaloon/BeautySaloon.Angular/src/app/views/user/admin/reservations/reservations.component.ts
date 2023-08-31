@@ -66,4 +66,13 @@ export class ReservationsComponent implements OnInit {
       this.loadReservations();
     }
   }
+  deleteReservation(reservation: Reservation): void {
+    const confirmation = confirm('Are you sure you want to delete this reservation?');
+    if (confirmation) {
+      this.reservationService.deleteReservation(reservation.id).subscribe(() => {
+        this.reservations = this.reservations.filter(r => r !== reservation);
+        this.loadReservations();
+      });
+    }
+  }
 }

@@ -1,4 +1,16 @@
-<p>Hello {{userName}}!</p>
-<p>Your phone number: {{phoneNumber ? phoneNumber : 'N/A'}}</p>
-<p>Would you like to change your phone number?</p>
+
+<div class="container-fluid profile-wrapper">
+  <div class="content-wrapper">
+    <div class="profile-username">Hello: {{userName}}</div>
+    <div class="profile-mobile-number">Your phone number: <br>
+    {{phoneNumber ? phoneNumber : 'N/A'}}
+    </div>
+    <button class="btn-change-number custom-btn btn-15">Change your phone number</button>
+      <button class="appoinmentsBtn" routerLink="/user/services">Appointment Online</button>
+
+  </div>
+    <img class="profile-img img-mac" [src]="profilePhoto" alt=''>
+    <img class="profile-img img-iphone"  [src]="iphone14" alt=''>
+</div>
+
 

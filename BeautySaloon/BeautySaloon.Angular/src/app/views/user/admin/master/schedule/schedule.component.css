@@ -1,0 +1,31 @@
+.schedule-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0;
+}
+.timepicker-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.day-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+.save-btn{
+  display: flex;
+  width: 5vw;
+  justify-content: center;
+  background-image: linear-gradient(45deg, #4b6bf3, #29f3f3);
+  border-radius: 7px;
+  font-size: calc(var(--index)*.7);
+  min-width: 50px;
+  color: white;
+}
+.add-working-day_Btn{
+  color: #4b6bf3;
+  font-weight: 600;
+}
+

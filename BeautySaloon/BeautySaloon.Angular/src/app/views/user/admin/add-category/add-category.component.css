@@ -24,6 +24,7 @@
   min-height: 84.4vh;
   background: #f1f1f1;
   min-width: 300px;
+  background: linear-gradient(to right, rgb(237 159 237), rgb(176 203 213));
 }
 
 .category-service-container {

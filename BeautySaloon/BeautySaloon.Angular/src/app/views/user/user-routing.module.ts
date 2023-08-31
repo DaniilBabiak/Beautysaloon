@@ -12,7 +12,6 @@ const routes: Routes = [
       { path: 'services', loadChildren: () => import('./service/service.module').then(m => m.ServiceModule) },
       { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule) },
       { path: 'works', loadChildren: () => import('./works/works.module').then(m => m.WorksModule) },
-      { path: 'contacts', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule) },
       { path: 'appointments', loadChildren: () => import('./appointments/appointments.module').then(m => m.AppointmentsModule) },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
       { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },

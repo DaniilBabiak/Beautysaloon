@@ -47,4 +47,10 @@ export class HeaderComponent implements OnInit {
   async signout() {
     await this.authService.signout();
   }
+  scrollToFooter(){
+    const footerElement = document.getElementById('footer');
+    if (footerElement) {
+      footerElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 }

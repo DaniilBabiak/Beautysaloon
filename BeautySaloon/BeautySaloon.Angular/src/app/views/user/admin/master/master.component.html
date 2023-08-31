@@ -1,18 +1,24 @@
-<p>master works!</p>
+<div class="container-fluid master-wrapper">
+  <div class="add-master-container">
 <div *ngFor="let master of masters">
 </div>
-<div *ngIf="masters">
-    <div *ngFor="let master of masters">
-        <button (click)="openMasterDetails(master)">
-            <span>{{master.name}}</span>
-        </button>
+<div *ngIf="masters" class="masters">
+    <div *ngFor="let master of masters" class="master">
+      <div class="name-master-wrapper">
+        <div class="button-container master-name-wrapper">
+          <button class="ellipsis-button custom-btn btn-15" title="{{master.name}}" (click)="openMasterDetails(master)">
+            {{master.name}}
+          </button>
+        </div>
+      </div>
         <div *ngIf="!master.schedule">Schedule is not configured for this master!</div>
-        <button (click)="configureSchedule(master)">Configure schedule</button>
-        <br>
-        <br>
-        <br>
-        
+      <div class="configure-wrapper">
+        <button  class="custom-btn btn-15 schedulebtn" (click)="configureSchedule(master)">Configure schedule</button>
+      </div>
     </div>
 </div>
-
-<button (click)="createMaster()">Add master</button>
+<div class="btn-add-master-wrapper">
+<button class="btn-add-master" (click)="createMaster()">Add master</button>
+</div>
+  </div>
+</div>
