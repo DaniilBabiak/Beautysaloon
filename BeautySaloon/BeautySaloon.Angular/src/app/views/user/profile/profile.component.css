@@ -1,0 +1,214 @@
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  background: #c5c5c5;
+  font-family: "Comic Sans MS";
+}
+
+.profile-img {
+  height: 55vh;
+  width: 95vw;
+  position: relative;
+}
+
+.content-wrapper {
+  position: absolute;
+  height: 32vh;
+  top: 11%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  z-index: 1;
+}
+
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+  7px 7px 20px 0px rgba(0, 0, 0, .1),
+  4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+}
+
+.btn-15 {
+  background: #0096ae;
+  border: none;
+  z-index: 1;
+}
+
+.btn-15:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  background-color: #663dff;
+  border-radius: 5px;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+  7px 7px 20px 0px rgba(0, 0, 0, .1),
+  4px 4px 5px 0px rgba(0, 0, 0, .1);
+  transition: all 0.3s ease;
+}
+
+.btn-15:hover {
+  color: #fff;
+}
+
+.btn-15:hover:after {
+  left: 0;
+  width: 100%;
+}
+
+.btn-15:active {
+  top: 2px;
+}
+
+.btn-change-number {
+  font-size: calc(var(--index) * 1);
+  width: 50%;
+  max-width: 350px;
+  display: flex;
+  align-items: center;
+}
+
+.appoinmentsBtn {
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+  height: 50px;
+  width: 50%;
+  font-size: calc(var(--index) * 1);
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-image: linear-gradient(to right, #e63600 0%, #fae904 51%, #eec302 100%);
+  background-size: 200% auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+  transition: .5s;
+  max-width: 350px;
+}
+.profile-username{
+  font-size: calc(var(--index)*1);
+  font-weight: 700;
+}
+.profile-mobile-number{
+  font-size: calc(var(--index)*1);
+}
+.appoinmentsBtn:hover {
+  background-position: right center;
+  transform: scale(1.1);
+}
+.profile-img-iphone{
+  position: absolute;
+}
+@media (min-width: 1440px) {
+  .profile-img {
+    width: 66vw;
+  }
+
+  .btn-change-number {
+    font-size: calc(var(--index) * .8);
+  }
+
+  .appoinmentsBtn {
+    font-size: calc(var(--index) * .8);
+  }
+}
+@media (min-width: 1024px) {
+  .profile-img {
+    height: 80vh;
+  }
+}
+@media screen and (max-width: 1024px){
+  .btn-change-number{
+    height: 55px;
+  }
+  .appoinmentsBtn{
+    height: 65px;
+    font-size: calc(var(--index)*.82);
+  }
+}
+
+@media (min-width: 768px) {
+  .btn-change-number {
+    width: 37%;
+  }
+
+  .appoinmentsBtn {
+    width: 37%;
+  }
+
+  .profile-img {
+    height: 70vh;
+  }
+
+  .content-wrapper {
+    height: 43vh;
+  }
+}
+@media screen and (min-width: 768px) {
+  .profile-img.img-mac {
+    display: block;
+  }
+
+  .profile-img.img-iphone {
+    display: none;
+  }
+}
+
+/* Для экранов меньше 768px */
+@media screen and (max-width: 767px) {
+  .profile-img.img-mac {
+    display: none;
+  }
+
+  .profile-img.img-iphone {
+    display: block;
+  }
+  .content-wrapper{
+    top: 19%;
+  }
+  .btn-change-number{
+    font-size: calc(var(--index)*.84);
+  }
+  .appoinmentsBtn{
+    font-size: calc(var(--index)*.9);
+  }
+  .img-iphone{
+    width: 65vw;
+  }
+  .content-wrapper{
+    width: 60vw;
+  }
+}
+
+@media screen and (max-width: 425px){
+  .profile-img.img-iphone{
+    width: 80vw;
+  }
+  .content-wrapper{
+    width: 80%;
+  }
+  .btn-change-number{
+    font-size: calc(var(--index)*.83);
+  }
+}
+@media screen and (max-width: 375px){
+  .img-iphone{
+    width: 90vw;
+  }
+}

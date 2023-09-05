@@ -1,5 +1,5 @@
-<p>reservations works!</p>
 
+<div class="reservation-wrapper">
 <table class="table">
   <thead>
     <tr>
@@ -17,11 +17,13 @@
       <td>{{ reservation.dateTime | date:'medium' }}</td>
       <td>{{ reservation.masterName }}</td>
       <td>{{reservation.customerPhoneNumber}}</td>
+      <td><button (click)="deleteReservation(reservation)">Delete</button></td>
     </tr>
   </tbody>
 </table>
+  <div class="pagination-wrapper">
 <div class="items-per-page">
-  <label for="itemsPerPage">Items Per Page:</label>
+  <label for="itemsPerPage">Reservation Per Page:</label>
   <select id="itemsPerPage" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
     <option value="2">2</option>
     <option value="5">5</option>
@@ -32,4 +34,6 @@
   <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
   <span>{{ currentPage }} / {{ totalPages }}</span>
   <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+</div>
+  </div>
 </div>

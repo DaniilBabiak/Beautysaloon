@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import{ faCoffee } from '@fortawesome/free-solid-svg-icons'
+import {faCoffee, faLocationDot} from '@fortawesome/free-solid-svg-icons'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faTwitter} from '@fortawesome/free-brands-svg-icons'
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons'
 import { faTelegram } from '@fortawesome/free-brands-svg-icons'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons'
+import {faMessage} from '@fortawesome/free-solid-svg-icons'
+import{faPhone} from "@fortawesome/free-solid-svg-icons";
+
 
 @Component({
   selector: 'app-footer',
@@ -18,4 +21,7 @@ export class FooterComponent {
   faLinkedIn = faLinkedin;
   faTelegram = faTelegram;
   faFacebook = faFacebook;
+  faLocationDot = faLocationDot;
+  faMessage = faMessage;
+  faPhone = faPhone;
 }

@@ -13,7 +13,9 @@
     border-image-slice: 1;
     min-width: 100px;
   }
-  
+  .master-detail-input{
+    width: 100%;
+  }
   .service-dropzone-container {
     border: 1px solid #ccc;
     padding: 10px;
@@ -21,20 +23,20 @@
     margin: 10px 0;
     font-size: calc(var(--index)*.55);
   }
-  
+
   .main-container {
     display: flex;
     min-height: 84.4vh;
     background: #f1f1f1;
     min-width: 300px;
   }
-  
+
   .category-service-container {
     flex: 2;
     padding: 10px;
     border-right: 2px solid black;
   }
-  
+
   .service-list {
     flex: 2;
     padding: 10px;
@@ -44,6 +46,11 @@
   .category-list{
     display: flex;
     flex-direction: column;
+    height: 100%;
+    justify-content: space-around;
+  }
+  .save{
+    background-image: linear-gradient(45deg, #0076ea, #00f7ff) !important;
   }
   .add-category-name{
     font-size: calc(var(--index)*.85);
@@ -67,6 +74,10 @@
     display: flex;
     margin-bottom: 10px;
   }
+.cancel-wrapper{
+  display: flex;
+  justify-content: end;
+}
   .deleteBtn{
     display: flex;
     width: 5vw;
@@ -75,6 +86,7 @@
     border-radius: 7px;
     font-size: calc(var(--index)*.7);
     min-width: 50px;
+    color: white;
   }
   .addCategoryBtn_wrapper{
     display: flex;
@@ -101,7 +113,7 @@
   .goBackBtn{
     width: 6vw;
     min-width: 100px;
-  
+
     background-image: linear-gradient(45deg, #1f45f3, #07efef);
     height: 5vh;
     border-radius: 7px;
@@ -131,7 +143,17 @@
     border-radius: 7px;
     font-size: calc(var(--index)*.7);
     min-width: 50px;
-  
+  }
+.btn-shedule-wrapper{
+  background-image: linear-gradient(45deg, #4b6bf3, #29f3f3);
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  height: 7%;
+}
+  .btn-wrapper{
+    display: flex;
+    justify-content: space-around;
   }
   .addCategoryBtn:hover{
     background-image: linear-gradient(45deg, #4b6bf3, #29f3f3);
@@ -161,5 +183,16 @@
       font-size: calc(var(--index)*.6);
       font-weight: 800;
     }
+    .main-container{
+      min-height: 55vh;
+    }
+    .deleteBtn{
+      width: 10vw;
+    }
   }
-  
+@media (max-width: 425px) {
+  .deleteBtn{
+    width: 15vw;
+  }
+}
+

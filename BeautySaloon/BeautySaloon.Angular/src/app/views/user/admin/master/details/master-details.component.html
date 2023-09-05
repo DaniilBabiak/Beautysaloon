@@ -2,9 +2,8 @@
     <div class="main-container">
         <div class="category-service-container">
             <div class="category-list">
-                <hr>
                 <h2 class="add-category-name">Master name:
-                    <input [(ngModel)]="master.name" placeholder="Master Name">
+                    <input [(ngModel)]="master.name" placeholder="Master Name" class="master-detail-input">
                 </h2>
                 <!-- <p class="add-category-description">Description:<span>{{ category.description }}</span></p> -->
                 <!-- <img [src]="category.image" alt={{category.imageFileName}} class="category-image"> -->
@@ -21,21 +20,29 @@
                         </div>
                     </div>
                 </div>
+                <div *ngIf="!master.schedule">
+                    Schedule is not configured for this master!
+                </div>
+                <button class="btn-shedule-wrapper" (click)="showSchedule()">Show schedule</button>
+              <div class="btn-wrapper">
+                <div>
+                  <button (click)="saveDungeonMaster()"  class="deleteBtn save"
+                          [ngClass]="{ 'button-close-attempted': isCloseAttempted }">Save</button>
+                </div>
                 <div *ngIf="master.id" class="deleteBtn_wrapper">
                     <button (click)="deleteMaster()" class="deleteBtn"
                         [ngClass]="{ 'button-close-attempted': isCloseAttempted }">Delete</button>
                 </div>
-                <div>
-                    <button (click)="saveDungeonMaster()"
-                        [ngClass]="{ 'button-close-attempted': isCloseAttempted }">Save</button>
-                </div>
-                <div>
-                    <button (click)="closeModal()">Cancel</button>
-                </div>
+
+              </div>
+
             </div>
         </div>
 
         <div class="service-list" [ngStyle]="{ 'display': divDisplayStyle }">
+          <div class="cancel-wrapper">
+            <span (click)="closeModal()">✖</span>
+          </div>
             <h2 class="service-list-wrapper">Services</h2>
             <hr>
             <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"

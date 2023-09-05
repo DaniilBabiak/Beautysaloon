@@ -3,7 +3,7 @@ th[sortable] {
     user-select: none;
     -webkit-user-select: none;
   }
-  
+
 th[sortable].desc:before, th[sortable].asc:before {
     content: '';
     display: block;
@@ -14,8 +14,18 @@ th[sortable].desc:before, th[sortable].asc:before {
     float: left;
     margin-left: -22px;
   }
-  
+
 th[sortable].desc:before {
     transform: rotate(180deg);
     -ms-transform: rotate(180deg);
   }
+.reservation-wrapper{
+  min-height: 84.5vh;
+  display: flex;
+  flex-direction: column;
+}
+.pagination-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
