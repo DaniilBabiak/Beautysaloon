@@ -6,8 +6,8 @@ import { MasterComponent } from './master.component';
 import { MasterDetailsComponent } from './details/master-details.component';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
-import { ScheduleComponent } from './schedule/schedule.component';
 import { NgbTimeStringAdapter } from 'src/app/shared/helpers/ngb-time-string-adapter';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 
 @NgModule({

@@ -2,7 +2,7 @@
 
 public class BestWork
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
     public string ImageBucket { get; set; }
     public string ImageFileName { get; set; }
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Schedule } from '../../../../../shared/models/schedule';
-import { WorkingDay } from 'src/app/shared/models/working-day';
 import { Constants } from 'src/app/shared/models/constants';
+import { MasterModel } from 'src/app/shared/models/master/master-model';
+import { ScheduleModel } from 'src/app/shared/models/schedule/schedule-model';
+import { WorkingDayModel } from 'src/app/shared/models/schedule/working-day-model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MasterService } from 'src/app/shared/services/master.service';
 
@@ -12,54 +13,63 @@ import { MasterService } from 'src/app/shared/services/master.service';
   styleUrls: ['./schedule.component.css']
 })
 export class ScheduleComponent implements OnInit {
-  schedule: Schedule | null = null;
+  scheduleId: number = 0;
+  schedule: ScheduleModel;
   masterId: number = 0;
   availableWorkingDays: string[] | null = null;
   showAddWorkingDayForm = false;
-  newWorkingDay: WorkingDay = {
+  newWorkingDay: WorkingDayModel = {
     day: '',
     endTime: '00:00:00',
-    startTime: '00:00:00',
-    scheduleId: 0,
-    workingDayId: 0
+    startTime: '00:00:00'
   }
 
   constructor(
     public activeModal: NgbActiveModal,
     private auth: AuthService,
     private masterService: MasterService) {
+    this.schedule = {
+      id: 0,
+      masterId: 0,
+      workingDays: []
+    }
   }
 
   ngOnInit(): void {
 
   }
 
-  saveSchedule(): void {
-    console.log(this.schedule);
-    if (this.schedule) {
-      if (this.schedule.id == 0) {
-        this.masterService.createSchedule(this.masterId, this.schedule).subscribe(() => {
-          this.activeModal.close();
-        });
-      }
-      else {
-        this.masterService.updateSchedule(this.schedule).subscribe(() => {
-          this.activeModal.close();
-        });
-      }
-    }
+  // initModal() {
+  //   if (this.scheduleId != 0){
+  //     this.masterService.getSchedule()
+  //   }
+  // }
 
-  }
+  // saveSchedule(): void {
+  //   if (this.schedule) {
+  //     if (this.master) {
+  //       if (this.master.scheduleId == 0 || this.master.scheduleId == null) {
+  //         this.masterService.createSchedule(this.schedule).subscribe(() => {
+  //           this.activeModal.close();
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
+
+  // deleteWorkingDay(workingDay: WorkingDay) {
+  //   if (this.schedule && this.schedule.workingDays) {
+  //     this.schedule.workingDays = this.schedule.workingDays.filter(day => day.workingDayId != workingDay.workingDayId);
+  //   }
+  // }
 
   addWorkingDay() {
-    this.schedule?.workingDays?.push(this.newWorkingDay);
+    this.schedule.workingDays.push(this.newWorkingDay);
     this.showAddWorkingDayForm = false;
     this.newWorkingDay = {
       day: '',
       endTime: '00:00:00',
-      startTime: '00:00:00',
-      scheduleId: 0,
-      workingDayId: 0
+      startTime: '00:00:00'
     }
   }
 
@@ -69,33 +79,29 @@ export class ScheduleComponent implements OnInit {
     console.log(this.availableWorkingDays);
   }
 
-  loadSchedule() {
-    this.auth.loadUser()?.then(() => {
-      this.masterService.getMaster(this.masterId).subscribe(result => {
-        if (result.schedule) {
-          this.schedule = result.schedule;
-        }
-        else {
-          this.schedule = {
-            id: 0,
-            masterId: this.masterId,
-            workingDays: [],
-            dayOffs: [],
-            master: result
-          }
-        }
+  // loadSchedule() {
+  //   this.auth.loadUser()?.then(() => {
+  //     this.masterService.getMaster(this.masterId).subscribe(result => {
+  //       this.master = result;
+  //       if (result.scheduleId != null) {
+  //         // this.schedule = result.schedule;
+  //       }
+  //       else {
+  //         this.schedule = {
+  //           masterId: this.masterId,
+  //           workingDays: [],
+  //         }
+  //       }
 
-        this.newWorkingDay = {
-          day: '',
-          endTime: '00:00:00',
-          startTime: '00:00:00',
-          scheduleId: this.schedule.id,
-          workingDayId: 0
-        }
+  //       this.newWorkingDay = {
+  //         day: '',
+  //         endTime: '00:00:00',
+  //         startTime: '00:00:00',
+  //       }
 
-      });
-    });
-  }
+  //     });
+  //   });
+  // }
 
   selectDay(day: string) {
     this.newWorkingDay.day = day;

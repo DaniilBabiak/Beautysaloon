@@ -1,10 +1,11 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+using BeautySaloon.API.Models.BestWorkModels;
 
 namespace BeautySaloon.API.Services.Interfaces;
 
 public interface IBestWorkService
 {
-    Task<BestWork> CreateBestWorkAsync(BestWork bestWork);
+    Task<BestWorkModel> CreateBestWorkAsync(BestWorkModel bestWork);
     Task DeleteBestWorkAsync(int id);
-    Task<List<BestWork>> GetAllBestWorksAsync();
+    Task<List<BestWorkModel>> GetAllBestWorksAsync();
 }

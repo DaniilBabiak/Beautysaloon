@@ -1,5 +1,6 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Models;
+using BeautySaloon.API.Models.MasterModels;
+using BeautySaloon.API.Models.ScheduleModels;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,32 +15,47 @@ public class MasterController : AdminControllerBase
         _masterService = masterService;
     }
 
-    [HttpGet("schedule/{masterId}")]
-    public async Task<IActionResult> GetScheduleAsync(int masterId)
+    [HttpGet("schedule")]
+    public async Task<IActionResult> GetSchedule([FromQuery]int? masterId, [FromQuery] int? scheduleId)
     {
-        var result = await _masterService.GetScheduleAsync(masterId);
+        if (masterId.HasValue && scheduleId.HasValue)
+        {
+            return BadRequest();
+        }
 
-        return Ok(result);
+        if (masterId.HasValue)
+        {
+            var result = await _masterService.GetScheduleByMasterIdAsync(masterId.Value);
+            return Ok(result);
+        }
+
+        if (scheduleId.HasValue)
+        {
+            var result = await _masterService.GetScheduleAsync(scheduleId.Value);
+            return Ok(result);
+        }
+
+        return BadRequest();
     }
 
-    [HttpPost("schedule/{masterId}")]
-    public async Task<IActionResult> CreateSheduleAsync(int masterId, Schedule schedule)
+    [HttpPost("schedule")]
+    public async Task<IActionResult> CreateSheduleAsync(ScheduleModel createScheduleModel)
     {
-        var result = await _masterService.CreateScheduleAsync(masterId, schedule);
+        var result = await _masterService.CreateScheduleAsync(createScheduleModel);
 
         return Ok(result);
     }
 
     [HttpPut("schedule")]
-    public async Task<IActionResult> UpdateScheduleAsync(Schedule schedule)
+    public async Task<IActionResult> UpdateScheduleAsync(ScheduleModel scheduleModel)
     {
-        var result = await _masterService.UpdateScheduleAsync(schedule);
+        var result = await _masterService.UpdateScheduleAsync(scheduleModel);
 
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateMasterAsync(CreateMasterModel createMasterModel)
+    public async Task<IActionResult> CreateMasterAsync(MasterDetailedModel createMasterModel)
     {
         var result = await _masterService.CreateMasterAsync(createMasterModel);
 
@@ -47,7 +63,7 @@ public class MasterController : AdminControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateMasterAsync(UpdateMasterModel updateMasterModel)
+    public async Task<IActionResult> UpdateMasterAsync(MasterDetailedModel updateMasterModel)
     {
         var result = await _masterService.UpdateMasterAsync(updateMasterModel);
         return Ok(result);

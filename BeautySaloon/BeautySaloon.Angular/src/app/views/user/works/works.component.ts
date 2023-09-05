@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { BestWork } from 'src/app/shared/models/best-work';
+import { BestWorkModel } from 'src/app/shared/models/bestWork/best-work-model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BestWorkService } from 'src/app/shared/services/best-work.service';
 import { ImageService } from 'src/app/shared/services/image.service';
@@ -11,7 +11,7 @@ import { ImageService } from 'src/app/shared/services/image.service';
 })
 export class WorksComponent implements OnInit {
   // Define the number of pages and images per page
-  bestWorks: BestWork[] = [];
+  bestWorks: BestWorkModel[] = [];
   totalPages = 10;
   itemsPerPage = 9;
   // Define the URL of the image you want to repeat

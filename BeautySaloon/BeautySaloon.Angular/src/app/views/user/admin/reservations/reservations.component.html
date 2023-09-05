@@ -4,18 +4,18 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col" sortable="service" (sort)="onSortChange($event)">Service Name</th>
+      <th scope="col" sortable="serviceName" (sort)="onSortChange($event)">Service Name</th>
       <th scope="col" sortable="dateTime" (sort)="onSortChange($event)">Date and Time</th>
-      <th scope="col" sortable="master" (sort)="onSortChange($event)">Master Name</th>
+      <th scope="col" sortable="masterName" (sort)="onSortChange($event)">Master Name</th>
       <th scope="col">Customer phone number</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let reservation of reservations">
       <td>{{reservation.id}}</td>
-      <td>{{ reservation.service?.name }}</td>
+      <td>{{ reservation.serviceName }}</td>
       <td>{{ reservation.dateTime | date:'medium' }}</td>
-      <td>{{ reservation.master?.name }}</td>
+      <td>{{ reservation.masterName }}</td>
       <td>{{reservation.customerPhoneNumber}}</td>
     </tr>
   </tbody>

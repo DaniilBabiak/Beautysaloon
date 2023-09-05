@@ -17,6 +17,14 @@ public class ServiceController : ControllerBase
         _service = service;
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetServiceAsync(int id)
+    {
+        var result = await _service.GetServiceByIdAsync(id);
+
+        return Ok(result);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetServicesAsync([FromQuery] int? categoryId)
     {

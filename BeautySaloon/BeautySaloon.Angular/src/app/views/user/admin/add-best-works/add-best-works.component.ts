@@ -1,5 +1,5 @@
 import {Component, HostListener} from '@angular/core';
-import { BestWork } from 'src/app/shared/models/best-work';
+import { BestWorkModel } from 'src/app/shared/models/bestWork/best-work-model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BestWorkService } from 'src/app/shared/services/best-work.service';
 import { ImageService } from 'src/app/shared/services/image.service';
@@ -12,8 +12,8 @@ import { ImageService } from 'src/app/shared/services/image.service';
 })
 export class AddBestWorksComponent {
   searchText:any;
-  bestWorks: BestWork[] | null = null;
-  newBestWork: BestWork = {
+  bestWorks: BestWorkModel[] | null = null;
+  newBestWork: BestWorkModel = {
     id: null,
     imageBucket: null,
     imageFileName: null,

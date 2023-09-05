@@ -1,18 +1,20 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Models;
+using BeautySaloon.API.Models.MasterModels;
+using BeautySaloon.API.Models.ScheduleModels;
 
 namespace BeautySaloon.API.Services.Interfaces;
 
 public interface IMasterService
 {
     Task AddDayOff(int masterId, DateTime date);
-    Task<Master> CreateMasterAsync(CreateMasterModel master);
-    Task<Schedule> CreateScheduleAsync(int masterId, Schedule schedule);
+    Task<MasterDetailedModel> CreateMasterAsync(MasterDetailedModel master);
+    Task<ScheduleModel> CreateScheduleAsync(ScheduleModel createScheduleModel);
     Task DeleteMasterAsync(int masterId);
-    Task<List<Master>> GetAllMastersAsync();
+    Task<List<MasterModel>> GetAllMastersAsync();
     Task<List<Master>> GetAllMastersByServiceIdAsync(int serviceId);
-    Task<Master> GetMasterAsync(int masterId);
-    Task<Schedule> GetScheduleAsync(int masterId);
-    Task<Master> UpdateMasterAsync(UpdateMasterModel master);
-    Task<Schedule> UpdateScheduleAsync(Schedule schedule);
+    Task<MasterDetailedModel> GetMasterAsync(int masterId);
+    Task<ScheduleModel> GetScheduleAsync(int scheduleId);
+    Task<ScheduleModel> GetScheduleByMasterIdAsync(int masterId);
+    Task<MasterDetailedModel> UpdateMasterAsync(MasterDetailedModel master);
+    Task<ScheduleModel> UpdateScheduleAsync(ScheduleModel scheduleModel);
 }

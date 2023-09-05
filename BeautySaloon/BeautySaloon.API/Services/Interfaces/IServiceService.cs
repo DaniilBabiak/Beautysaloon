@@ -1,14 +1,15 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+using BeautySaloon.API.Models.ServiceModels;
 
 namespace BeautySaloon.API.Services.Interfaces;
 
 public interface IServiceService
 {
-    Task<Service> CreateServiceAsync(Service service);
+    Task<ServiceDetailedModel> CreateServiceAsync(ServiceDetailedModel service);
     Task DeleteServiceAsync(int id);
     Task<List<ServiceCategory>> GetAllServiceCategoriesAsync();
-    Task<List<Service>> GetAllServicesAsync();
-    Task<Service> GetServiceByIdAsync(int id);
-    Task<List<Service>> GetServicesByCategoryIdAsync(int id);
-    Task<Service> UpdateServiceAsync(Service service);
+    Task<List<ServiceModel>> GetAllServicesAsync();
+    Task<ServiceDetailedModel> GetServiceByIdAsync(int id);
+    Task<List<ServiceModel>> GetServicesByCategoryIdAsync(int id);
+    Task<ServiceDetailedModel> UpdateServiceAsync(ServiceDetailedModel service);
 }

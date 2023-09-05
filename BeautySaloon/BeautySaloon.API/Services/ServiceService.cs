@@ -1,7 +1,9 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+﻿using AutoMapper;
+using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
 using BeautySaloon.API.Exceptions.NotFound;
+using BeautySaloon.API.Models.ServiceModels;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,25 +12,28 @@ namespace BeautySaloon.API.Services;
 public class ServiceService : IServiceService
 {
     private readonly BeautySaloonContext _context;
+    private readonly IMapper _mapper;
 
-    public ServiceService(BeautySaloonContext context)
+    public ServiceService(BeautySaloonContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<Service> GetServiceByIdAsync(int id)
+    public async Task<ServiceDetailedModel> GetServiceByIdAsync(int id)
     {
-        var result = await _context.Services
+        var service = await _context.Services
                              .Include(s => s.Category)
                              .Include(s => s.Masters)
                              .Include(s => s.Reservations)
                              .FirstOrDefaultAsync(s => s.Id == id);
 
-        if (result is null)
+        if (service is null)
         {
             throw new ServiceNotFoundException($"Service with id {id} not found.");
         }
 
+        var result = _mapper.Map<ServiceDetailedModel>(service);
         return result;
     }
 
@@ -45,13 +50,15 @@ public class ServiceService : IServiceService
         return result;
     }
 
-    public async Task<List<Service>> GetAllServicesAsync()
+    public async Task<List<ServiceModel>> GetAllServicesAsync()
     {
-        var result = await _context.Services.Include(c => c.Category).AsNoTracking().ToListAsync();
+        var services = await _context.Services.Include(c => c.Category).AsNoTracking().ToListAsync();
+
+        var result = _mapper.Map<List<ServiceModel>>(services);
         return result;
     }
 
-    public async Task<List<Service>> GetServicesByCategoryIdAsync(int id)
+    public async Task<List<ServiceModel>> GetServicesByCategoryIdAsync(int id)
     {
         var category = await _context.ServiceCategories
                                      .AsNoTracking()
@@ -62,7 +69,7 @@ public class ServiceService : IServiceService
             throw new CategoryNotFoundException($"Category with id {id} not found!");
         }
 
-        var result = await _context.Services
+        var services = await _context.Services
                                    .AsNoTracking()
                                    .Include(s => s.Masters)
                                    .Include(s => s.Category)
@@ -70,49 +77,49 @@ public class ServiceService : IServiceService
                                    .Where(s => s.CategoryId == id)
                                    .ToListAsync();
 
+        var result = _mapper.Map<List<ServiceModel>>(services);
+        return result;
+    }
+
+    public async Task<ServiceDetailedModel> CreateServiceAsync(ServiceDetailedModel serviceModel)
+    {
+        var newService = _mapper.Map<Service>(serviceModel);
+
+        if (newService.CategoryId != 0)
+        {
+            var category = await _context.ServiceCategories
+                             .Include(c => c.Services)
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(c => c.Id == newService.CategoryId);
+
+            if (category is null)
+            {
+                throw new CategoryNotFoundException($"Category with id {newService.CategoryId} not found!");
+            }
+        }
+
+        await _context.Services.AddAsync(newService);
+        await _context.SaveChangesAsync();
+
+        var result = _mapper.Map<ServiceDetailedModel>(newService);
 
         return result;
     }
 
-    public async Task<Service> CreateServiceAsync(Service service)
+    public async Task<ServiceDetailedModel> UpdateServiceAsync(ServiceDetailedModel serviceModel)
     {
-        if (service.CategoryId.HasValue)
-        {
-            var category = await _context.ServiceCategories
-                             .Include(c => c.Services)
-                             .FirstOrDefaultAsync(c => c.Id == service.CategoryId);
-
-            if (category is null)
-            {
-                throw new CategoryNotFoundException($"Category with id {service.CategoryId} not found!");
-            }
-            category.Services ??= new List<Service>();
-            category.Services.Add(service);
-
-            await _context.SaveChangesAsync();
-
-            return service;
-        }
-
-        await _context.Services.AddAsync(service);
-        await _context.SaveChangesAsync();
-
-        return service;
-    }
-
-    public async Task<Service> UpdateServiceAsync(Service service)
-    {
-        var existingService = await _context.Services.AsNoTracking().FirstOrDefaultAsync(s => s.Id == service.Id);
+        var existingService = await _context.Services.FirstOrDefaultAsync(s => s.Id == serviceModel.Id);
 
         if (existingService is null)
         {
-            throw new ServiceNotFoundException($"Service with id {service.Id} not found.");
+            throw new ServiceNotFoundException($"Service with id {serviceModel.Id} not found.");
         }
 
-        _context.Services.Update(service);
+        _mapper.Map(existingService, serviceModel);
         await _context.SaveChangesAsync();
 
-        return service;
+        var result = _mapper.Map<ServiceDetailedModel>(existingService);
+        return result;
     }
 
     public async Task DeleteServiceAsync(int id)

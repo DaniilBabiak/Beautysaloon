@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import { AuthService } from "./auth.service";
 import { ConfigService } from "./config.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Service } from "../models/service";
+import { ServiceModel } from '../models/service/service-model';
+import { ServiceDetailedModel } from '../models/service/service-detailed-model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ServiceService {
   constructor(private auth: AuthService, private config: ConfigService, private http: HttpClient) {
   }
 
-  getServices(categoryId: number | null = null): Observable<Service[]> {
+  getServices(categoryId: number | null = null): Observable<ServiceModel[]> {
     var url = this.config.resourceApiURI;
 
     if (categoryId) {
@@ -24,24 +25,31 @@ export class ServiceService {
 
     var options = this.getOptions();
 
-    return this.http.get<Service[]>(url, options);
-
+    return this.http.get<ServiceModel[]>(url, options);
   }
 
-  createService(service: Service): Observable<Service> {
+  getService(serviceId: number):Promise<ServiceDetailedModel | undefined>{
+    const url = `${this.config.resourceApiURI}/${serviceId}`;
+
+    var options = this.getOptions();
+
+    return this.http.get<ServiceDetailedModel>(url, options).toPromise();
+  }
+
+  createService(service: ServiceModel): Observable<ServiceModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.post<Service>(`${url}/api/admin/Service`, service, options);
+    return this.http.post<ServiceModel>(`${url}/api/admin/Service`, service, options);
   }
 
-  updateService(service: Service): Observable<Service> {
+  updateService(service: ServiceModel): Observable<ServiceModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.put<Service>(`${url}/api/admin/Service`, service, options);
+    return this.http.put<ServiceModel>(`${url}/api/admin/Service`, service, options);
   }
 
   deleteService(id: number): Observable<any> {

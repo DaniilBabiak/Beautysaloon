@@ -1,19 +1,19 @@
 <div class="services-wrapper">
   <div class="column">
     <ng-container *ngFor="let category of categories.slice(0, categories.length / 2); let i = index">
-      <section class="sgroup" [ngStyle]="getSectionStyles(i, category.image ?? '')">
+      <section class="sgroup" [ngStyle]="getSectionStyles(i, category ?? '') | async">
         <div class="close-sgroup">&times;</div>
         <div class="title-box">{{category.name}}</div>
         <div class="info-box">
           <div class="info-col-1 img-padding">
             <div class="info-cal-1-wrapper">
-            <img [src]="category.image" class="info-col-1-img_settings" alt="" />
+              <img [src]="loadImageAsync(category) | async" class="info-col-1-img_settings" alt="" />
             </div>
           </div>
           <div class="info-col-2">
             <div class="service-info">
-              <div class="services-text">{{category.description}}</div>
-              <div *ngFor="let service of category.services" class="services-prices">
+              <div class="services-text">{{category.description}} </div>
+              <div *ngFor="let service of loadServicesAsync(category.id) | async" class="services-prices">
                 <div class="services-prices-wrapper">
                   <div class="services-name">{{service.name}}</div>
                   <div class="services-price">{{service.price}}</div>
@@ -28,30 +28,30 @@
       </section>
     </ng-container>
   </div>
-  <div class="column" >
+  <div class="column">
     <ng-container *ngFor="let category of categories.slice(categories.length / 2); let i = index">
-      <section class="sgroup" [ngStyle]="getSectionStyles(i + categories.length / 2, category.image ?? '')">
+      <section class="sgroup" [ngStyle]="getSectionStyles(i + categories.length / 2, category ?? '') | async">
         <div class="close-sgroup">&times;</div>
         <div class="title-box">{{category.name}}</div>
         <div class="info-box">
           <div class="info-col-1 ">
             <div class="info-cal-1-wrapper">
-            <img [src]="category.image" class="info-col-1-img_settings" alt="" />
+              <img [src]="loadImageAsync(category) | async" class="info-col-1-img_settings" alt="" />
             </div>
           </div>
           <div class="info-col-2">
             <div class="service-info">
               <div class="services-text">{{category.description}}</div>
               <div class="all-service-wrapper">
-              <div *ngFor="let service of category.services" class="services-prices">
-                <div class="services-prices-wrapper">
-                  <div class="services-name">{{service.name}} <span></span></div>
-                  <div class="services-price">{{service.price}}</div>
+                <div *ngFor="let service of loadServicesAsync(category.id)|async" class="services-prices">
+                  <div class="services-prices-wrapper">
+                    <div class="services-name">{{service.name}} <span></span></div>
+                    <div class="services-price">{{service.price}}</div>
+                  </div>
                 </div>
               </div>
-              </div>
               <div class="service-btn-makeappoitment">
-                <button class="appoinmentsBtn"  (click)="makeAppointment(category)">Appointment Online</button>
+                <button class="appoinmentsBtn" (click)="makeAppointment(category)">Appointment Online</button>
               </div>
             </div>
           </div>

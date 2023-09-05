@@ -1,5 +1,6 @@
 ﻿using BeautySaloon.API.Areas.Admin.Controllers;
 using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+using BeautySaloon.API.Models.ServiceModels;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,17 +19,17 @@ public class ServiceController : AdminControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateServiceAsync([FromBody] Service service)
+    public async Task<IActionResult> CreateServiceAsync([FromBody] ServiceDetailedModel serviceModel)
     {
-        var result = await _service.CreateServiceAsync(service);
+        var result = await _service.CreateServiceAsync(serviceModel);
 
         return Ok(result);
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateServiceAsync([FromBody] Service service)
+    public async Task<IActionResult> UpdateServiceAsync([FromBody] ServiceDetailedModel serviceModel)
     {
-        var result = await _service.UpdateServiceAsync(service);
+        var result = await _service.UpdateServiceAsync(serviceModel);
 
         return Ok(result);
     }

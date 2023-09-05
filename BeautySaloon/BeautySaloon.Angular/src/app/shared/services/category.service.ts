@@ -1,9 +1,9 @@
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { ServiceCategory } from '../models/service-category';
 import { ConfigService } from './config.service';
 import { Observable } from 'rxjs';
+import { CategoryModel } from '../models/category/category-model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,48 +12,29 @@ export class CategoryService {
   constructor(private auth: AuthService, private config: ConfigService, private http: HttpClient) {
   }
 
-  getCategories(): Observable<ServiceCategory[]> {
+  getCategories(): Observable<CategoryModel[]> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.get<ServiceCategory[]>(url + '/api/ServiceCategory', options);
+    return this.http.get<CategoryModel[]>(url + '/api/ServiceCategory', options);
 
   }
 
-  createCategory(serviceCategory: ServiceCategory): Observable<ServiceCategory> {
-    const categoryWithoutImage: ServiceCategory = {
-      id: serviceCategory.id,
-      name: serviceCategory.name,
-      description: serviceCategory.description,
-      imageBucket: serviceCategory.imageBucket,
-      imageFileName: serviceCategory.imageFileName,
-      services: serviceCategory.services,
-      image: null // Указываем, что image равен null
-    };
-
+  createCategory(serviceCategory: CategoryModel): Observable<CategoryModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.post<ServiceCategory>(`${url}/api/admin/ServiceCategory`, categoryWithoutImage, options);
+    return this.http.post<CategoryModel>(`${url}/api/admin/ServiceCategory`, serviceCategory, options);
   }
 
-  updateCategory(serviceCategory: ServiceCategory): Observable<ServiceCategory>{
-    const categoryWithoutImage: ServiceCategory = {
-      id: serviceCategory.id,
-      name: serviceCategory.name,
-      description: serviceCategory.description,
-      imageBucket: serviceCategory.imageBucket,
-      imageFileName: serviceCategory.imageFileName,
-      services: serviceCategory.services,
-      image: null // Указываем, что image равен null
-    };
+  updateCategory(serviceCategory: CategoryModel): Observable<CategoryModel>{
     var url = this.config.resourceApiURI;
     
     var options = this.getOptions();
 
-    return this.http.put<ServiceCategory>(`${url}/api/admin/ServiceCategory`, categoryWithoutImage, options)
+    return this.http.put<CategoryModel>(`${url}/api/admin/ServiceCategory`, serviceCategory, options)
   }
 
   deleteCategory(id: number): Observable<any> {

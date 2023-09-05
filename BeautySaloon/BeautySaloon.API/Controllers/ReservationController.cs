@@ -1,4 +1,4 @@
-﻿using BeautySaloon.API.Models;
+﻿using BeautySaloon.API.Models.ReservationModels;
 using BeautySaloon.API.Services;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -17,26 +17,17 @@ public class ReservationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateReservationAnonymousAsync(CreateAnonymousReservationRequest createAnonymousReservationRequest)
+    public async Task<IActionResult> CreateReservationAnonymousAsync(ReservationModel reservationModel)
     {
-        var result = await _reservationService.CreateAnonymousReservationAsync(createAnonymousReservationRequest);
+        var result = await _reservationService.CreateReservationAsync(reservationModel);
 
         return Ok(result);
     }
 
-    [HttpGet("getAvailable/{serviceId}")]
-    public async Task<IActionResult> GetAvailableReservationsForServiceAsync(int serviceId)
+    [HttpGet("getAvailable")]
+    public async Task<IActionResult> GetAvailableReservationsAsync([FromQuery]int serviceId, [FromQuery] int masterId)
     {
-        var availableReservations = await _reservationService.GetAvailableReseravtionsByServiceId(serviceId);
-
-        var result = new List<GetAvailableReservationsForServiceResponse>();
-
-        result.AddRange(availableReservations.OrderBy(ar => ar.DateTime).Select(ar => new GetAvailableReservationsForServiceResponse
-        {
-            AvailableTime = ar.DateTime,
-            Master = ar.Master,
-            Service = ar.Service
-        }));
+        var result = await _reservationService.GetAvailableReseravtionsAsync(serviceId, masterId);
 
         return Ok(result);
     }

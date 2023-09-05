@@ -25,9 +25,9 @@
     </div>
     <div *ngIf="availableReservations">
         Available masters:
-        <button *ngFor="let master of availableMasters" (click)="saveSelectedMaster(master)">
-            {{master.name}}
-        </button>
+        <!-- <button *ngFor="let master of availableMasters" (click)="saveSelectedMaster(master)"> -->
+            <!-- {{master.name}}
+        </button> -->
         <br>
         <div *ngIf="selectedMaster">
             Available days:
@@ -35,9 +35,9 @@
                 {{ day | date:'mediumDate' }}
             </button>
             <div *ngIf="selectedDay">
-                <div *ngFor="let slot of getSlots()">
+                <!-- <div *ngFor="let slot of getSlots()">
                     <button (click)="selectTime(slot)"> {{ slot | date:'shortTime' }}</button>
-                </div>
+                </div> -->
             </div>
         </div>
 

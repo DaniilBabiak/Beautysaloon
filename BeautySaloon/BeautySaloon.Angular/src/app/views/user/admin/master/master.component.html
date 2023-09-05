@@ -6,7 +6,7 @@
         <button (click)="openMasterDetails(master)">
             <span>{{master.name}}</span>
         </button>
-        <div *ngIf="!master.schedule">Schedule is not configured for this master!</div>
+        <div *ngIf="!master.scheduleId">Schedule is not configured for this master!</div>
         <button (click)="configureSchedule(master)">Configure schedule</button>
         <br>
         <br>

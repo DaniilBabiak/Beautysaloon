@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ServiceCategory } from 'src/app/shared/models/service-category';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ImageService } from 'src/app/shared/services/image.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationComponent } from '../add-reservation/add-reservation.component';
+import { CategoryModel } from 'src/app/shared/models/category/category-model';
+import { ServiceService } from '../../../shared/services/service.service';
+import { ServiceModel } from 'src/app/shared/models/service/service-model';
+import { ServiceDetailedModel } from 'src/app/shared/models/service/service-detailed-model';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css']
 })
 export class ServiceComponent implements OnInit {
-  categories: ServiceCategory[] = [];
+  categories: CategoryModel[] = [];
   ngOnInit() {
     this.authService.loadUser()?.then(() => {
       this.loadCategories();
@@ -23,6 +26,7 @@ export class ServiceComponent implements OnInit {
   constructor(
     private imageService: ImageService,
     private categoryService: CategoryService,
+    private serviceService: ServiceService,
     private authService: AuthService,
     private modalService: NgbModal) {
   }
@@ -30,22 +34,18 @@ export class ServiceComponent implements OnInit {
   loadCategories() {
     this.categoryService.getCategories().subscribe(result => {
       this.categories = result;
-      this.loadImages().then(() => {
-        this.initButtons();
-      });
+      this.initButtons();
     });
   }
 
-  async loadImages() {
-    for (const element of this.categories) {
-      if (element.imageBucket && element.imageFileName) {
-        const data = await this.imageService.getImage(element.imageBucket, element.imageFileName);
-        if (data) {
-          console.log("loaded image");
-          element.image = data;
-        }
-      }
-    }
+  async loadImageAsync(category: CategoryModel) {
+    return this.imageService.getImage(category.imageBucket, category.imageFileName);
+  }
+
+  async loadServicesAsync(categoryId: number) {
+    var service = await this.serviceService.getServices(categoryId).toPromise();
+
+    return service as ServiceModel[];
   }
 
   initButtons() {
@@ -96,7 +96,8 @@ export class ServiceComponent implements OnInit {
     Boxlayout.init();
   }
 
-  getSectionStyles(index: number, image: string): { [key: string]: string } {
+  async getSectionStyles(index: number, category: CategoryModel): Promise<{ [key: string]: string; }> {
+    var image = await this.loadImageAsync(category);
     const totalColumns = 2; // Number of columns
     const categoriesPerRow = Math.ceil(this.categories.length / totalColumns);
     const row = Math.floor(index / categoriesPerRow);
@@ -108,7 +109,7 @@ export class ServiceComponent implements OnInit {
     return { top, left, backgroundImage };
   }
 
-  makeAppointment(category: ServiceCategory) {
+  makeAppointment(category: CategoryModel) {
     const modalRef = this.modalService.open(ReservationComponent);
     modalRef.componentInstance.category = category;
     modalRef.componentInstance.init();

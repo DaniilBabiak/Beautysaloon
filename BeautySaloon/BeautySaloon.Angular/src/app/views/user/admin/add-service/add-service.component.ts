@@ -1,14 +1,15 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { ServiceCategory } from '../../../../shared/models/service-category';
 import { CategoryService } from '../../../../shared/services/category.service';
 import { ImageService } from '../../../../shared/services/image.service';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { Service } from 'src/app/shared/models/service';
 import { ServiceService } from '../../../../shared/services/service.service';
 import { NgbTimeStringAdapter } from '../../../../shared/helpers/ngb-time-string-adapter'
 import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { CategoryModel } from 'src/app/shared/models/category/category-model';
+import { ServiceModel } from 'src/app/shared/models/service/service-model';
+import { ServiceDetailedModel } from 'src/app/shared/models/service/service-detailed-model';
 
 @Component({
   selector: 'app-add-service',
@@ -18,17 +19,16 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 export class AddServiceComponent implements OnInit {
   isFieldsValid: any = false;
   isTimeValid = false;
-  services: Service[] | null = null;
-  serviceCategories: ServiceCategory[] | null = null;
-  newService: Service = {
-    id: null,
-    name: null,
+  services: ServiceDetailedModel[] | null = null;
+  categories: CategoryModel[] | null = null;
+  newService: ServiceDetailedModel = {
+    id: 0,
+    name: "",
     duration: "00:00:00",
-    category: null,
-    reservations: null,
-    price: null,
-    categoryId: null,
-    masters: null
+    price: 0,
+    categoryId: 0,
+    masterIds: [],
+    reservationIds: []
   };
   showAddServiceForm = false;
 
@@ -56,40 +56,31 @@ export class AddServiceComponent implements OnInit {
 
   loadCategories() {
     this.categoryService.getCategories().subscribe((result) => {
-      this.serviceCategories = result;
-      this.loadImages();
+      this.categories = result;
     });
   }
 
-  loadImages() {
-    this.serviceCategories?.forEach((element) => {
-      if (element.imageBucket && element.imageFileName) {
-        this.imageService
-          .getImage(element.imageBucket, element.imageFileName)
-          .then((data) => {
-            element.image = data;
-          });
-      }
-    });
+  async loadImageAsync(category: CategoryModel) {
+    return this.imageService.getImage(category.imageBucket, category.imageFileName);
   }
-  selectCategory(category: ServiceCategory) {
+
+  selectCategory(category: CategoryModel) {
     this.newService.categoryId = category.id;
-    this.newService.category = category;
   }
-  saveService() {
-    this.service.createService(this.newService).subscribe(result => {
-      this.newService = {
-        id: null,
-        name: null,
-        duration: "00:00:00",
-        category: null,
-        reservations: null,
-        price: null,
-        categoryId: null,
-        masters: null
-      }
-    })
-  }
+  // saveService() {
+  //   this.service.createService(this.newService).subscribe(result => {
+  //     this.newService = {
+  //       id: null,
+  //       name: null,
+  //       duration: "00:00:00",
+  //       category: null,
+  //       reservations: null,
+  //       price: null,
+  //       categoryId: null,
+  //       masters: null
+  //     }
+  //   })
+  // }
 
   checkFieldsValidity() {
     this.isFieldsValid =

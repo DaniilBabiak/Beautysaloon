@@ -1,8 +1,7 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Helpers;
-using BeautySaloon.API.Models;
+using BeautySaloon.API.Models.ReservationModels;
 using BeautySaloon.API.Services.Interfaces;
-using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +16,6 @@ public class ReservationController : AdminControllerBase
     }
 
     [HttpGet("getAll")]
-    [Authorize("admin")]
     public async Task<IActionResult> GetAllReservationsAsync([FromQuery] int pageNumber = 1,
                                                              [FromQuery] int pageSize = 10,
                                                              [FromQuery] string sortBy = "DateTime")
@@ -30,10 +28,10 @@ public class ReservationController : AdminControllerBase
             sortBy = sortBy[1..]; // Remove the '-' prefix
         }
 
-        Func<Reservation, IComparable> sortingKeySelector = sortBy switch
+        Func<ReservationModel, IComparable> sortingKeySelector = sortBy switch
         {
-            "Master" => reservation => reservation.Master?.Name,
-            "Service" => reservation => reservation.Service?.Name,
+            "Master" => reservation => reservation.MasterName,
+            "Service" => reservation => reservation.ServiceName,
             _ => reservation => reservation.DateTime
         };
 
@@ -54,7 +52,6 @@ public class ReservationController : AdminControllerBase
     }
 
     [HttpGet("getAll/{serviceId}")]
-    [Authorize("admin")]
     public async Task<IActionResult> GetAllReservationsForServiceAsync(int serviceId)
     {
         var result = await _reservationService.GetReservationsByServiceId(serviceId);

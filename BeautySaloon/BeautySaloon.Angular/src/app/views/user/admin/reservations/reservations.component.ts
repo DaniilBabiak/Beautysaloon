@@ -1,8 +1,8 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Reservation } from '../../../../shared/models/resrvation/reservation';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { ReservationService } from 'src/app/shared/services/reservation.service';
 import { NgbdSortableHeader, SortEvent } from 'src/app/shared/classes/ngbdSortableHeader';
+import { ReservationModel } from 'src/app/shared/models/resrvation/reservation-model';
 
 @Component({
   selector: 'app-reservations',
@@ -10,13 +10,13 @@ import { NgbdSortableHeader, SortEvent } from 'src/app/shared/classes/ngbdSortab
   styleUrls: ['./reservations.component.css']
 })
 export class ReservationsComponent implements OnInit {
-  reservations: Reservation[] = [];
+  reservations: ReservationModel[] = [];
   sortBy: string = 'DateTime';
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 1;
 
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader<Reservation>> | null = null;
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader<ReservationModel>> | null = null;
 
   constructor(private auth: AuthService, private reservationService: ReservationService) {
 
@@ -46,7 +46,7 @@ export class ReservationsComponent implements OnInit {
     this.loadReservations();
   }
 
-  onSortChange(event: SortEvent<Reservation>) {
+  onSortChange(event: SortEvent<ReservationModel>) {
     if (this.headers) {
       this.headers.forEach(header => {
         if (header.sortable !== event.column) {

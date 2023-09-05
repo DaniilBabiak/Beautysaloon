@@ -11,20 +11,16 @@
                 <div class="service-dropzone-container">
                     <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"
                         (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropAddService($event)">
-                        <div *ngIf="master.services == null || master.services?.length == 0" class="dropzone">
+                        <div *ngIf="master && master.serviceIds.length == 0" class="dropzone">
                             Put services here
                         </div>
-                        <div *ngFor="let service of master.services" class="service-draggable" [draggable]="true"
+                        <div *ngFor="let service of getAssignedServices()" class="service-draggable" [draggable]="true"
                             (dragstart)="onDragStart($event, service)">
                             <h3 class="service-name">Service name:<span>{{ service.name }}</span></h3>
                             <p class="service-price">Price:<span>{{ service.price }}</span></p>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="!master.schedule">
-                    Schedule is not configured for this master!
-                </div>
-                <button (click)="showSchedule()">Show schedule</button>
                 <div *ngIf="master.id" class="deleteBtn_wrapper">
                     <button (click)="deleteMaster()" class="deleteBtn"
                         [ngClass]="{ 'button-close-attempted': isCloseAttempted }">Delete</button>
@@ -44,10 +40,10 @@
             <hr>
             <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"
                 (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropRemoveService($event)">
-                <div *ngIf="unAssignedServices?.length == 0">
+                <div *ngIf="master && master.serviceIds.length == services.length">
                     Put services here to unassign master
                 </div>
-                <div *ngFor="let service of unAssignedServices" class="service-draggable" [draggable]="true"
+                <div *ngFor="let service of getUnAssignedServices()" class="service-draggable" [draggable]="true"
                     (dragstart)="onDragStart($event, service)">
                     <h3 class="service-name">Service name:<span>{{ service.name }}</span></h3>
                     <p class="service-price">Price<span>{{ service.price }}</span></p>
