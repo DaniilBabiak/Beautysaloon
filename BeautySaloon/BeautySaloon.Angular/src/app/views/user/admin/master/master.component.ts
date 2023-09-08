@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Master } from 'src/app/shared/models/master';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { MasterService } from 'src/app/shared/services/master.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterDetailsComponent } from './details/master-details.component';
+import { MasterModel } from 'src/app/shared/models/master/master-model';
+import { MasterDetailedModel } from 'src/app/shared/models/master/master-detailed-model';
 import { ScheduleComponent } from './schedule/schedule.component';
 
 @Component({
@@ -12,7 +13,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
   styleUrls: ['./master.component.css']
 })
 export class MasterComponent implements OnInit {
-  masters: Master[] | null = null;
+  masters: MasterModel[] | null = null;
 
   constructor(private auth: AuthService, private masterService: MasterService, private modalService: NgbModal) { }
   ngOnInit(): void {
@@ -23,17 +24,17 @@ export class MasterComponent implements OnInit {
     this.auth.loadUser()?.then(() => {
       this.masterService.getAllMasters().subscribe(result => {
         this.masters = result;
+        console.log(result);
       })
     });
   }
 
-  openMasterDetails(master: Master) {
+  openMasterDetails(master: MasterModel) {
     const modalRef = this.modalService.open(MasterDetailsComponent, { backdrop: 'static' });
     modalRef.componentInstance.masterId = master.id;
-    modalRef.componentInstance.loadMaster();
+    modalRef.componentInstance.initModal();
 
     modalRef.closed.subscribe(result => {
-      console.log(result);
       this.loadMasters();
     })
   }
@@ -41,21 +42,22 @@ export class MasterComponent implements OnInit {
   createMaster() {
     const modalRef = this.modalService.open(MasterDetailsComponent, { backdrop: 'static' });
     modalRef.componentInstance.masterId = 0;
-    modalRef.componentInstance.loadMaster();
+    modalRef.componentInstance.initModal();
 
     modalRef.closed.subscribe(result => {
-      console.log(result);
       this.loadMasters();
     })
   }
 
-  configureSchedule(master: Master) {
-    const modalRef = this.modalService.open(ScheduleComponent, { backdrop: 'static' });
-    modalRef.componentInstance.masterId = master.id;
-    modalRef.componentInstance.loadSchedule();
-    modalRef.closed.subscribe(() => {
-      this.loadMasters();
-    });
+  configureSchedule(master: MasterModel) {
+    if (master.scheduleId == null || master.scheduleId == 0){
+      const modalRef = this.modalService.open(ScheduleComponent, { backdrop: 'static' });
+      modalRef.componentInstance.masterId = master.id;
+      modalRef.componentInstance.loadSchedule();
+      modalRef.closed.subscribe(() => {
+        this.loadMasters();
+      });
+    }
   }
 
 }

@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Service } from '../models/service';
 import { AuthService } from './auth.service';
 import { ConfigService } from './config.service';
-import { Master } from '../models/master';
-import { Schedule } from '../models/schedule';
+import { MasterDetailedModel } from '../models/master/master-detailed-model';
+import { MasterModel } from '../models/master/master-model';
+import { ScheduleModel } from '../models/schedule/schedule-model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,72 +15,69 @@ export class MasterService {
   constructor(private auth: AuthService, private config: ConfigService, private http: HttpClient) {
   }
 
-  getAllMasters(): Observable<Master[]> {
+  getAllMasters(): Observable<MasterModel[]> {
     var url = this.config.resourceApiURI;
-    url = url + '/api/customer/master'
+    url = url + '/api/master'
     var options = this.getOptions();
 
-    return this.http.get<Master[]>(url, options);
+    return this.http.get<MasterModel[]>(url, options);
 
   }
 
-  getMaster(id: number): Observable<Master> {
+  getMaster(id: number): Observable<MasterDetailedModel> {
     var url = this.config.resourceApiURI;
-    url = url + `/api/customer/master/${id}`
+    url = url + `/api/master/${id}`
     var options = this.getOptions();
 
-    return this.http.get<Master>(url, options);
+    return this.http.get<MasterDetailedModel>(url, options);
   }
 
-  getSchedule(masterId: number): Observable<Schedule> {
+  getScheduleByMasterId(masterId: number): Observable<ScheduleModel> {
     var url = this.config.resourceApiURI;
-    url = url + `/api/admin/master/schedule/${masterId}`
+    url = url + `/api/admin/master/schedule?masterId=${masterId}`
     var options = this.getOptions();
 
-    return this.http.get<Schedule>(url, options);
+    return this.http.get<ScheduleModel>(url, options);
   }
 
-  createSchedule(masterId: number, schedule: Schedule): Observable<Schedule> {
+  getSchedule(scheduleId: number): Observable<ScheduleModel> {
     var url = this.config.resourceApiURI;
-    url = url + `/api/admin/master/schedule/${masterId}`
+    url = url + `/api/admin/master/schedule?scheduleId=${scheduleId}`
     var options = this.getOptions();
 
-    return this.http.post<Schedule>(url, schedule, options);
+    return this.http.get<ScheduleModel>(url, options);
   }
 
-  updateSchedule(schedule: Schedule): Observable<Schedule> {
+  createSchedule(schedule: ScheduleModel): Observable<ScheduleModel> {
+    var url = this.config.resourceApiURI;
+    url = url + `/api/admin/master/schedule/`
+    var options = this.getOptions();
+
+    return this.http.post<ScheduleModel>(url, schedule, options);
+  }
+
+  updateSchedule(schedule: ScheduleModel): Observable<ScheduleModel> {
     var url = this.config.resourceApiURI;
     url = url + `/api/admin/master/schedule`
     var options = this.getOptions();
 
-    return this.http.put<Schedule>(url, schedule, options);
+    return this.http.put<ScheduleModel>(url, schedule, options);
   }
 
-  createMaster(master: Master): Observable<Master> {
+  createMaster(master: MasterDetailedModel): Observable<MasterDetailedModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    var body = {
-      name: master.name,
-      serviceIds: master.services?.map(service => service.id)
-    };
-
-    return this.http.post<Master>(`${url}/api/admin/Master`, body, options);
+    return this.http.post<MasterDetailedModel>(`${url}/api/admin/Master`, master, options);
   }
 
-  updateMaster(master: Master): Observable<Master> {
+  updateMaster(master: MasterDetailedModel): Observable<MasterDetailedModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    var body = {
-      id: master.id,
-      name: master.name,
-      serviceIds: master.services?.map(service => service.id)
-    };
-
-    return this.http.put<Master>(`${url}/api/admin/Master`, body, options);
+    return this.http.put<MasterDetailedModel>(`${url}/api/admin/Master`, master, options);
   }
 
   deleteMaster(id: number): Observable<any> {

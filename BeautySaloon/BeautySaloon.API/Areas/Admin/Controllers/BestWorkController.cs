@@ -1,7 +1,7 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+﻿using AutoMapper;
+using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+using BeautySaloon.API.Models.BestWorkModels;
 using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Areas.Admin.Controllers;
@@ -9,16 +9,17 @@ namespace BeautySaloon.API.Areas.Admin.Controllers;
 public class BestWorkController : AdminControllerBase
 {
     private readonly IBestWorkService _bestWorkService;
-
-    public BestWorkController(IBestWorkService bestWorkService)
+    private readonly IMapper _mapper;
+    public BestWorkController(IBestWorkService bestWorkService, IMapper mapper)
     {
         _bestWorkService = bestWorkService;
+        _mapper = mapper;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateBestWorkAsync([FromBody] BestWork bestWork)
+    public async Task<IActionResult> CreateBestWorkAsync([FromBody] BestWorkModel bestWorkModel)
     {
-        var result = await _bestWorkService.CreateBestWorkAsync(bestWork);
+        var result = await _bestWorkService.CreateBestWorkAsync(bestWorkModel);
 
         return Ok(result);
     }

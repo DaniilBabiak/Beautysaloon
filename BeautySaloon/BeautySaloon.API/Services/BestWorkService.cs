@@ -1,5 +1,7 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+﻿using AutoMapper;
+using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
+using BeautySaloon.API.Models.BestWorkModels;
 using BeautySaloon.API.RabbitMq;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,24 +11,31 @@ namespace BeautySaloon.API.Services;
 public class BestWorkService : IBestWorkService
 {
     private readonly BeautySaloonContext _context;
-    public BestWorkService(BeautySaloonContext context)
+    private readonly IMapper _mapper;
+    public BestWorkService(BeautySaloonContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<List<BestWork>> GetAllBestWorksAsync()
+    public async Task<List<BestWorkModel>> GetAllBestWorksAsync()
     {
-        var result = await _context.BestWorks.AsNoTracking().ToListAsync();
+        var bestWorks = await _context.BestWorks.AsNoTracking().ToListAsync();
+
+        var result = _mapper.Map<List<BestWorkModel>>(bestWorks);
 
         return result;
     }
 
-    public async Task<BestWork> CreateBestWorkAsync(BestWork bestWork)
+    public async Task<BestWorkModel> CreateBestWorkAsync(BestWorkModel bestWorkModel)
     {
-        await _context.BestWorks.AddAsync(bestWork);
+        var newBestWork = _mapper.Map<BestWork>(bestWorkModel);
+        await _context.BestWorks.AddAsync(newBestWork);
         await _context.SaveChangesAsync();
 
-        return bestWork;
+        var result = _mapper.Map<BestWorkModel>(newBestWork);
+
+        return result;
     }
 
     public async Task DeleteBestWorkAsync(int id)

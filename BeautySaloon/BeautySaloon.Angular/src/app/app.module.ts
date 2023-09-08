@@ -10,7 +10,7 @@ import { ConfigService } from "./shared/services/config.service";
 import { NgbTimeStringAdapter } from './shared/helpers/ngb-time-string-adapter';
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

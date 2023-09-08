@@ -14,6 +14,8 @@ using System.Text.Json.Serialization;
 using FluentValidation.AspNetCore;
 using BeautySaloon.API.Validators;
 using FluentValidation;
+using BeautySaloon.API.MapperProfiles;
+using BeautySaloon.API.MapperProfiles.MasterProfiles.Resolvers;
 
 namespace BeautySaloon.API.Extensions;
 
@@ -51,6 +53,20 @@ public static class BuilderExtensions
         builder.ConfigureCors();
 
         builder.ConfigureHealthChecks();
+
+        builder.Services.AddTransient<MasterServicesResolver>();
+        builder.Services.AddTransient<MasterReservationsResolver>();
+
+        builder.Services.AddAutoMapper(options =>
+        {
+            options.AddMaps(typeof(Program));
+            options.AddProfiles(MasterAutoMapperOptions.Profiles);
+            options.AddProfiles(BestWorkAutoMapperOptions.Profiles);
+            options.AddProfiles(ScheduleAutoMapperOptions.Profiles);
+            options.AddProfiles(CategoryAutoMapperOptions.Profiles);
+            options.AddProfiles(ServiceAutoMapperOptions.Profiles);
+            options.AddProfiles(ReservationAutoMapperOptions.Profiles);
+        });
 
         builder.Services.AddTransient<IServiceService, ServiceService>();
         builder.Services.AddTransient<IServiceCategoryService, ServiceCategoryService>();

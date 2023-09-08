@@ -11,7 +11,7 @@
           </button>
         </div>
       </div>
-        <div *ngIf="!master.schedule">Schedule is not configured for this master!</div>
+        <div *ngIf="!master.scheduleId">Schedule is not configured for this master!</div>
       <div class="configure-wrapper">
         <button  class="custom-btn btn-15 schedulebtn" (click)="configureSchedule(master)">Configure schedule</button>
       </div>

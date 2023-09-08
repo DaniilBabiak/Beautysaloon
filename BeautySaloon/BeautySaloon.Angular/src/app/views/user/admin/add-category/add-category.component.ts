@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from "../../../../shared/services/category.service";
-import { ServiceCategory } from "../../../../shared/models/service-category";
 import { ImageService } from 'src/app/shared/services/image.service';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { Service } from 'src/app/shared/models/service';
 import { ServiceService } from 'src/app/shared/services/service.service';
+import { CategoryModel } from 'src/app/shared/models/category/category-model';
+import { ServiceModel } from 'src/app/shared/models/service/service-model';
+import { CategoryWithImage } from 'src/app/shared/models/category/category-with-image';
 
 @Component({
   selector: 'app-add-category',
@@ -13,24 +14,15 @@ import { ServiceService } from 'src/app/shared/services/service.service';
 })
 export class AddCategoryComponent implements OnInit {
   divDisplayStyle = 'flex';
-  showServiceList(){
+  showServiceList() {
     this.divDisplayStyle = 'flex';
   }
-  hideServiceList(){
+  hideServiceList() {
     this.divDisplayStyle = 'none';
   }
-  serviceCategories: ServiceCategory[] | null = null;
-  servicesWithoutCategory: Service[] | null = null;
+  serviceCategories: CategoryWithImage[] = [];
+  servicesWithoutCategory: ServiceModel[] | null = null;
 
-  newCategory: ServiceCategory = {
-    id: null,
-    name: null,
-    description: null,
-    imageBucket: null,
-    imageFileName: null,
-    services: null,
-    image: null
-  };
   showAddCategoryForm = false;
   selectedFile: File | null = null;
   isServiceHovered: boolean = false; // Переменная для отслеживания наведения на область категории
@@ -62,7 +54,12 @@ export class AddCategoryComponent implements OnInit {
 
   loadCategories() {
     this.categoryService.getCategories().subscribe(result => {
-      this.serviceCategories = result;
+      this.serviceCategories = result.map(categoryWithoutImage => {
+        return {
+          model: categoryWithoutImage,
+          image: ''
+        } as CategoryWithImage;
+      });
       this.loadImages();
     });
   }
@@ -76,45 +73,44 @@ export class AddCategoryComponent implements OnInit {
   }
 
   loadImages() {
-    this.serviceCategories?.forEach(element => {
-      if (element.imageBucket && element.imageFileName) {
-        this.imageService.getImage(element.imageBucket, element.imageFileName).then(data => {
-          element.image = data;
-
+    this.serviceCategories.forEach(element => {
+      if (element.model.imageBucket && element.model.imageFileName) {
+        this.imageService.getImage(element.model.imageBucket, element.model.imageFileName).then(image => {
+          element.image = image;
         });
       }
     });
   }
 
-  createCategory() {
-    this.categoryService.createCategory(this.newCategory).subscribe(result => {
-      this.loadCategories(); // Обновляем список категорий после создания
-      this.newCategory = {
-        id: null,
-        name: null,
-        description: null,
-        imageBucket: null,
-        imageFileName: null,
-        services: null,
-        image: null
-      };
-      this.showAddCategoryForm = false;
-    });
-  }
+  // createCategory() {
+  //   this.categoryService.createCategory(this.newCategory).subscribe(result => {
+  //     this.loadCategories(); // Обновляем список категорий после создания
+  //     this.newCategory = {
+  //       id: null,
+  //       name: null,
+  //       description: null,
+  //       imageBucket: null,
+  //       imageFileName: null,
+  //       services: null,
+  //       image: null
+  //     };
+  //     this.showAddCategoryForm = false;
+  //   });
+  // }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0] as File;
-    this.imageService.uploadImage(this.selectedFile, "category").subscribe(result => {
-      this.newCategory.imageBucket = result.bucketName;
-      this.newCategory.imageFileName = result.fileName;
-      if (this.newCategory.imageBucket && this.newCategory.imageFileName) {
-        this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageFileName).then(data => {
-          this.newCategory.image = data;
-        })
-      }
+  // onFileSelected(event: any) {
+  //   this.selectedFile = event.target.files[0] as File;
+  //   this.imageService.uploadImage(this.selectedFile, "category").subscribe(result => {
+  //     this.newCategory.imageBucket = result.bucketName;
+  //     this.newCategory.imageFileName = result.fileName;
+  //     if (this.newCategory.imageBucket && this.newCategory.imageFileName) {
+  //       this.imageService.getImage(this.newCategory.imageBucket, this.newCategory.imageFileName).then(data => {
+  //         this.newCategory.image = data;
+  //       })
+  //     }
 
-    })
-  }
+  //   })
+  // }
 
   // Обработчик события начала перетаскивания сервиса
   onDragStart(event: any, service: any) {
@@ -133,7 +129,7 @@ export class AddCategoryComponent implements OnInit {
   }
 
   // Обработчик события сбрасывания сервиса в область категории
-  onDropAddService(event: any, category: ServiceCategory) {
+  onDropAddService(event: any, category: CategoryWithImage) {
     event.preventDefault();
     this.isServiceHovered = false;
 
@@ -153,7 +149,7 @@ export class AddCategoryComponent implements OnInit {
       if (index !== -1) {
         this.servicesWithoutCategory?.splice(index, 1);
       }
-      this.categoryService.updateCategory(this.serviceCategories[categoryIndex]).subscribe(() => {
+      this.categoryService.updateCategory(this.serviceCategories[categoryIndex].model).subscribe(() => {
         this.loadCategories();
         this.loadServicesWithoutCategory();
       });
@@ -163,7 +159,7 @@ export class AddCategoryComponent implements OnInit {
   onDropRemoveService(event: any) {
     event.preventDefault();
 
-    const serviceData = JSON.parse(event.dataTransfer.getData('text')) as Service; // Получение данных сервиса
+    const serviceData = JSON.parse(event.dataTransfer.getData('text')) as ServiceModel; // Получение данных сервиса
 
     // Добавление сервиса в список сервисов без категории
     if (this.servicesWithoutCategory) {
@@ -175,10 +171,10 @@ export class AddCategoryComponent implements OnInit {
 
     // Поиск и удаление сервиса из категорий
     if (this.serviceCategories) {
-      const categoryIndex = this.serviceCategories.findIndex(category => category.id == serviceData.categoryId);
+      const categoryIndex = this.serviceCategories.findIndex(category => category.model.id == serviceData.categoryId);
       if (categoryIndex !== -1) {
         this.serviceCategories[categoryIndex].services?.splice(categoryIndex, 1);
-        serviceData.categoryId = null;
+        serviceData.categoryId = 0;
         this.service.updateService(serviceData).subscribe(() => {
           this.loadCategories();
         });

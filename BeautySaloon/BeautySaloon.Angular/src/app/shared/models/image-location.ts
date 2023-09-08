@@ -1,4 +1,4 @@
 export interface ImageLocation {
-    bucketName: string | null,
-    fileName: string | null
+    bucketName: string,
+    fileName: string
 }

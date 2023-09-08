@@ -4,12 +4,17 @@ import { AuthService } from './auth.service';
 import { ConfigService } from './config.service';
 import { Observable, concatMap, map, of, tap } from 'rxjs';
 import { ImageLocation } from '../models/image-location';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
-  constructor(private auth: AuthService, private config: ConfigService, private http: HttpClient) {
+  constructor(
+    private auth: AuthService,
+    private config: ConfigService,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer) {
   }
 
   uploadImage(file: File, bucketName: string): Observable<ImageLocation> {
@@ -23,14 +28,20 @@ export class ImageService {
 
   async getImage(bucketName: string, fileName: string): Promise<string> {
 
-    var url = this.config.imageApiURI;
+    const url = this.config.imageApiURI;
 
-    var headers = this.getOptions().headers;
+    const headers = this.getOptions().headers;
 
-    var imageBlob = await this.http.get(url + `/api/Image?bucketName=${bucketName}&fileName=${fileName}`,
-      { headers: headers, responseType: 'blob' }).toPromise();
+    const response = await this.http.get(url + `/api/Image?bucketName=${bucketName}&fileName=${fileName}`, {
+      headers: headers,
+      responseType: 'blob'
+    }).toPromise();
 
-    return URL.createObjectURL(imageBlob as Blob);
+    if (!response) {
+      throw new Error('Image not found');
+    }
+
+    return URL.createObjectURL(response as Blob);
   }
 
   private getOptions() {

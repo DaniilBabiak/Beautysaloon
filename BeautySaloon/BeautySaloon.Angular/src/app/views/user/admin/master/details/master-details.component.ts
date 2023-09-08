@@ -1,12 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Master } from 'src/app/shared/models/master';
-import { Service } from 'src/app/shared/models/service';
+import { MasterDetailedModel } from 'src/app/shared/models/master/master-detailed-model';
+import { ServiceModel } from 'src/app/shared/models/service/service-model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MasterService } from 'src/app/shared/services/master.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
-import { ScheduleComponent } from '../schedule/schedule.component';
 
 @Component({
   selector: 'app-details',
@@ -16,8 +15,10 @@ import { ScheduleComponent } from '../schedule/schedule.component';
 export class MasterDetailsComponent {
   @Input() masterId: number | undefined;
   isCloseAttempted: boolean = false;
-  master: Master | null = null;
-  unAssignedServices: Service[] | null = null;
+  master: MasterDetailedModel | null = null;
+
+  services: ServiceModel[] = [];
+
   isServiceHovered: boolean = false; // Переменная для отслеживания наведения на область категории
   divDisplayStyle = 'flex';
   showServiceList() {
@@ -30,22 +31,15 @@ export class MasterDetailsComponent {
     public activeModal: NgbActiveModal,
     private auth: AuthService,
     private masterService: MasterService,
-    private serviceService: ServiceService,
-    private router: Router,
-    private modalService: NgbModal) { }
+    private serviceService: ServiceService) { }
 
   ngOnInit(): void {
 
   }
 
-  showSchedule() {
-    const modalRef = this.modalService.open(ScheduleComponent);
-    modalRef.componentInstance.schedule = this.master?.schedule;
-    modalRef.result.then(schedule => {
-      if (this.master) {
-        this.master.schedule = schedule;
-      }
-    })
+  initModal(){
+    this.loadMaster();
+    this.loadServices();
   }
 
   loadMaster() {
@@ -53,52 +47,49 @@ export class MasterDetailsComponent {
       this.master = {
         id: 0,
         name: '',
-        reservations: [],
-        schedule: {
-          id: 0,
-          dayOffs: [],
-          masterId: 0,
-          master: this.master,
-          workingDays: []
-        },
+        reservationIds: [],
         scheduleId: 0,
-        services: []
+        serviceIds: []
       }
 
-      this.loadUnAssignedServices();
+      this.loadServices();
     }
     else {
       this.auth.loadUser()?.then(() => {
         if (this.masterId) {
           this.masterService.getMaster(this.masterId).subscribe(result => {
             this.master = result;
-            if (!this.master?.schedule) {
-              this.master.schedule = {
-                id: null,
-                dayOffs: null,
-                masterId: null,
-                master: null,
-                workingDays: []
-              }
-            }
-            this.loadUnAssignedServices();
-
+            this.loadServices();
           });
         }
       });
     }
-
-
   }
 
-  loadUnAssignedServices() {
+  getAssignedServices(): ServiceModel[] {
+    if (this.master) {
+        const assignedServices = this.services.filter(service => this.master?.serviceIds.includes(service.id as number));
+        return assignedServices;
+    } else {
+        // Если master равен null, возвращаем пустой массив
+        return [];
+    }
+}
+
+getUnAssignedServices(): ServiceModel[] {
+  if (this.master) {
+      const unAssignedServices = this.services.filter(service => !this.master?.serviceIds.includes(service.id as number));
+      return unAssignedServices;
+  } else {
+      // Если master равен null, возвращаем пустой массив
+      return [];
+  }
+}
+
+  loadServices() {
     this.auth.loadUser()?.then(() => {
       this.serviceService.getServices().subscribe(result => {
-        if (this.master) {
-          this.unAssignedServices = result.filter(service =>
-            !this.master?.services?.some(masterService => masterService.id === service.id)
-          );
-        }
+        this.services = result;
       })
     })
   }
@@ -157,18 +148,11 @@ export class MasterDetailsComponent {
 
     const serviceData = JSON.parse(event.dataTransfer.getData('text')); // Получение данных сервиса
 
-    // Перемещение сервиса в выбранную категорию
-    if (this.master?.services) {
-      var alreadyInThisCategory = this.master.services?.findIndex(service => service.id === serviceData.id) != -1;
-      if (!alreadyInThisCategory) {
-        this.master.services?.push(serviceData);
-      }
-
-
-      // Удаление сервиса из списка без категории
-      const index = this.unAssignedServices?.findIndex(service => service.id === serviceData.id) as number;
-      if (index !== -1) {
-        this.unAssignedServices?.splice(index, 1);
+    // Перемещение сервиса в мастера
+    if (this.master) {
+      var alreadyHasThisService = this.master.serviceIds.findIndex(serviceId => serviceId === serviceData.id) != -1;
+      if (!alreadyHasThisService) {
+        this.master.serviceIds.push(serviceData.id);
       }
     }
   }
@@ -176,22 +160,11 @@ export class MasterDetailsComponent {
   onDropRemoveService(event: any) {
     event.preventDefault();
 
-    const serviceData = JSON.parse(event.dataTransfer.getData('text')) as Service; // Получение данных сервиса
+    const serviceData = JSON.parse(event.dataTransfer.getData('text')) as ServiceModel; // Получение данных сервиса
 
-    // Добавление сервиса в список сервисов без категории
-    if (this.unAssignedServices) {
-      var alreadyInThisCategory = this.unAssignedServices?.findIndex(service => service.id === serviceData.id) != -1;
-      if (!alreadyInThisCategory) {
-        this.unAssignedServices.push(serviceData);
-      }
-    }
-
-    // Поиск и удаление сервиса из категорий
-    if (this.master && this.master.services) {
-      const serviceIndex = this.master.services.findIndex(service => service.id == serviceData.id);
-      if (serviceIndex !== -1) {
-        this.master.services?.splice(serviceIndex, 1);
-      };
+    var index = this.master?.serviceIds.findIndex(serviceId => serviceId === serviceData.id) as number;
+    if (index != -1){
+      this.master?.serviceIds.splice(index, 1);
     }
   }
 }

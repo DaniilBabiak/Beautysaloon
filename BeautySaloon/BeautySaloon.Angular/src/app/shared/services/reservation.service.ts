@@ -1,14 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Master } from '../models/master';
-import { Schedule } from '../models/schedule';
+import { GetAllReservationsResponse } from '../models/resrvation/get-all-reservations-response';
 import { AuthService } from './auth.service';
 import { ConfigService } from './config.service';
-import { Reservation } from '../models/resrvation/reservation';
-import { AvailableReservation } from '../models/resrvation/available-reservation';
-import { CreateReservationRequest } from '../models/resrvation/create-reservation-request';
-import { GetAllReservationsResponse } from '../models/resrvation/get-all-reservations-response';
+import { ReservationModel } from '../models/resrvation/reservation-model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,15 +32,15 @@ export class ReservationService {
 
   }
 
-  getAvailableReservations(serviceId: number): Observable<AvailableReservation[]> {
+  getAvailableReservations(serviceId: number): Observable<ReservationModel[]> {
     var url = this.config.resourceApiURI;
     url = url + `/api/reservation/getAvailable/${serviceId}`;
     var options = this.getOptions();
 
-    return this.http.get<AvailableReservation[]>(url, options);
+    return this.http.get<ReservationModel[]>(url, options);
   }
 
-  createReservation(reservationRequest: CreateReservationRequest): Observable<any> {
+  createReservation(reservationRequest: ReservationModel): Observable<any> {
     var url = this.config.resourceApiURI;
     url = url + `/api/reservation/`;
     var options = this.getOptions();

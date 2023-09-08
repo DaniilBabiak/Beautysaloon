@@ -6,7 +6,7 @@ const routes: Routes = [
   { path: '', component: AdminComponent },
   { path: 'add-category', loadChildren: () => import('./add-category/add-category.module').then(m => m.AddCategoryModule) },
   { path: 'add-best-works', loadChildren: () => import('./add-best-works/add-best-works.module').then(m => m.AddBestWorksModule) },
-  { path: 'add-service', loadChildren: () => import('./add-service/add-service.module').then(m => m.AddServiceModule) },
+  { path: 'service', loadChildren: () => import('./service/service.module').then(m => m.ServiceModule) },
   { path: 'master', loadChildren: () => import('./master/master.module').then(m => m.MasterModule) },
   { path: 'reservations', loadChildren: () => import('./reservations/reservations.module').then(m => m.ReservationsModule) },
 ];

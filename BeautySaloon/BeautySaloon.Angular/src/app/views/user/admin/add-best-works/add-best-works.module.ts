@@ -4,9 +4,12 @@ import { AddBestWorksRoutingModule } from './add-best-works-routing.module';
 import { AddBestWorksComponent } from './add-best-works.component';
 import { FormsModule } from "@angular/forms";
 import { Ng2SearchPipeModule } from "ng2-search-filter";
+import { BestWorkWithImageFilter } from 'src/app/shared/helpers/best-work-with-image-filter';
+
 @NgModule({
   declarations: [
-    AddBestWorksComponent
+    AddBestWorksComponent,
+    BestWorkWithImageFilter
   ],
   imports: [
     CommonModule,

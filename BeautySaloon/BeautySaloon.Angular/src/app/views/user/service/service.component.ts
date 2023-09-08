@@ -1,18 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ServiceCategory } from 'src/app/shared/models/service-category';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ImageService } from 'src/app/shared/services/image.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationComponent } from '../add-reservation/add-reservation.component';
+import { CategoryModel } from 'src/app/shared/models/category/category-model';
+import { ServiceService } from '../../../shared/services/service.service';
+import { ServiceModel } from 'src/app/shared/models/service/service-model';
+import { ServiceDetailedModel } from 'src/app/shared/models/service/service-detailed-model';
+import { Observable } from 'rxjs';
+import { CategoryWithImage } from 'src/app/shared/models/category/category-with-image';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css']
 })
 export class ServiceComponent implements OnInit {
-  categories: ServiceCategory[] = [];
+  categories: CategoryWithImage[] = [];
+
+  constructor(
+    private imageService: ImageService,
+    private categoryService: CategoryService,
+    private serviceService: ServiceService,
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private sanitizer: DomSanitizer) {
+  }
+
   ngOnInit() {
     this.authService.loadUser()?.then(() => {
       this.loadCategories();
@@ -20,32 +35,36 @@ export class ServiceComponent implements OnInit {
 
   }
 
-  constructor(
-    private imageService: ImageService,
-    private categoryService: CategoryService,
-    private authService: AuthService,
-    private modalService: NgbModal) {
-  }
-
   loadCategories() {
-    this.categoryService.getCategories().subscribe(result => {
-      this.categories = result;
-      this.loadImages().then(() => {
+    this.categoryService.getCategories().subscribe(categories => {
+      const categoryPromises = categories.map(element => {
+        const categoryWithImage: CategoryWithImage = {
+          model: element,
+          image: '',
+          services: []
+        };
+
+        const imagePromise = this.imageService.getImage(element.imageBucket, element.imageFileName)
+          .then(image => {
+            return image;
+          })
+          .catch(error => {
+            return 'assets/images/about-page3.png';
+          });
+        const servicesPromise = this.serviceService.getServices(element.id).toPromise();
+
+        return Promise.all([imagePromise, servicesPromise]).then(([image, services]) => {
+          categoryWithImage.image = image;
+          categoryWithImage.services = services as ServiceModel[];
+          return categoryWithImage;
+        });
+      });
+
+      Promise.all(categoryPromises).then(categoriesWithImages => {
+        this.categories = categoriesWithImages;
         this.initButtons();
       });
     });
-  }
-
-  async loadImages() {
-    for (const element of this.categories) {
-      if (element.imageBucket && element.imageFileName) {
-        const data = await this.imageService.getImage(element.imageBucket, element.imageFileName);
-        if (data) {
-          console.log("loaded image");
-          element.image = data;
-        }
-      }
-    }
   }
 
   initButtons() {
@@ -96,7 +115,7 @@ export class ServiceComponent implements OnInit {
     Boxlayout.init();
   }
 
-  getSectionStyles(index: number, image: string): { [key: string]: string } {
+  getSectionStyles(index: number, category: CategoryWithImage): { [key: string]: string; } {
     const totalColumns = 2; // Number of columns
     const categoriesPerRow = Math.ceil(this.categories.length / totalColumns);
     const row = Math.floor(index / categoriesPerRow);
@@ -104,11 +123,14 @@ export class ServiceComponent implements OnInit {
 
     const top = (row * 50) + '%';
     const left = (col * 50) + '%';
-    const backgroundImage = `url(${image})`;
+    var backgroundImage = '';
+
+    backgroundImage = `url(${category.image})`;
+
     return { top, left, backgroundImage };
   }
 
-  makeAppointment(category: ServiceCategory) {
+  makeAppointment(category: CategoryModel) {
     const modalRef = this.modalService.open(ReservationComponent);
     modalRef.componentInstance.category = category;
     modalRef.componentInstance.init();
