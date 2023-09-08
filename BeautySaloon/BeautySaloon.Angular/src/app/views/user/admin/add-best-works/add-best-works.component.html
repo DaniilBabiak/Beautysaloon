@@ -1,26 +1,29 @@
 <div class="add-best-work-container">
   <div class="add-best-work-wrapper">
-<button (click)="showAddBestWorkForm = true" class="add-photo">Add Photo</button>
-<div *ngIf="showAddBestWorkForm" class="add-photo-wrapper">
-  <img [src]="newBestWork.image" alt={{newBestWork.imageFileName}} class="add-best-work_img">
-  <div class="file-btn">
-    <button (click)="createBestWork()" class="createBtn">Create</button>
-  <input type="file" (change)="onFileSelected($event)" class="input-add-photo">
-  <!-- Другие поля для ввода -->
+    <button (click)="showAddBestWorkForm = true" class="add-photo">Add Photo</button>
+    <div *ngIf="showAddBestWorkForm" class="add-photo-wrapper">
+      <img [src]="newBestWork.image" alt={{newBestWork.model.imageFileName}} class="add-best-work_img">
+      <div class="file-btn">
+        <button (click)="createBestWork()" class="createBtn">Create</button>
+        <input type="file" (change)="onFileSelected($event)" class="input-add-photo">
+        <!-- Другие поля для ввода -->
 
+      </div>
+    </div>
   </div>
-</div>
-  </div><hr>
-<div>
-  <div class="search-input">
-    <input type="text" name="search" [(ngModel)]="searchText" placeholder="search by ID" required="required" class="input">
-  </div>
-  <div *ngIf="bestWorks" class="bestWork-wrapper"   (wheel)="handleMouseWheel($event)">
-  <div *ngFor="let bestWork of bestWorks | filter:searchText" class="bestWork-content">
-    <img [src]="bestWork.image" alt={{bestWork.imageFileName}} class="best-work_img">
-    <button (click)="deleteBestWork(bestWork.id)">detele</button>
-    <!-- Дополнительные элементы, связанные с категорией -->
-  </div>
-</div>
+  <hr>
+  <div>
+    <div class="search-input">
+      <input type="text" name="search" [(ngModel)]="searchText" placeholder="search by ID" required="required"
+        class="input">
+    </div>
+    <div class="bestWork-wrapper" (wheel)="handleMouseWheel($event)">
+      <div *ngFor="let bestWork of bestWorks | bestWorkWithImageFilter:searchText" class="bestWork-content">
+        {{bestWork.model.id}}
+        <img [src]="bestWork.image" alt={{bestWork.model.imageFileName}} class="best-work_img">
+        <button (click)="deleteBestWork(bestWork.model.id)">detele</button>
+        <!-- Дополнительные элементы, связанные с категорией -->
+      </div>
+    </div>
   </div>
 </div>

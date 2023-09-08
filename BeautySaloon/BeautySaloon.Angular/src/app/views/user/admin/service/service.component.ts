@@ -12,11 +12,11 @@ import { ServiceModel } from 'src/app/shared/models/service/service-model';
 import { ServiceDetailedModel } from 'src/app/shared/models/service/service-detailed-model';
 
 @Component({
-  selector: 'app-add-service',
-  templateUrl: './add-service.component.html',
-  styleUrls: ['./add-service.component.css'],
+  selector: 'app-service',
+  templateUrl: './service.component.html',
+  styleUrls: ['./service.component.css'],
 })
-export class AddServiceComponent implements OnInit {
+export class ServiceComponent implements OnInit {
   isFieldsValid: any = false;
   isTimeValid = false;
   services: ServiceDetailedModel[] | null = null;

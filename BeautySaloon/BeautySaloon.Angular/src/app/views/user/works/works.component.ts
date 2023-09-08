@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BestWorkModel } from 'src/app/shared/models/bestWork/best-work-model';
+import { BestWorkWithImage } from 'src/app/shared/models/bestWork/best-work-with-image';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BestWorkService } from 'src/app/shared/services/best-work.service';
 import { ImageService } from 'src/app/shared/services/image.service';
@@ -11,30 +12,52 @@ import { ImageService } from 'src/app/shared/services/image.service';
 })
 export class WorksComponent implements OnInit {
   // Define the number of pages and images per page
-  bestWorks: BestWorkModel[] = [];
+  bestWorks: BestWorkWithImage[] = [];
   totalPages = 10;
   itemsPerPage = 9;
   // Define the URL of the image you want to repeat
   showModal: boolean = false;
-  modalImage: string = '';
+  modalImage: string | SafeResourceUrl = '';
   modalAlt: string = '';
   modalBestWorkId: number | null = null;
   currentPage = 1;
-  isAdmin:boolean = false;
-  constructor(private auth: AuthService, private imageService: ImageService, private bestWorkService: BestWorkService) { }
+  isAdmin: boolean = false;
+
+  constructor(
+    private auth: AuthService,
+    private imageService: ImageService,
+    private bestWorkService: BestWorkService) { }
+
   ngOnInit(): void {
     this.auth.loadUser()?.then(() => {
       this.isAdmin = this.auth.isAdmin;
-      this.bestWorkService.getBestWorks().subscribe(result => {
-        this.bestWorks = result;
-        this.countTotalPages();
-        this.loadImages();
-      })
+      this.bestWorkService.getBestWorks().subscribe(bestWorks => {
+        const bestWorkPromises = bestWorks.map(element => {
+          const bestWorkWithImage: BestWorkWithImage = {
+            model: element,
+            image: ''
+          };
+          console.log('Loading image for ' + bestWorkWithImage.model.id);
+          const imagePromise = this.imageService.getImage(element.imageBucket, element.imageFileName);
+
+          return Promise.all([imagePromise]).then(([image]) => {
+            bestWorkWithImage.image = image;
+            console.log('Loaded image for ' + bestWorkWithImage.model.id);
+
+            return bestWorkWithImage;
+          });
+        });
+
+        Promise.all(bestWorkPromises).then(bestWorksWithImage => {
+          this.bestWorks = bestWorksWithImage;
+          this.updateItemsPerPage();
+          this.countTotalPages();
+        });
+      });
     })
-    this.updateItemsPerPage();
   }
-  countTotalPages(){
-    this.totalPages = this.bestWorks.length % this.itemsPerPage == 0 ? this.bestWorks.length / this.itemsPerPage: this.bestWorks.length / this.itemsPerPage ;
+  countTotalPages() {
+    this.totalPages = this.bestWorks.length % this.itemsPerPage == 0 ? this.bestWorks.length / this.itemsPerPage : this.bestWorks.length / this.itemsPerPage;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -44,17 +67,6 @@ export class WorksComponent implements OnInit {
     this.currentPage = 1;
   }
 
-  async loadImages() {
-    for (const element of this.bestWorks) {
-      if (element.imageBucket && element.imageFileName) {
-        const data = await this.imageService.getImage(element.imageBucket, element.imageFileName);
-        if (data) {
-          console.log("loaded image");
-          element.image = data;
-        }
-      }
-    }
-  }
   private updateItemsPerPage() {
     if (window.innerWidth <= 768) {
       this.itemsPerPage = 3;
@@ -72,9 +84,9 @@ export class WorksComponent implements OnInit {
 
     return images;
   }
-  openModal(alt: string, image: string, id:number) {
+  openModalAsync(alt: string, bestWork: BestWorkWithImage, id: number) {
     this.modalAlt = alt;
-    this.modalImage = image;
+    this.modalImage = bestWork.image;
     this.showModal = true;
     this.modalBestWorkId = id;
   }

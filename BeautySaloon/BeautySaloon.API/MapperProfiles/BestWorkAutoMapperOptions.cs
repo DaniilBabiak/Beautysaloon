@@ -10,6 +10,7 @@ public static class BestWorkAutoMapperOptions
         get
         {
             yield return new BestWorkModelToBestWorkProfile();
+            yield return new BestWorkToBestWorkModelProfile();
         }
     }
 }

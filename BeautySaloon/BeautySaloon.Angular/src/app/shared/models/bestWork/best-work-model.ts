@@ -1,6 +1,5 @@
 export interface BestWorkModel {
-    id: number | null,
-    imageBucket: string | null,
-    imageFileName: string | null,
-    image: string | null
+    id: number,
+    imageBucket: string,
+    imageFileName: string
 }

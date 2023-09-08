@@ -5,6 +5,7 @@ import { AuthService } from '../../../../shared/services/auth.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { CategoryModel } from 'src/app/shared/models/category/category-model';
 import { ServiceModel } from 'src/app/shared/models/service/service-model';
+import { CategoryWithImage } from 'src/app/shared/models/category/category-with-image';
 
 @Component({
   selector: 'app-add-category',
@@ -13,13 +14,13 @@ import { ServiceModel } from 'src/app/shared/models/service/service-model';
 })
 export class AddCategoryComponent implements OnInit {
   divDisplayStyle = 'flex';
-  showServiceList(){
+  showServiceList() {
     this.divDisplayStyle = 'flex';
   }
-  hideServiceList(){
+  hideServiceList() {
     this.divDisplayStyle = 'none';
   }
-  serviceCategories: CategoryModel[] | null = null;
+  serviceCategories: CategoryWithImage[] = [];
   servicesWithoutCategory: ServiceModel[] | null = null;
 
   showAddCategoryForm = false;
@@ -53,8 +54,13 @@ export class AddCategoryComponent implements OnInit {
 
   loadCategories() {
     this.categoryService.getCategories().subscribe(result => {
-      this.serviceCategories = result;
-      // this.loadImages();
+      this.serviceCategories = result.map(categoryWithoutImage => {
+        return {
+          model: categoryWithoutImage,
+          image: ''
+        } as CategoryWithImage;
+      });
+      this.loadImages();
     });
   }
 
@@ -66,16 +72,15 @@ export class AddCategoryComponent implements OnInit {
     })
   }
 
-  // loadImages() {
-  //   this.serviceCategories?.forEach(element => {
-  //     if (element.imageBucket && element.imageFileName) {
-  //       this.imageService.getImage(element.imageBucket, element.imageFileName).then(data => {
-  //         element.image = data;
-
-  //       });
-  //     }
-  //   });
-  // }
+  loadImages() {
+    this.serviceCategories.forEach(element => {
+      if (element.model.imageBucket && element.model.imageFileName) {
+        this.imageService.getImage(element.model.imageBucket, element.model.imageFileName).then(image => {
+          element.image = image;
+        });
+      }
+    });
+  }
 
   // createCategory() {
   //   this.categoryService.createCategory(this.newCategory).subscribe(result => {
@@ -124,57 +129,57 @@ export class AddCategoryComponent implements OnInit {
   }
 
   // Обработчик события сбрасывания сервиса в область категории
-  // onDropAddService(event: any, category: CategoryModel) {
-  //   event.preventDefault();
-  //   this.isServiceHovered = false;
+  onDropAddService(event: any, category: CategoryWithImage) {
+    event.preventDefault();
+    this.isServiceHovered = false;
 
-  //   const serviceData = JSON.parse(event.dataTransfer.getData('text')); // Получение данных сервиса
-  //   if (this.serviceCategories) {
-  //     const categoryIndex = this.serviceCategories.indexOf(category);
-  //     // Перемещение сервиса в выбранную категорию
-  //     if (this.serviceCategories[categoryIndex].services) {
-  //       var alreadyInThisCategory = this.serviceCategories[categoryIndex].services?.findIndex(service => service.id === serviceData.id) != -1;
-  //       if (!alreadyInThisCategory) {
-  //         this.serviceCategories[categoryIndex].services?.push(serviceData);
-  //       }
-  //     }
+    const serviceData = JSON.parse(event.dataTransfer.getData('text')); // Получение данных сервиса
+    if (this.serviceCategories) {
+      const categoryIndex = this.serviceCategories.indexOf(category);
+      // Перемещение сервиса в выбранную категорию
+      if (this.serviceCategories[categoryIndex].services) {
+        var alreadyInThisCategory = this.serviceCategories[categoryIndex].services?.findIndex(service => service.id === serviceData.id) != -1;
+        if (!alreadyInThisCategory) {
+          this.serviceCategories[categoryIndex].services?.push(serviceData);
+        }
+      }
 
-  //     // Удаление сервиса из списка без категории
-  //     const index = this.servicesWithoutCategory?.findIndex(service => service.id === serviceData.id) as number;
-  //     if (index !== -1) {
-  //       this.servicesWithoutCategory?.splice(index, 1);
-  //     }
-  //     this.categoryService.updateCategory(this.serviceCategories[categoryIndex]).subscribe(() => {
-  //       this.loadCategories();
-  //       this.loadServicesWithoutCategory();
-  //     });
-  //   }
-  // }
+      // Удаление сервиса из списка без категории
+      const index = this.servicesWithoutCategory?.findIndex(service => service.id === serviceData.id) as number;
+      if (index !== -1) {
+        this.servicesWithoutCategory?.splice(index, 1);
+      }
+      this.categoryService.updateCategory(this.serviceCategories[categoryIndex].model).subscribe(() => {
+        this.loadCategories();
+        this.loadServicesWithoutCategory();
+      });
+    }
+  }
 
-  // onDropRemoveService(event: any) {
-  //   event.preventDefault();
+  onDropRemoveService(event: any) {
+    event.preventDefault();
 
-  //   const serviceData = JSON.parse(event.dataTransfer.getData('text')) as Service; // Получение данных сервиса
+    const serviceData = JSON.parse(event.dataTransfer.getData('text')) as ServiceModel; // Получение данных сервиса
 
-  //   // Добавление сервиса в список сервисов без категории
-  //   if (this.servicesWithoutCategory) {
-  //     var alreadyInThisCategory = this.servicesWithoutCategory?.findIndex(service => service.id === serviceData.id) != -1;
-  //     if (!alreadyInThisCategory) {
-  //       this.servicesWithoutCategory.push(serviceData);
-  //     }
-  //   }
+    // Добавление сервиса в список сервисов без категории
+    if (this.servicesWithoutCategory) {
+      var alreadyInThisCategory = this.servicesWithoutCategory?.findIndex(service => service.id === serviceData.id) != -1;
+      if (!alreadyInThisCategory) {
+        this.servicesWithoutCategory.push(serviceData);
+      }
+    }
 
-  //   // Поиск и удаление сервиса из категорий
-  //   if (this.serviceCategories) {
-  //     const categoryIndex = this.serviceCategories.findIndex(category => category.id == serviceData.categoryId);
-  //     if (categoryIndex !== -1) {
-  //       this.serviceCategories[categoryIndex].services?.splice(categoryIndex, 1);
-  //       serviceData.categoryId = null;
-  //       this.service.updateService(serviceData).subscribe(() => {
-  //         this.loadCategories();
-  //       });
-  //     }
-  //   }
+    // Поиск и удаление сервиса из категорий
+    if (this.serviceCategories) {
+      const categoryIndex = this.serviceCategories.findIndex(category => category.model.id == serviceData.categoryId);
+      if (categoryIndex !== -1) {
+        this.serviceCategories[categoryIndex].services?.splice(categoryIndex, 1);
+        serviceData.categoryId = 0;
+        this.service.updateService(serviceData).subscribe(() => {
+          this.loadCategories();
+        });
+      }
+    }
 
-  // }
+  }
 }

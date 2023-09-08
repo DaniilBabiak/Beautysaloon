@@ -22,18 +22,11 @@ export class BestWorkService {
   }
 
   createBestWork(bestWork: BestWorkModel): Observable<BestWorkModel> {
-    const bestWorkWithoutImage: BestWorkModel = {
-      id: bestWork.id,
-      imageBucket: bestWork.imageBucket,
-      imageFileName: bestWork.imageFileName,
-      image: null // Указываем, что image равен null
-    };
-
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.post<BestWorkModel>(`${url}/api/admin/BestWork`, bestWorkWithoutImage, options);
+    return this.http.post<BestWorkModel>(`${url}/api/admin/BestWork`, bestWork, options);
   }
   deleteBestWork(id: number): Observable<any> {
     var url = this.config.resourceApiURI;

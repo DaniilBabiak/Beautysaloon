@@ -20,10 +20,10 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="!master.schedule">
+                <div *ngIf="!master.scheduleId">
                     Schedule is not configured for this master!
                 </div>
-                <button class="btn-shedule-wrapper" (click)="showSchedule()">Show schedule</button>
+                <!-- <button class="btn-shedule-wrapper" (click)="showSchedule()">Show schedule</button> -->
               <div class="btn-wrapper">
                 <div>
                   <button (click)="saveDungeonMaster()"  class="deleteBtn save"

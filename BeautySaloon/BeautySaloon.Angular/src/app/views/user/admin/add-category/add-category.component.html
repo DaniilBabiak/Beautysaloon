@@ -1,4 +1,4 @@
-<!-- <div class="main-container">
+<div class="main-container">
   <div class="category-service-container">
     <div class="category-list">
       <div class="addCategoryBtn_wrapper">
@@ -6,9 +6,9 @@
       </div>
       <hr>
       <div *ngFor="let category of serviceCategories" class="category-wrapper">
-        <h2 class="add-category-name">Category name:<span>{{ category.name }}</span></h2>
-        <p class="add-category-description">Description:<span>{{ category.description }}</span></p>
-        <img [src]="category.image" alt={{category.imageFileName}} class="category-image">
+        <h2 class="add-category-name">Category name:<span>{{ category.model.name }}</span></h2>
+        <p class="add-category-description">Description:<span>{{ category.model.description }}</span></p>
+        <img [src]="category.image" alt={{category.model.imageFileName}} class="category-image">
         <div class="service-dropzone-container">
           <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"
                (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropAddService($event, category)">
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="deleteBtn_wrapper">
-          <button (click)="deleteCategory(category.id)" class="deleteBtn">Delete</button>
+          <button (click)="deleteCategory(category.model.id)" class="deleteBtn">Delete</button>
         </div>
 
       </div>
@@ -31,7 +31,7 @@
 
     </div>
   </div>
-
+<!-- 
   <div *ngIf="showAddCategoryForm" class="create-category-wrapper">
     <div class="create-category-flex_wrapper">
       <button class="goBackBtn" (click)="showServiceList(); showAddCategoryForm = false;">Go back</button><hr>
@@ -40,7 +40,7 @@
     <input [(ngModel)]="newCategory.description" placeholder="Category Description" style="margin: 2% 0">
     <img [src]="newCategory.image" alt={{newCategory.imageFileName}}>
     <input type="file" (change)="onFileSelected($event)" style="margin: 2% 0">
-      </div>
+      </div> -->
     <!-- Другие поля для ввода -->
     <!-- <button (click)="createCategory()" class="create-categoryBtn">Create</button>
 
@@ -61,4 +61,4 @@
       </div>
     </div>
   </div>
-</div> --> -->
+</div> -->

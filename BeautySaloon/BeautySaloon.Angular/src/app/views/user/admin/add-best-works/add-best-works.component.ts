@@ -1,5 +1,7 @@
-import {Component, HostListener} from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { SafeResourceUrl } from '@angular/platform-browser';
 import { BestWorkModel } from 'src/app/shared/models/bestWork/best-work-model';
+import { BestWorkWithImage } from 'src/app/shared/models/bestWork/best-work-with-image';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BestWorkService } from 'src/app/shared/services/best-work.service';
 import { ImageService } from 'src/app/shared/services/image.service';
@@ -11,13 +13,15 @@ import { ImageService } from 'src/app/shared/services/image.service';
   styleUrls: ['./add-best-works.component.css']
 })
 export class AddBestWorksComponent {
-  searchText:any;
-  bestWorks: BestWorkModel[] | null = null;
-  newBestWork: BestWorkModel = {
-    id: null,
-    imageBucket: null,
-    imageFileName: null,
-    image: null
+  searchText: any;
+  bestWorks: BestWorkWithImage[] = [];
+  newBestWork: BestWorkWithImage = {
+    model: {
+      id: 0,
+      imageBucket: '',
+      imageFileName: ''
+    },
+    image: ''
   };
 
   showAddBestWorkForm = false;
@@ -34,40 +38,46 @@ export class AddBestWorksComponent {
     })
   }
 
-  deleteBestWork(id: number | null) {
-    if (id) {
-      this.bestWorkService.deleteBestWork(id).subscribe(result => {
-        this.loadBestWorks();
-      })
-    }
+  deleteBestWork(id: number) {
+
+    this.bestWorkService.deleteBestWork(id).subscribe(result => {
+      this.loadBestWorks();
+    })
 
   }
 
   loadBestWorks() {
-    this.bestWorkService.getBestWorks().subscribe(result => {
-      this.bestWorks = result;
-      this.loadImages();
-    });
-  }
+    this.bestWorkService.getBestWorks().subscribe(bestWorks => {
+      const bestWorkPromises = bestWorks.map(element => {
+        const bestWorkWithImage: BestWorkWithImage = {
+          model: element,
+          image: ''
+        };
 
-  loadImages() {
-    this.bestWorks?.forEach(element => {
-      if (element.imageBucket && element.imageFileName) {
-        this.imageService.getImage(element.imageBucket, element.imageFileName).then(data => {
-          element.image = data;
+        const imagePromise = this.imageService.getImage(element.imageBucket, element.imageFileName);
+
+        return Promise.all([imagePromise]).then(([image]) => {
+          bestWorkWithImage.image = image;
+          return bestWorkWithImage;
         });
-      }
+      });
+
+      Promise.all(bestWorkPromises).then(bestWorksWithImage => {
+        this.bestWorks = bestWorksWithImage;
+      });
     });
   }
 
   createBestWork() {
-    this.bestWorkService.createBestWork(this.newBestWork).subscribe(result => {
+    this.bestWorkService.createBestWork(this.newBestWork.model).subscribe(result => {
       this.loadBestWorks(); // Обновляем список категорий после создания
       this.newBestWork = {
-        id: null,
-        imageBucket: null,
-        imageFileName: null,
-        image: null
+        model: {
+          id: 0,
+          imageBucket: '',
+          imageFileName: ''
+        },
+        image: ''
       };
       this.showAddBestWorkForm = false;
     });
@@ -76,14 +86,11 @@ export class AddBestWorksComponent {
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0] as File;
     this.imageService.uploadImage(this.selectedFile, "best-works").subscribe(result => {
-      this.newBestWork.imageBucket = result.bucketName;
-      this.newBestWork.imageFileName = result.fileName;
-      if (this.newBestWork.imageBucket && this.newBestWork.imageFileName) {
-        this.imageService.getImage(this.newBestWork.imageBucket, this.newBestWork.imageFileName).then(data => {
-          this.newBestWork.image = data;
-        })
-      }
-
+      this.newBestWork.model.imageBucket = result.bucketName;
+      this.newBestWork.model.imageFileName = result.fileName;
+      this.imageService.getImage(result.bucketName, result.fileName).then(image => {
+        this.newBestWork.image = image;
+      })
     })
   }
 

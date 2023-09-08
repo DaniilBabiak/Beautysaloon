@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddServiceRoutingModule } from './add-service-routing.module';
-import { AddServiceComponent } from './add-service.component';
+import { AddServiceRoutingModule } from './service-routing.module';
 import { NgbDropdownModule, NgbTimeAdapter, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from "@angular/forms";
 import { NgbTimeStringAdapter } from 'src/app/shared/helpers/ngb-time-string-adapter';
+import { ServiceComponent } from './service.component';
 @NgModule({
   declarations: [
-    AddServiceComponent
+    ServiceComponent
   ],
   imports: [
     CommonModule,
@@ -18,4 +18,4 @@ import { NgbTimeStringAdapter } from 'src/app/shared/helpers/ngb-time-string-ada
   ],
   providers: [NgbTimeStringAdapter]
 })
-export class AddServiceModule { }
+export class ServiceModule { }
