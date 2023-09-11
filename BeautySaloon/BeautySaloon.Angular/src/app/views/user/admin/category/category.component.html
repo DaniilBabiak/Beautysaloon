@@ -2,21 +2,22 @@
   <div class="category-service-container">
     <div class="category-list">
       <div class="addCategoryBtn_wrapper">
-        <button (click)="showAddCategoryForm = true; hideServiceList();" class="addCategoryBtn">Add Category</button>
+        <button (click)="openCategoryDetails(0)" class="addCategoryBtn">Add Category</button>
       </div>
       <hr>
       <div *ngFor="let category of serviceCategories" class="category-wrapper">
         <h2 class="add-category-name">Category name:<span>{{ category.model.name }}</span></h2>
         <p class="add-category-description">Description:<span>{{ category.model.description }}</span></p>
-        <img [src]="category.image" alt={{category.model.imageFileName}} class="category-image">
+        <img (click)="openCategoryDetails(category.model.id)" [src]="category.image"
+          alt={{category.model.imageFileName}} class="category-image">
         <div class="service-dropzone-container">
           <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"
-               (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropAddService($event, category)">
+            (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropAddService($event, category)">
             <div *ngIf="category.services?.length == 0" class="dropzone">
               Put services here
             </div>
             <div *ngFor="let service of category.services" class="service-draggable" [draggable]="true"
-                 (dragstart)="onDragStart($event, service)">
+              (dragstart)="onDragStart($event, service)">
               <h3 class="service-name">Service name:<span>{{ service.name }}</span></h3>
               <p class="service-price">Price:<span>{{ service.price }}</span></p>
             </div>
@@ -31,34 +32,19 @@
 
     </div>
   </div>
-<!-- 
-  <div *ngIf="showAddCategoryForm" class="create-category-wrapper">
-    <div class="create-category-flex_wrapper">
-      <button class="goBackBtn" (click)="showServiceList(); showAddCategoryForm = false;">Go back</button><hr>
-      <div class="category-create-wrapper">
-    <input [(ngModel)]="newCategory.name" placeholder="Category Name">
-    <input [(ngModel)]="newCategory.description" placeholder="Category Description" style="margin: 2% 0">
-    <img [src]="newCategory.image" alt={{newCategory.imageFileName}}>
-    <input type="file" (change)="onFileSelected($event)" style="margin: 2% 0">
-      </div> -->
-    <!-- Другие поля для ввода -->
-    <!-- <button (click)="createCategory()" class="create-categoryBtn">Create</button>
-
-    </div>
-  </div>
   <div class="service-list" [ngStyle]="{ 'display': divDisplayStyle }">
     <h2 class="service-list-wrapper">Services without Category</h2>
     <hr>
     <div class="service-dropzone" [style.border]="isServiceHovered ? '2px dashed #aaa' : 'none'"
-         (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropRemoveService($event)">
+      (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDropRemoveService($event)">
       <div *ngIf="servicesWithoutCategory?.length == 0">
         Put services here
       </div>
       <div *ngFor="let service of servicesWithoutCategory" class="service-draggable" [draggable]="true"
-           (dragstart)="onDragStart($event, service)">
+        (dragstart)="onDragStart($event, service)">
         <h3 class="service-name">Service name:<span>{{ service.name }}</span></h3>
         <p class="service-price">Price<span>{{ service.price }}</span></p>
       </div>
     </div>
   </div>
-</div> -->
+</div>

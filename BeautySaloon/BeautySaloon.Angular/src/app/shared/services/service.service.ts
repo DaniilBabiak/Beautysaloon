@@ -29,27 +29,27 @@ export class ServiceService {
   }
 
   getService(serviceId: number):Promise<ServiceDetailedModel | undefined>{
-    const url = `${this.config.resourceApiURI}/${serviceId}`;
+    const url = `${this.config.resourceApiURI}/api/service/${serviceId}`;
 
     var options = this.getOptions();
 
     return this.http.get<ServiceDetailedModel>(url, options).toPromise();
   }
 
-  createService(service: ServiceModel): Observable<ServiceModel> {
+  createService(service: ServiceDetailedModel): Observable<ServiceDetailedModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.post<ServiceModel>(`${url}/api/admin/Service`, service, options);
+    return this.http.post<ServiceDetailedModel>(`${url}/api/admin/Service`, service, options);
   }
 
-  updateService(service: ServiceModel): Observable<ServiceModel> {
+  updateService(service: ServiceDetailedModel): Observable<ServiceDetailedModel> {
     var url = this.config.resourceApiURI;
 
     var options = this.getOptions();
 
-    return this.http.put<ServiceModel>(`${url}/api/admin/Service`, service, options);
+    return this.http.put<ServiceDetailedModel>(`${url}/api/admin/Service`, service, options);
   }
 
   deleteService(id: number): Observable<any> {

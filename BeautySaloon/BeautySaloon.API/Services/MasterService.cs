@@ -98,6 +98,7 @@ public class MasterService : IMasterService
     {
         var existingMaster = await _context.Masters
                                            .Include(m => m.Services)
+                                           .Include(m => m.Reservations)
                                            .SingleOrDefaultAsync(m => m.Id == updateMasterModel.Id);
 
         if (existingMaster is null)

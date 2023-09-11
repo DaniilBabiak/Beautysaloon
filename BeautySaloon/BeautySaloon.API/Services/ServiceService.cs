@@ -108,14 +108,47 @@ public class ServiceService : IServiceService
 
     public async Task<ServiceDetailedModel> UpdateServiceAsync(ServiceDetailedModel serviceModel)
     {
-        var existingService = await _context.Services.FirstOrDefaultAsync(s => s.Id == serviceModel.Id);
+        var existingService = await _context.Services
+                                            .Include(s => s.Category)
+                                            .Include(s => s.Reservations)
+                                            .Include(s => s.Masters)
+                                            .FirstOrDefaultAsync(s => s.Id == serviceModel.Id);
 
         if (existingService is null)
         {
             throw new ServiceNotFoundException($"Service with id {serviceModel.Id} not found.");
         }
 
-        _mapper.Map(existingService, serviceModel);
+        _mapper.Map(serviceModel, existingService);
+
+        existingService.Reservations = new List<Reservation>();
+
+        foreach(var reservationId in serviceModel.ReservationIds)
+        {
+            var reservation = await _context.Reservations.FirstAsync(r => r.Id == reservationId);
+            existingService.Reservations.Add(reservation);
+        }
+
+        existingService.Masters = new List<Master>();
+
+        foreach (var masterId in serviceModel.MasterIds)
+        {
+            var master = await _context.Masters.FirstAsync(r => r.Id == masterId);
+            existingService.Masters.Add(master);
+        }
+
+        if (serviceModel.CategoryId == 0)
+        {
+            existingService.CategoryId = null;
+            existingService.Category = null;
+        }
+        else
+        {
+            var category = await _context.ServiceCategories.FirstAsync(c => c.Id == serviceModel.Id);
+            existingService.CategoryId = serviceModel.CategoryId;
+            existingService.Category = category;
+        }
+
         await _context.SaveChangesAsync();
 
         var result = _mapper.Map<ServiceDetailedModel>(existingService);

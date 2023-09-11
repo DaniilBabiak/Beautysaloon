@@ -1,0 +1,10 @@
+<p>category-details works!</p>
+<div class="category-create-wrapper">
+    <input [(ngModel)]="category.model.name" placeholder="Category Name">
+    <input [(ngModel)]="category.model.description" placeholder="Category Description" style="margin: 2% 0">
+    <img [src]="category.image" alt={{category.model.imageFileName}} height="300" width="300">
+    <input type="file" (change)="onFileSelected($event)" style="margin: 2% 0">
+</div>
+Другие поля для ввода
+<button (click)="saveCategory()" class="create-categoryBtn">Save</button>
+<button (click)="closeModal()">Cancel</button>

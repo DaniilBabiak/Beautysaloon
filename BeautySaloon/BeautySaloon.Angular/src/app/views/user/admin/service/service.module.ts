@@ -5,9 +5,11 @@ import { NgbDropdownModule, NgbTimeAdapter, NgbTimepickerModule } from '@ng-boot
 import { FormsModule } from "@angular/forms";
 import { NgbTimeStringAdapter } from 'src/app/shared/helpers/ngb-time-string-adapter';
 import { ServiceComponent } from './service.component';
+import { ServiceDetailsComponent } from './service-details/service-details.component';
 @NgModule({
   declarations: [
-    ServiceComponent
+    ServiceComponent,
+    ServiceDetailsComponent
   ],
   imports: [
     CommonModule,

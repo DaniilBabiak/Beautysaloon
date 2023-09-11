@@ -118,7 +118,7 @@ services:
 
     beautysaloon:
         container_name: beautysaloon
-        image: beautysaloon-service:6.18
+        image: beautysaloon-service:6.19
         build:
             dockerfile: ./BeautySaloon.API/Dockerfile
         ports:

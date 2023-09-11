@@ -11,6 +11,7 @@ public static class MasterAutoMapperOptions
         {
             yield return new MasterToMasterModelProfile();
             yield return new MasterToMasterDetailedModelProfile();
+            yield return new MasterDetailedModelToMasterProfile();
         }
     }
 }

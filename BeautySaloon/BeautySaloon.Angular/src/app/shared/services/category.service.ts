@@ -21,6 +21,14 @@ export class CategoryService {
 
   }
 
+  getCategory(categoryId: number): Observable<CategoryModel> {
+    var url = `${this.config.resourceApiURI}/api/ServiceCategory?categoryId=${categoryId}`;
+
+    var options = this.getOptions();
+
+    return this.http.get<CategoryModel>(url, options);
+  }
+
   createCategory(serviceCategory: CategoryModel): Observable<CategoryModel> {
     var url = this.config.resourceApiURI;
 
@@ -29,9 +37,9 @@ export class CategoryService {
     return this.http.post<CategoryModel>(`${url}/api/admin/ServiceCategory`, serviceCategory, options);
   }
 
-  updateCategory(serviceCategory: CategoryModel): Observable<CategoryModel>{
+  updateCategory(serviceCategory: CategoryModel): Observable<CategoryModel> {
     var url = this.config.resourceApiURI;
-    
+
     var options = this.getOptions();
 
     return this.http.put<CategoryModel>(`${url}/api/admin/ServiceCategory`, serviceCategory, options)

@@ -32,16 +32,22 @@ export class ImageService {
 
     const headers = this.getOptions().headers;
 
-    const response = await this.http.get(url + `/api/Image?bucketName=${bucketName}&fileName=${fileName}`, {
-      headers: headers,
-      responseType: 'blob'
-    }).toPromise();
+    try {
+      const response = await this.http.get(url + `/api/Image?bucketName=${bucketName}&fileName=${fileName}`, {
+        headers: headers,
+        responseType: 'blob'
+      }).toPromise();
 
-    if (!response) {
-      throw new Error('Image not found');
+      console.log(response);
+
+      if (!response) {
+      }
+
+      return URL.createObjectURL(response as Blob);
     }
-
-    return URL.createObjectURL(response as Blob);
+    catch {
+      return 'assets/images/image-not-found.jpg';
+    }
   }
 
   private getOptions() {
