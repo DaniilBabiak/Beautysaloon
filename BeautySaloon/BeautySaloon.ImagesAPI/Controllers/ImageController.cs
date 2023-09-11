@@ -37,9 +37,9 @@ public class ImageController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetFile([Required, FromQuery] MinioLocation location)
+    public async Task<IActionResult> GetFile([Required, FromQuery] MinioLocation location)
     {
-        var result = _imageService.GetImageAsync(location);
+        var result = await _imageService.GetImageAsync(location);
         var contentType = "image/jpeg";
 
         return File(result, contentType);

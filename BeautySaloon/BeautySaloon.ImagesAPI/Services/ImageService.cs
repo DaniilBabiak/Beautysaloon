@@ -1,6 +1,7 @@
 ﻿using BeautySaloon.ImagesAPI.Models;
 using Minio;
 using Minio.DataModel;
+using Minio.Exceptions;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 
@@ -75,22 +76,29 @@ public class ImageService : IImageService
         }
     }
 
-    public byte[] GetImageAsync(MinioLocation location)
+    public async Task<byte[]> GetImageAsync(MinioLocation location)
     {
-        byte[] result = default;
+        try
+        {
+            byte[] result = default;
 
-        var getObjectArgs = new GetObjectArgs().WithBucket(location.BucketName)
-                                               .WithObject(location.FileName)
-                                               .WithCallbackStream(stream =>
-                                               {
-                                                   using MemoryStream ms = new MemoryStream();
-                                                   stream.CopyTo(ms);
-                                                   result = ms.ToArray();
-                                               });
+            var getObjectArgs = new GetObjectArgs().WithBucket(location.BucketName)
+                                                   .WithObject(location.FileName)
+                                                   .WithCallbackStream(stream =>
+                                                   {
+                                                       using MemoryStream ms = new MemoryStream();
+                                                       stream.CopyTo(ms);
+                                                       result = ms.ToArray();
+                                                   });
 
-        _minio.GetObjectAsync(getObjectArgs).Wait();
-        // Возвращаем файл как результат
-        return result;
+            await _minio.GetObjectAsync(getObjectArgs);
+            return result;
+        }
+        catch (ObjectNotFoundException ex)
+        {
+            throw new Exceptions.NotFoundExceptions
+                                .FileNotFoundException($"File with location {location.BucketName}/{location.FileName} not found!");
+        }        
     }
 
     private async Task EnsureBucketExists(MinioClient minio, string bucketName)

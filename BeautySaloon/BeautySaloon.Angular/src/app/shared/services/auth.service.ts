@@ -75,12 +75,10 @@ export class AuthService {
 
   get authorizationHeaderValue(): string {
     if (this.user) {
-      console.log('Using user token.')
       return `${this.user.token_type} ${this.user.access_token}`;
     }
 
     if (this.tokenResponse) {
-      console.log('Using client token.')
       return `${this.tokenResponse.token_type} ${this.tokenResponse.access_token}`;
     }
 
