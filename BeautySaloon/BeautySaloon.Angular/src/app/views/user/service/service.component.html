@@ -1,7 +1,7 @@
 <div class="services-wrapper" *ngIf="categories.length > 0">
   <div class="column">
     <ng-container *ngFor="let category of categories.slice(0, categories.length / 2); let i = index">
-      <section class="sgroup" [ngStyle]="getSectionStyles(i, category)">
+      <section class="sgroup" [ngStyle]="getSectionStyles(i, category)" (click)="openSgroup($event)">
         <div class="close-sgroup">&times;</div>
         <div class="title-box">{{category.model.name}}</div>
         <div class="info-box">
@@ -30,8 +30,8 @@
   </div>
   <div class="column">
     <ng-container *ngFor="let category of categories.slice(categories.length / 2); let i = index">
-      <section class="sgroup" [ngStyle]="getSectionStyles(i + categories.length / 2, category)">
-        <div class="close-sgroup">&times;</div>
+      <section class="sgroup" [ngStyle]="getSectionStyles(i + categories.length / 2, category)" (click)="openSgroup($event)">
+        <div class="close-sgroup" (click)="closeSgroup($event)">&times;</div>
         <div class="title-box">{{category.model.name}}</div>
         <div class="info-box">
           <div class="info-col-1 ">
@@ -41,7 +41,7 @@
           </div>
           <div class="info-col-2">
             <div class="service-info">
-              <div class="services-text">{{category.model}}</div>
+              <div class="services-text">{{category.model.description}}</div>
               <div class="all-service-wrapper">
                 <div *ngFor="let service of category.services" class="services-prices">
                   <div class="services-prices-wrapper">

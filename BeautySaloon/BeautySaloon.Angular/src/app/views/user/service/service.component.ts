@@ -19,6 +19,7 @@ import { CategoryWithImage } from 'src/app/shared/models/category/category-with-
 export class ServiceComponent implements OnInit {
   categories: CategoryWithImage[] = [];
 
+
   constructor(
     private imageService: ImageService,
     private categoryService: CategoryService,
@@ -62,58 +63,34 @@ export class ServiceComponent implements OnInit {
 
       Promise.all(categoryPromises).then(categoriesWithImages => {
         this.categories = categoriesWithImages;
-        this.initButtons();
       });
     });
   }
 
-  initButtons() {
-    console.log("init buttons")
-    const Boxlayout = (function () {
-      const wrapper = document.body;
-      const sgroups = Array.from(document.querySelectorAll(".sgroup")) as HTMLElement[];
-      const closeButtons = Array.from(document.querySelectorAll(".close-sgroup")) as HTMLElement[];
-      const expandedClass = "is-expanded";
-      const hasExpandedClass = "has-expanded-item";
+  openSgroup(event: Event) {
+    const wrapper = document.body;
+    const sgroups = Array.from(document.querySelectorAll(".sgroup")) as HTMLElement[];
+    const closeButtons = Array.from(document.querySelectorAll(".close-sgroup")) as HTMLElement[];
+    const expandedClass = "is-expanded";
+    const hasExpandedClass = "has-expanded-item";
+    const element = event.currentTarget as HTMLElement;
 
-      return { init };
+    if (!element.classList.contains(expandedClass)) {
+      element.classList.add(expandedClass);
+      wrapper.classList.add(hasExpandedClass);
+    }
+  }
 
-      function init() {
-        _initEvents();
-      }
-
-      function _initEvents() {
-        sgroups.forEach((element: HTMLElement) => {
-          element.addEventListener('click', function (this: HTMLElement) {
-            _opensgroup(this);
-            console.log("_opensgroup by click");
-          });
-        });
-
-        closeButtons.forEach((element: HTMLElement) => {
-          element.addEventListener('click', function (this: HTMLElement, event: Event) {
-            event.stopPropagation();
-            _closesgroup(this.parentElement as HTMLElement);
-          });
-        });
-      }
-
-      function _opensgroup(element: HTMLElement) {
-        if (!element.classList.contains(expandedClass)) {
-          element.classList.add(expandedClass);
-          wrapper.classList.add(hasExpandedClass);
-        }
-      }
-
-      function _closesgroup(element: HTMLElement) {
-        if (element.classList.contains(expandedClass)) {
-          element.classList.remove(expandedClass);
-          wrapper.classList.remove(hasExpandedClass);
-        }
-      }
-    })();
-
-    Boxlayout.init();
+  closeSgroup(event: Event){
+    const expandedClass = "is-expanded";
+    const hasExpandedClass = "has-expanded-item";
+    event.stopPropagation();
+    const button = event.target as HTMLElement;
+    const parent = button.parentElement as HTMLElement;
+    if (parent.classList.contains(expandedClass)) {
+      parent.classList.remove(expandedClass);
+      parent.classList.remove(hasExpandedClass);
+    }
   }
 
   getSectionStyles(index: number, category: CategoryWithImage): { [key: string]: string; } {
