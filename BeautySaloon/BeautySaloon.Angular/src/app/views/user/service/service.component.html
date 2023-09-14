@@ -2,7 +2,7 @@
   <div class="column">
     <ng-container *ngFor="let category of categories.slice(0, categories.length / 2); let i = index">
       <section class="sgroup" [ngStyle]="getSectionStyles(i, category)" (click)="openSgroup($event)">
-        <div class="close-sgroup">&times;</div>
+        <div (click)="closeSgroup($event)" class="close-sgroup">&times;</div>
         <div class="title-box">{{category.model.name}}</div>
         <div class="info-box">
           <div class="info-col-1 img-padding">
@@ -30,7 +30,8 @@
   </div>
   <div class="column">
     <ng-container *ngFor="let category of categories.slice(categories.length / 2); let i = index">
-      <section class="sgroup" [ngStyle]="getSectionStyles(i + categories.length / 2, category)" (click)="openSgroup($event)">
+      <section class="sgroup" [ngStyle]="getSectionStyles(i + categories.length / 2, category)"
+        (click)="openSgroup($event)">
         <div class="close-sgroup" (click)="closeSgroup($event)">&times;</div>
         <div class="title-box">{{category.model.name}}</div>
         <div class="info-box">
