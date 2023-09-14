@@ -6,7 +6,6 @@ using BeautySaloon.API.Helpers;
 using BeautySaloon.API.Services.Interfaces;
 using BeautySaloon.API.Validators;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 namespace BeautySaloon.API.Services;
 
@@ -33,7 +32,7 @@ public class CustomerService : ICustomerService
 
         if (!result.IsValid)
         {
-            throw new CustomerNotValidException(result); 
+            throw new CustomerNotValidException(result);
         }
 
         if (!string.IsNullOrEmpty(customer.PhoneNumber))

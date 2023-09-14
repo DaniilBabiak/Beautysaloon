@@ -1,6 +1,4 @@
-﻿using BeautySaloon.API.Areas.Customer.Controllers;
-using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Controllers;

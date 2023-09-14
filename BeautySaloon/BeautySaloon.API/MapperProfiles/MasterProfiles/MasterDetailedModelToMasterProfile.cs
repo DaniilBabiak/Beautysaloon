@@ -12,7 +12,7 @@ public class MasterDetailedModelToMasterProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Id))
             .ForMember(dest => dest.Schedule, opt => opt.MapFrom(source => new Schedule { Id = source.ScheduleId }))
             .ForMember(dest => dest.Services, opt =>
-                                                opt.MapFrom(source => source.ServiceIds.Select(id => new Service { Id = id})))
+                                                opt.MapFrom(source => source.ServiceIds.Select(id => new Service { Id = id })))
             .ForMember(dest => dest.Reservations, opt =>
                                                   opt.MapFrom(source => source.ReservationIds.Select(id => new Reservation { Id = id })))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Name));

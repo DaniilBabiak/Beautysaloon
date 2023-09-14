@@ -1,7 +1,6 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+﻿using BeautySaloon.API.Models.CategoryModels;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Areas.Admin.Controllers;
@@ -17,9 +16,8 @@ public class ServiceCategoryController : AdminControllerBase
 
     [HttpPost]
     [Authorize("admin")]
-    public async Task<IActionResult> CreateCategoryAsync([FromBody] ServiceCategory category)
+    public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryModel category)
     {
-        var test = User;
         var result = await _category.CreateCategoryAsync(category);
 
         return Ok(result);
@@ -27,7 +25,7 @@ public class ServiceCategoryController : AdminControllerBase
 
     [HttpPut]
     [Authorize("admin")]
-    public async Task<IActionResult> UpdateCategoryAsync([FromBody] ServiceCategory category)
+    public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryModel category)
     {
         var result = await _category.UpdateCategoryAsync(category);
 

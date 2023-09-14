@@ -1,9 +1,6 @@
 ﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using FluentValidation;
-using Microsoft.AspNetCore.Localization;
 using PhoneNumbers;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace BeautySaloon.API.Validators;
 

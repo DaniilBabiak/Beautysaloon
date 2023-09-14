@@ -50,29 +50,76 @@ public class ServiceCategoryService : IServiceCategoryService
         return result;
     }
 
-    public async Task<ServiceCategory> CreateCategoryAsync(ServiceCategory category)
+    public async Task<CategoryModel> CreateCategoryAsync(CategoryModel categoryModel)
     {
-        await _context.ServiceCategories.AddAsync(category);
+        var newCategory = _mapper.Map<ServiceCategory>(categoryModel);
+
+        newCategory.Services = new List<Service>();
+
+        await _context.ServiceCategories.AddAsync(newCategory);
         await _context.SaveChangesAsync();
 
-        return category;
+        if (categoryModel.ServiceIds is not null)
+        {
+            foreach (var serviceId in categoryModel.ServiceIds)
+            {
+                var service = await _context.Services.Where(s => s.Id == serviceId).FirstOrDefaultAsync();
+
+                if (service is null)
+                {
+                    throw new ServiceNotFoundException($"Error while creating category. Service with id {serviceId} not found.");
+                }
+
+                newCategory.Services.Add(service);
+                service.Category = newCategory;
+                service.CategoryId = newCategory.Id;
+            }
+        }
+
+        await _context.SaveChangesAsync();
+
+        var result = _mapper.Map<CategoryModel>(newCategory);
+
+        return categoryModel;
     }
 
-    public async Task<ServiceCategory> UpdateCategoryAsync(ServiceCategory category)
+    public async Task<CategoryModel> UpdateCategoryAsync(CategoryModel categoryModel)
     {
         var existingCategory = await _context.ServiceCategories
-                                             .AsNoTracking()
-                                             .FirstOrDefaultAsync(s => s.Id == category.Id);
+                                             .Include(c => c.Services)
+                                             .FirstOrDefaultAsync(s => s.Id == categoryModel.Id);
+
+        _mapper.Map(categoryModel, existingCategory);
 
         if (existingCategory is null)
         {
-            throw new CategoryNotFoundException($"Category with id {category.Id} not found.");
+            throw new CategoryNotFoundException($"Category with id {categoryModel.Id} not found.");
         }
 
-        _context.ServiceCategories.Update(category);
+        existingCategory.Services = new List<Service>();
+
+        if (categoryModel.ServiceIds is not null)
+        {
+            foreach (var serviceId in categoryModel.ServiceIds)
+            {
+                var service = await _context.Services.Where(s => s.Id == serviceId).FirstOrDefaultAsync();
+
+                if (service is null)
+                {
+                    throw new ServiceNotFoundException($"Error while creating category. Service with id {serviceId} not found.");
+                }
+
+                existingCategory.Services.Add(service);
+                service.Category = existingCategory;
+                service.CategoryId = existingCategory.Id;
+            }
+        }
+
         await _context.SaveChangesAsync();
 
-        return category;
+        var result = _mapper.Map<CategoryModel>(existingCategory);
+
+        return result;
     }
 
     public async Task DeleteCategoryAsync(int id)

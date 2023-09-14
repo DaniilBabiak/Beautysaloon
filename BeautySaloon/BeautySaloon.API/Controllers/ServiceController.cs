@@ -1,6 +1,4 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

@@ -1,21 +1,20 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Entities.Contexts;
+﻿using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.HealthChecks;
+using BeautySaloon.API.MapperProfiles;
+using BeautySaloon.API.MapperProfiles.MasterProfiles.Resolvers;
 using BeautySaloon.API.RabbitMq;
 using BeautySaloon.API.Services;
 using BeautySaloon.API.Services.Interfaces;
+using BeautySaloon.API.Validators;
 using BeautySaloon.Shared;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using FluentValidation.AspNetCore;
-using BeautySaloon.API.Validators;
-using FluentValidation;
-using BeautySaloon.API.MapperProfiles;
-using BeautySaloon.API.MapperProfiles.MasterProfiles.Resolvers;
 
 namespace BeautySaloon.API.Extensions;
 

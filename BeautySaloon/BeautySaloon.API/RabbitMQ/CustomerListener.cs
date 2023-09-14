@@ -1,14 +1,11 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
-using Microsoft.Extensions.Options;
-using Serilog;
-using BeautySaloon.Shared;
-using Newtonsoft.Json;
-using System.Text;
-using BeautySaloon.API.Entities.Contexts;
-using BeautySaloon.API.Entities.BeautySaloonContextEntities;
+﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Services.Interfaces;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using Serilog;
+using System.Text;
 
 namespace BeautySaloon.API.RabbitMq;
 
@@ -29,7 +26,7 @@ public class CustomerListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while(!stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {

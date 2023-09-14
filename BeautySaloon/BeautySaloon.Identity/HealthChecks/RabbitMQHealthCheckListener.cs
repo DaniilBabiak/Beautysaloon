@@ -52,7 +52,7 @@ public class RabbitMQHealthCheckListener : BackgroundService
 
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
-        }        
+        }
     }
 
     private async Task ConnectAndExecute(CancellationToken stoppingToken)

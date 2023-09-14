@@ -27,7 +27,6 @@ export class CategoryComponent implements OnInit {
   servicesWithoutCategory: ServiceModel[] | null = null;
 
   showAddCategoryForm = false;
-  selectedFile: File | null = null;
   isServiceHovered: boolean = false; // Переменная для отслеживания наведения на область категории
 
 
@@ -126,13 +125,11 @@ export class CategoryComponent implements OnInit {
 
     const serviceData = JSON.parse(event.dataTransfer.getData('text')); // Получение данных сервиса
     console.log(serviceData);
-    this.service.getService(serviceData.id).then(result => {
-      var serviceToUpdate = result as ServiceDetailedModel;
-      serviceToUpdate.categoryId = category.model.id;
-      this.service.updateService(serviceToUpdate).subscribe(() => {
-        this.loadCategories();
-        this.loadServicesWithoutCategory();
-      })
+    category.model.serviceIds.push(serviceData.id);
+
+    this.categoryService.updateCategory(category.model).subscribe(() => {
+      this.loadCategories();
+      this.loadServicesWithoutCategory();
     })
   }
 

@@ -1,11 +1,6 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Entities.Contexts;
-using BeautySaloon.API.Helpers;
+﻿using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.RabbitMq.Models;
-using BeautySaloon.Shared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -76,13 +71,13 @@ public class UnusedImageListener : BackgroundService
                 var requestBody = ea.Body;
                 var requestJson = Encoding.UTF8.GetString(requestBody.ToArray());
                 var request = JsonConvert.DeserializeObject<List<MinioLocation>>(requestJson);
-                
+
                 var response = new List<MinioLocation>();
 
                 if (request is not null || request.Any())
                 {
                     response = await GetUnusedObjectsAsync(request);
-                }                
+                }
 
                 var responseMessage = JsonConvert.SerializeObject(response);
                 var properties = ea.BasicProperties;

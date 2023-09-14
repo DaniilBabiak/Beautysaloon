@@ -4,7 +4,9 @@
     <img [src]="category.image" alt="category.image" width="100" height="100" />
     :
     <div *ngFor="let service of category.services">
-      <button (click)="openServiceDetails(service)">{{service.name}}</button>
+      <button (click)="openServiceDetails(service.id)">{{service.name}}</button>
     </div>
   </div>
 </div>
+
+<button (click)="openServiceDetails(0)">Add service</button>

@@ -29,7 +29,7 @@ public class RabbitMQHealthCheckListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while(!stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
@@ -52,7 +52,7 @@ public class RabbitMQHealthCheckListener : BackgroundService
 
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
-        }        
+        }
     }
 
     private async Task ConnectAndExecute(CancellationToken stoppingToken)

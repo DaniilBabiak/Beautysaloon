@@ -9,7 +9,7 @@ public class ServiceToServiceModelProfile : Profile
     public ServiceToServiceModelProfile()
     {
         CreateMap<Service, ServiceModel>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(source =>  source.Id))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Id))
             .ForMember(dest => dest.Price, opt => opt.MapFrom(source => source.Price))
             .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(source => source.CategoryId));
     }

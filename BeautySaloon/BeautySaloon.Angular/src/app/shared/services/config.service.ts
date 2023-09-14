@@ -29,7 +29,7 @@ get healthCheckURI(){
       filterProtocolClaims: true,
       loadUserInfo: true,
       automaticSilentRenew: true,
-      silent_redirect_uri: 'http://localhost:4200/silent-refresh.html'
+      silent_redirect_uri: 'http://localhost:4200/silent-refresh.html',
     };
   }
 }

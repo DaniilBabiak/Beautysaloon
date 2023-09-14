@@ -1,5 +1,4 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Models.ReservationModels;
+﻿using BeautySaloon.API.Models.ReservationModels;
 
 namespace BeautySaloon.API.Services.Interfaces;
 

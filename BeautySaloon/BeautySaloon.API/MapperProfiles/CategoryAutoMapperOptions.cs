@@ -10,6 +10,7 @@ public static class CategoryAutoMapperOptions
         get
         {
             yield return new ServiceCategoryToCategoryModelProfile();
+            yield return new CategoryModelToServiceCategoryProfile();
         }
     }
 }

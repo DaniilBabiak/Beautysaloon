@@ -16,6 +16,7 @@ public static class ClientsConfig
         PostLogoutRedirectUris = { "http://localhost:4200/user/main" },
         AllowedCorsOrigins = { "http://localhost:4200" },
         AllowAccessTokensViaBrowser = true,
+        AllowOfflineAccess = true,
         AccessTokenLifetime = 3600,
     };
 

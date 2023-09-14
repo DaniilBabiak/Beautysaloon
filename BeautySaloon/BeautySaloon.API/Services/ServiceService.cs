@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
-using BeautySaloon.API.Exceptions;
 using BeautySaloon.API.Exceptions.NotFound;
 using BeautySaloon.API.Models.ServiceModels;
 using BeautySaloon.API.Services.Interfaces;
@@ -85,7 +84,7 @@ public class ServiceService : IServiceService
     {
         var newService = _mapper.Map<Service>(serviceModel);
 
-        if (newService.CategoryId != 0)
+        if (newService.CategoryId is not null && newService.CategoryId != 0)
         {
             var category = await _context.ServiceCategories
                              .Include(c => c.Services)
@@ -123,7 +122,7 @@ public class ServiceService : IServiceService
 
         existingService.Reservations = new List<Reservation>();
 
-        foreach(var reservationId in serviceModel.ReservationIds)
+        foreach (var reservationId in serviceModel.ReservationIds)
         {
             var reservation = await _context.Reservations.FirstAsync(r => r.Id == reservationId);
             existingService.Reservations.Add(reservation);
@@ -140,11 +139,10 @@ public class ServiceService : IServiceService
         if (serviceModel.CategoryId == 0)
         {
             existingService.CategoryId = null;
-            existingService.Category = null;
         }
         else
         {
-            var category = await _context.ServiceCategories.FirstAsync(c => c.Id == serviceModel.Id);
+            var category = await _context.ServiceCategories.Include(c => c.Services).FirstAsync(c => c.Id == serviceModel.Id);
             existingService.CategoryId = serviceModel.CategoryId;
             existingService.Category = category;
         }

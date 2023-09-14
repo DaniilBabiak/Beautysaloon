@@ -1,6 +1,4 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using BeautySaloon.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Controllers;

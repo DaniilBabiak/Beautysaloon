@@ -1,8 +1,6 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Helpers;
+﻿using BeautySaloon.API.Helpers;
 using BeautySaloon.API.Models.ReservationModels;
 using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Areas.Admin.Controllers;

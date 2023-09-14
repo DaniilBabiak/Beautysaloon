@@ -34,11 +34,19 @@ export class ServiceDetailsComponent {
 
   saveService() {
     if (this.serviceId == 0) {
-      this.serviceService.createService(this.service)
+      this.serviceService.createService(this.service).subscribe(result => {
+        this.closeModal();
+      });
     }
-    else{
-      this.serviceService.updateService(this.service);
+    else {
+      this.serviceService.updateService(this.service).subscribe(result => {
+        this.closeModal();
+      });
     }
+  }
+
+  closeModal() {
+    this.activeModal.close();
   }
 
   createEmptyService(): ServiceDetailedModel {

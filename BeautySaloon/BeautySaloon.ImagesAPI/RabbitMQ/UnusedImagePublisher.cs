@@ -1,14 +1,11 @@
-﻿using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
+﻿using BeautySaloon.ImagesAPI.Models;
+using BeautySaloon.ImagesAPI.Services;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using Serilog;
 using System.Text;
-using Microsoft.Extensions.Options;
-using BeautySaloon.Shared;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Runtime;
-using BeautySaloon.ImagesAPI.Services;
-using BeautySaloon.ImagesAPI.Models;
 
 namespace BeautySaloon.ImagesAPI.RabbitMQ;
 

@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace BeautySaloon.API.Exceptions.NotFound;
+﻿namespace BeautySaloon.API.Exceptions.NotFound;
 [Serializable]
 internal class ReservationNotFoundException : NotFoundException
 {

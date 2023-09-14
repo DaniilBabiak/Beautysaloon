@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
-using BeautySaloon.API.Exceptions;
 using BeautySaloon.API.Exceptions.NotFound;
 using BeautySaloon.API.Models.MasterModels;
 using BeautySaloon.API.Models.ScheduleModels;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Diagnostics.Metrics;
-using System.Linq;
 
 namespace BeautySaloon.API.Services;
 

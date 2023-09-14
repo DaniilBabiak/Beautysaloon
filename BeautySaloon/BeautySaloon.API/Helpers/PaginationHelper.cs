@@ -1,7 +1,4 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Models;
-
-namespace BeautySaloon.API.Helpers;
+﻿namespace BeautySaloon.API.Helpers;
 
 public static class PaginationHelper
 {

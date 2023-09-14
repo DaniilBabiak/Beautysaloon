@@ -77,9 +77,9 @@ export class ServiceComponent implements OnInit {
     });
   }
 
-  openServiceDetails(service: ServiceModel) {
+  openServiceDetails(serviceId: number) {
     const modalRef = this.modalService.open(ServiceDetailsComponent, { backdrop: 'static' });
-    modalRef.componentInstance.serviceId = service.id;
+    modalRef.componentInstance.serviceId = serviceId;
     modalRef.componentInstance.initModal();
 
     modalRef.closed.subscribe(result => {

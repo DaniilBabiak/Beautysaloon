@@ -3,7 +3,6 @@ using BeautySaloon.API.Entities.BeautySaloonContextEntities;
 using BeautySaloon.API.Entities.Contexts;
 using BeautySaloon.API.Exceptions;
 using BeautySaloon.API.Exceptions.NotFound;
-using BeautySaloon.API.Helpers;
 using BeautySaloon.API.Models.ReservationModels;
 using BeautySaloon.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -123,7 +122,7 @@ public class ReservationService : IReservationService
 
         var existingReservationTimes = master.Reservations.Select(r => r.DateTime)// Получаем все резервации из мастеров
                                                           .ToList();
-            
+
         var availableReservations = new List<Reservation>();
 
         DateTime currentDate = DateTime.Now.Date;
@@ -167,7 +166,7 @@ public class ReservationService : IReservationService
                 date = date.AddDays(1);
             }
         }
-        
+
 
         return availableReservations;
     }

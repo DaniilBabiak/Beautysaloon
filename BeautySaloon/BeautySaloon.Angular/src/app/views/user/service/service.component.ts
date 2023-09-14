@@ -86,6 +86,7 @@ export class ServiceComponent implements OnInit {
         sgroups.forEach((element: HTMLElement) => {
           element.addEventListener('click', function (this: HTMLElement) {
             _opensgroup(this);
+            console.log("_opensgroup by click");
           });
         });
 

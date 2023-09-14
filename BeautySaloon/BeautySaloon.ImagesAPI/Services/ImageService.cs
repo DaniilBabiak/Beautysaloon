@@ -1,8 +1,6 @@
 ﻿using BeautySaloon.ImagesAPI.Models;
 using Minio;
-using Minio.DataModel;
 using Minio.Exceptions;
-using System.Net.Sockets;
 using System.Reactive.Linq;
 
 namespace BeautySaloon.ImagesAPI.Services;
@@ -98,7 +96,7 @@ public class ImageService : IImageService
         {
             throw new Exceptions.NotFoundExceptions
                                 .FileNotFoundException($"File with location {location.BucketName}/{location.FileName} not found!");
-        }        
+        }
     }
 
     private async Task EnsureBucketExists(MinioClient minio, string bucketName)

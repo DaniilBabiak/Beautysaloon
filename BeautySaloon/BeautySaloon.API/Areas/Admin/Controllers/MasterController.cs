@@ -1,8 +1,6 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Models.MasterModels;
+﻿using BeautySaloon.API.Models.MasterModels;
 using BeautySaloon.API.Models.ScheduleModels;
 using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Areas.Admin.Controllers;
@@ -16,7 +14,7 @@ public class MasterController : AdminControllerBase
     }
 
     [HttpGet("schedule")]
-    public async Task<IActionResult> GetSchedule([FromQuery]int? masterId, [FromQuery] int? scheduleId)
+    public async Task<IActionResult> GetSchedule([FromQuery] int? masterId, [FromQuery] int? scheduleId)
     {
         if (masterId.HasValue && scheduleId.HasValue)
         {

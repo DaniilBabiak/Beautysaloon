@@ -1,1 +1,7 @@
-<p>service-details works!</p>
+<input [(ngModel)]="service.name" placeholder="Service Name" class="master-detail-input">
+<input [(ngModel)]="service.price" type="number" placeholder="Service Price" class="master-detail-input">
+Duration:
+<ngb-timepicker [(ngModel)]="service.duration"></ngb-timepicker>
+
+<button (click)="saveService()">Save</button>
+<button (click)="closeModal()">Cancel</button>

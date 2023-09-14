@@ -1,5 +1,4 @@
-﻿using BeautySaloon.API.Entities.BeautySaloonContextEntities;
-using BeautySaloon.API.Models.BestWorkModels;
+﻿using BeautySaloon.API.Models.BestWorkModels;
 
 namespace BeautySaloon.API.Services.Interfaces;
 

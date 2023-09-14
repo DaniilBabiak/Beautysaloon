@@ -1,7 +1,5 @@
 ﻿using BeautySaloon.API.Models.ReservationModels;
-using BeautySaloon.API.Services;
 using BeautySaloon.API.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySaloon.API.Controllers;
@@ -25,7 +23,7 @@ public class ReservationController : ControllerBase
     }
 
     [HttpGet("getAvailable")]
-    public async Task<IActionResult> GetAvailableReservationsAsync([FromQuery]int serviceId, [FromQuery] int masterId)
+    public async Task<IActionResult> GetAvailableReservationsAsync([FromQuery] int serviceId, [FromQuery] int masterId)
     {
         var result = await _reservationService.GetAvailableReseravtionsAsync(serviceId, masterId);
 

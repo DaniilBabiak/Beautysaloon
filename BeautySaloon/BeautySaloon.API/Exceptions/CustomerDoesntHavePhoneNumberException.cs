@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace BeautySaloon.API.Exceptions;
+﻿namespace BeautySaloon.API.Exceptions;
 [Serializable]
 internal class CustomerDoesntHavePhoneNumberException : Exception
 {
