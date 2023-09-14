@@ -1,5 +1,7 @@
-<div class="modal" *ngIf="selectedWork">
-    <span class="modal-close" (click)="closeModal()">&times;</span>
-    <img [src]="selectedWork.image" [alt]="selectedWork.model.imageFileName">
-    <span class="show-modal-id" *ngIf="isAdmin">id: {{selectedWork.model.id}}</span>
-</div>
+<div class="overlay" *ngIf="selectedWork">
+    <div class="modal">
+      <span class="modal-close" (click)="closeModal()">&times;</span>
+      <img [src]="selectedWork.image" [alt]="selectedWork.model.imageFileName">
+      <span class="show-modal-id" *ngIf="isAdmin">id: {{selectedWork.model.id}}</span>
+    </div>
+  </div>
