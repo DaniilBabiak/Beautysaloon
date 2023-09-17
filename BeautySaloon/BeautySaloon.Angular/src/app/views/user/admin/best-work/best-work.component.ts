@@ -8,11 +8,11 @@ import { ImageService } from 'src/app/shared/services/image.service';
 
 
 @Component({
-  selector: 'app-add-best-works',
-  templateUrl: './add-best-works.component.html',
-  styleUrls: ['./add-best-works.component.css']
+  selector: 'app-best-work',
+  templateUrl: './best-work.component.html',
+  styleUrls: ['./best-work.component.css']
 })
-export class AddBestWorksComponent {
+export class BestWorkComponent {
   searchText: any;
   bestWorks: BestWorkWithImage[] = [];
   newBestWork: BestWorkWithImage = {

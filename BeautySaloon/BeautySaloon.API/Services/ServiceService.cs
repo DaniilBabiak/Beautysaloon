@@ -142,7 +142,15 @@ public class ServiceService : IServiceService
         }
         else
         {
-            var category = await _context.ServiceCategories.Include(c => c.Services).FirstAsync(c => c.Id == serviceModel.Id);
+            var category = await _context.ServiceCategories
+                                         .Include(c => c.Services)
+                                         .FirstOrDefaultAsync(c => c.Id == serviceModel.CategoryId);
+
+            if (category is null)
+            {
+                throw new CategoryNotFoundException($"Category with id {serviceModel.CategoryId} not found.");
+            }
+
             existingService.CategoryId = serviceModel.CategoryId;
             existingService.Category = category;
         }

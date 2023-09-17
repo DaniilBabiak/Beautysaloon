@@ -4,7 +4,7 @@
   </div>
   <div class="rhomb-grid">
     <ng-container *ngFor="let bestWork of getCurrentPageBestWorks(); let i = index">
-      <a (click)="openModalAsync('My Image', bestWork, bestWork.model.id)" class="rhomb">
+      <a (click)="openModal(bestWork)" class="rhomb">
         <div class="rhomb-inner">
           <img [src]="bestWork.image" alt="" />
         </div>
@@ -40,11 +40,4 @@
   <div class="work-btn">
     <button class="appoinmentsBtn" routerLink="/user/services">Appointment Online</button>
   </div>
-</div>
-<div class="modal" *ngIf="showModal">
-  <span class="modal-close" (click)="closeModal()">&times;</span>
-  <img [src]="modalImage" [alt]="modalAlt">
-  <span class="show-modal-id" *ngIf="isAdmin">id: {{modalBestWorkId}}</span>
-
-
 </div>

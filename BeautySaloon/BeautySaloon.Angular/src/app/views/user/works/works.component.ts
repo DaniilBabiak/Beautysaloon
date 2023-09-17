@@ -1,10 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BestWorkModel } from 'src/app/shared/models/bestWork/best-work-model';
 import { BestWorkWithImage } from 'src/app/shared/models/bestWork/best-work-with-image';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BestWorkService } from 'src/app/shared/services/best-work.service';
 import { ImageService } from 'src/app/shared/services/image.service';
+import { SelectedWorkComponent } from './selected-work/selected-work.component';
 @Component({
   selector: 'app-works',
   templateUrl: './works.component.html',
@@ -26,7 +28,8 @@ export class WorksComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private imageService: ImageService,
-    private bestWorkService: BestWorkService) { }
+    private bestWorkService: BestWorkService,
+    private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.auth.loadUser()?.then(() => {
@@ -84,11 +87,10 @@ export class WorksComponent implements OnInit {
 
     return images;
   }
-  openModalAsync(alt: string, bestWork: BestWorkWithImage, id: number) {
-    this.modalAlt = alt;
-    this.modalImage = bestWork.image;
-    this.showModal = true;
-    this.modalBestWorkId = id;
+  openModal(bestWork: BestWorkWithImage) {
+    const modalRef = this.modalService.open(SelectedWorkComponent);
+    modalRef.componentInstance.initModal(this.bestWorks, bestWork.model.id, this.isAdmin);
+
   }
   closeModal() {
     this.showModal = false;

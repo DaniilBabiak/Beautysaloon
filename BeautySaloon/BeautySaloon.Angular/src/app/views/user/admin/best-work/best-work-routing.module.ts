@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddBestWorksComponent } from './add-best-works.component';
+import { BestWorkComponent } from './best-work.component';
 
-const routes: Routes = [{ path: '', component: AddBestWorksComponent }];
+const routes: Routes = [{ path: '', component: BestWorkComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AddBestWorksRoutingModule { }
+export class BestWorkRoutingModule { }

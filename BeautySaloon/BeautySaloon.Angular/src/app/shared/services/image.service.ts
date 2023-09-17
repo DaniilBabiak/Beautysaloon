@@ -38,11 +38,6 @@ export class ImageService {
         responseType: 'blob'
       }).toPromise();
 
-      console.log(response);
-
-      if (!response) {
-      }
-
       return URL.createObjectURL(response as Blob);
     }
     catch {
