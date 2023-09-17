@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddBestWorksRoutingModule } from './add-best-works-routing.module';
-import { AddBestWorksComponent } from './add-best-works.component';
+import { BestWorkComponent } from './best-work.component';
 import { FormsModule } from "@angular/forms";
 import { Ng2SearchPipeModule } from "ng2-search-filter";
 import { BestWorkWithImageFilter } from 'src/app/shared/helpers/best-work-with-image-filter';
+import { BestWorkRoutingModule } from './best-work-routing.module';
 
 @NgModule({
   declarations: [
-    AddBestWorksComponent,
+    BestWorkComponent,
     BestWorkWithImageFilter
   ],
   imports: [
     CommonModule,
-    AddBestWorksRoutingModule,
+    BestWorkRoutingModule,
     FormsModule,
     Ng2SearchPipeModule,
   ]
 })
-export class AddBestWorksModule { }
+export class BestWorkModule { }

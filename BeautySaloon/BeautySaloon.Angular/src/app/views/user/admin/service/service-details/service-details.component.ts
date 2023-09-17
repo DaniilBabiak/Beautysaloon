@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CategoryModel } from 'src/app/shared/models/category/category-model';
 import { ServiceDetailedModel } from 'src/app/shared/models/service/service-detailed-model';
+import { CategoryService } from 'src/app/shared/services/category.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 
 @Component({
@@ -12,8 +14,12 @@ export class ServiceDetailsComponent {
   @Input() serviceId: number = 0;
   isCloseAttempted: boolean = false;
   service: ServiceDetailedModel;
+  categories: CategoryModel[] = [];
 
-  constructor(private serviceService: ServiceService, public activeModal: NgbActiveModal) {
+  constructor(
+    private categoryService: CategoryService,
+    private serviceService: ServiceService,
+    public activeModal: NgbActiveModal) {
     this.service = this.createEmptyService();
   }
 
@@ -29,6 +35,12 @@ export class ServiceDetailsComponent {
   loadService() {
     this.serviceService.getService(this.serviceId).then(service => {
       this.service = service as ServiceDetailedModel;
+    })
+  }
+
+  loadCategories() {
+    this.categoryService.getCategories().subscribe(result => {
+      this.categories = result;
     })
   }
 
